@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import VietnamMap from "@/components/VietNamMap";
 import MountainSidebar from "@/components/MountainSidebar";
 import {
   fetchMountains,
@@ -9,6 +8,9 @@ import {
   type Mountain,
   type MountainFeatureCollection,
 } from "@/lib/overpass";
+import VietnamMapNew from "@/components/VietNamMapNew";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { MapStyles } from "@/components/MapStyles";
 
 export default function Home() {
   const [data, setData] = useState<MountainFeatureCollection | null>(null);
@@ -51,8 +53,12 @@ export default function Home() {
           selectedId={selectedId}
         />
       </div>
-      <div className="flex-1">
-        <VietnamMap
+      <div className="relative flex-1">
+        <div className="absolute top-3 right-3 z-10 flex gap-4">
+          <ThemeToggle />
+          <MapStyles />
+        </div>
+        <VietnamMapNew
           data={data}
           selectedMountain={selectedMountain}
           onMountainSelect={handleMapSelect}

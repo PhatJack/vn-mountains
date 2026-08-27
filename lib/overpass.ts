@@ -52,7 +52,7 @@ function parseElevation(ele?: string): number | null {
 
 export async function fetchMountains(): Promise<MountainFeatureCollection> {
   const bboxFilter = VN_BBOXES.map((b) => `node["natural"="peak"](${b})`).join(
-    ";\n  "
+    ";\n  ",
   );
   const query = `[out:json][timeout:60];\n(\n  ${bboxFilter};\n);\nout body;`;
 
@@ -90,9 +90,10 @@ export async function fetchMountains(): Promise<MountainFeatureCollection> {
 }
 
 export function featuresToSortedMountains(
-  collection: MountainFeatureCollection
+  collection: MountainFeatureCollection,
 ): Mountain[] {
   return collection.features
+    .filter((f) => !f.properties.name.includes("Unknown"))
     .map((f) => ({
       id: f.properties.id,
       name: f.properties.name,
