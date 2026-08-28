@@ -8,12 +8,15 @@ import {
   type MapRef,
 } from "@/components/ui/map";
 import MountainDetailSheet from "@/components/MountainDetailSheet";
-import type { MountainFeatureCollection } from "@/lib/overpass";
+import type { Mountain, MountainFeatureCollection } from "@/lib/overpass";
 import type { Feature, Point, FeatureCollection } from "geojson";
 import { useMapStore, MAP_STYLES } from "@/stores/map-store";
+import MapTerrain from "./map-components/map-terrain";
+import MountainLayer from "./map-components/mountain-layer";
 
 interface VietnamMapNewProps {
   data: MountainFeatureCollection | null;
+  mountains: Mountain[];
   selectedMountain: { lat: number; lng: number } | null;
   onMountainSelect: (lat: number, lng: number) => void;
 }
@@ -25,6 +28,7 @@ const emptyCollection: FeatureCollection<Point> = {
 
 export default function VietnamMapNew({
   data,
+	mountains,
   selectedMountain,
   onMountainSelect,
 }: VietnamMapNewProps) {
@@ -101,6 +105,10 @@ export default function VietnamMapNew({
       zoom={5.5}
       styles={mapStyles}
     >
+      <MapTerrain />
+
+      {/* {mountains && <MountainLayer data={mountains} />} */}
+
       <MapClusterLayer
         data={input}
         clusterMaxZoom={20}
@@ -117,7 +125,13 @@ export default function VietnamMapNew({
           }}
         />
       )}
-      <MapControls position="bottom-right" showZoom showCompass showFullscreen />
+      <MapControls
+        position="bottom-right"
+        showZoom
+        showCompass
+        showFullscreen
+        showLocate
+      />
     </Map>
   );
 }

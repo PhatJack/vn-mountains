@@ -60,6 +60,7 @@ export default function Home() {
         </div>
         <VietnamMapNew
           data={data}
+          mountains={mountains}
           selectedMountain={selectedMountain}
           onMountainSelect={handleMapSelect}
         />

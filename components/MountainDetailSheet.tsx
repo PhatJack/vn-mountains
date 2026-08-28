@@ -38,12 +38,16 @@ export default function MountainDetailSheet({
 }: MountainDetailSheetProps) {
   return (
     <Sheet open={!!mountain} onOpenChange={onOpenChange}>
-      <SheetContent side="right" showCloseButton className="w-full overflow-y-auto sm:max-w-sm">
-        <Carousel className="mx-auto w-full pt-2">
+      <SheetContent
+        side="right"
+        showCloseButton
+        className="w-full overflow-y-auto sm:max-w-md"
+      >
+        <Carousel className="mx-auto w-full pt-16">
           <CarouselContent>
             {MOUNTAIN_IMAGES.map((src) => (
               <CarouselItem key={src}>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-md">
+                <div className="relative aspect-4/3 overflow-hidden">
                   <Image
                     src={src}
                     alt="Mountain"
@@ -55,8 +59,6 @@ export default function MountainDetailSheet({
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden sm:inline-flex" />
-          <CarouselNext className="hidden sm:inline-flex" />
         </Carousel>
 
         {mountain && (
@@ -69,7 +71,9 @@ export default function MountainDetailSheet({
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Elevation</span>
                 <span className="font-medium">
-                  {mountain.elevation !== null ? `${mountain.elevation} m` : "N/A"}
+                  {mountain.elevation !== null
+                    ? `${mountain.elevation} m`
+                    : "N/A"}
                 </span>
               </div>
               <Separator />

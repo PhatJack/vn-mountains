@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import type { Mountain as MountainType } from "@/lib/overpass";
+import Image from "next/image";
 
 interface MountainSidebarProps {
   mountains: MountainType[];
@@ -46,7 +47,7 @@ export default function MountainSidebar({
     return mountains.filter(
       (m) =>
         m.name.toLowerCase().includes(q) ||
-        (m.elevation !== null && String(m.elevation).includes(q))
+        (m.elevation !== null && String(m.elevation).includes(q)),
     );
   }, [mountains, search]);
 
@@ -56,9 +57,14 @@ export default function MountainSidebar({
   return (
     <Card className="flex h-full flex-col rounded-none border-0 border-r">
       <CardHeader className="border-b">
-        <CardTitle className="flex items-center gap-2">
-          <Mountain className="size-5" data-icon="inline-start" />
-          Vietnam Mountains
+        <CardTitle className="flex items-center justify-center">
+          <Image
+            src={"/logo.png"}
+            alt="VietNam Mountains"
+            width={70}
+            height={70}
+            className="aspect-square"
+          />
         </CardTitle>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <MapPin className="size-3.5" />
@@ -102,7 +108,8 @@ export default function MountainSidebar({
                     onClick={() => onSelect(mountain.lat, mountain.lng)}
                     className={cn(
                       "flex w-full flex-col gap-1 px-4 py-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground",
-                      selectedId === mountain.id && "bg-accent text-accent-foreground"
+                      selectedId === mountain.id &&
+                        "bg-accent text-accent-foreground",
                     )}
                   >
                     <div className="flex items-center justify-between gap-2">

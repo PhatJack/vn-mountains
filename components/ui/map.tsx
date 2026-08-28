@@ -1935,6 +1935,7 @@ function MapClusterLayer<
   const clusterLayerId = `clusters-${id}`;
   const clusterCountLayerId = `cluster-count-${id}`;
   const unclusteredLayerId = `unclustered-point-${id}`;
+	const unclusteredImageId = `unclustered-image-${id}`;
 
   const stylePropsRef = useRef({
     clusterColors,
@@ -2003,6 +2004,8 @@ function MapClusterLayer<
     });
 
     // Add unclustered point layer
+    // const mountainIcon = async () => await map.loadImage("/mountain.png");
+    // map.addImage(unclusteredImageId,mountainIcon)
     map.addLayer({
       id: unclusteredLayerId,
       type: "circle",
@@ -2014,6 +2017,12 @@ function MapClusterLayer<
         "circle-stroke-width": 2,
         "circle-stroke-color": "#fff",
       },
+      // layout: {
+      //   "icon-image": "mountain-icon",
+      //   "icon-size": 0.5,
+      //   "icon-allow-overlap": true,
+      //   "icon-ignore-placement": true,
+      // },
     });
 
     return () => {

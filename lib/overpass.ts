@@ -52,7 +52,7 @@ function parseElevation(ele?: string): number | null {
 
 export async function fetchMountains(): Promise<MountainFeatureCollection> {
   const bboxFilter = VN_BBOXES.map((b) => `node["natural"="peak"](${b})`).join(
-    ";\n  ",
+    ";\n  "
   );
   const query = `[out:json][timeout:60];\n(\n  ${bboxFilter};\n);\nout body;`;
 
