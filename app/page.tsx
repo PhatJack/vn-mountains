@@ -11,6 +11,7 @@ import {
 import VietnamMapNew from "@/components/VietNamMapNew";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { MapStyles } from "@/components/MapStyles";
+import LanguagesSelect from "@/components/Languages";
 
 export default function Home() {
   const [data, setData] = useState<MountainFeatureCollection | null>(null);
@@ -54,15 +55,18 @@ export default function Home() {
         />
       </div>
       <div className="relative flex-1">
-        <div className="absolute top-3 right-3 z-10 flex gap-4">
-          <ThemeToggle />
-          <MapStyles />
-        </div>
         <VietnamMapNew
           data={data}
           mountains={mountains}
           selectedMountain={selectedMountain}
           onMountainSelect={handleMapSelect}
+          toolbar={
+            <div className="absolute top-3 right-3 z-10 flex gap-4">
+              <ThemeToggle />
+              <MapStyles />
+              <LanguagesSelect />
+            </div>
+          }
         />
       </div>
     </div>

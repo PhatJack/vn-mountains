@@ -2,8 +2,29 @@ const OVERPASS_ENDPOINT = "https://overpass-api.de/api/interpreter";
 
 // Vietnam mountain regions: north (Northwest Highlands) + south (Central Highlands)
 const VN_BBOXES = [
-  // "21.5,103,23.5,105.5", // North — Fansipan, Hoang Lien Son, Ha Giang
-  "11.5,107.5,14,108.5", // South — Central Highlands, Langbian, Da Lat
+  // North
+  "20,102,23.5,106",
+
+  // North East
+  "20,106,23.5,110",
+
+  // North Central
+  "17,102,20,106",
+
+  // Central
+  "14,102,17,109",
+
+  // South Central
+  "11,108,14,109",
+
+  // Central Highlands
+  "11,106,14,108",
+
+  // South
+  "8.5,102,11,108",
+
+  // South East
+  "8.5,108,12,110",
 ];
 
 interface OverpassElement {
@@ -52,9 +73,19 @@ function parseElevation(ele?: string): number | null {
 
 export async function fetchMountains(): Promise<MountainFeatureCollection> {
   const bboxFilter = VN_BBOXES.map((b) => `node["natural"="peak"](${b})`).join(
-    ";\n  "
+    ";\n  ",
   );
-  const query = `[out:json][timeout:60];\n(\n  ${bboxFilter};\n);\nout body;`;
+  // const query = `[out:json][timeout:60];\n(\n  ${bboxFilter};\n);\nout body;`;
+  const query = `
+    [out:json][timeout:90];
+    area["ISO3166-1"="VN"][admin_level=2]->.vietnam;
+    (
+      node["natural"="peak"](area.vietnam);
+      way["natural"="peak"](area.vietnam);
+      relation["natural"="peak"](area.vietnam);
+    );
+    out center;
+  `;
 
   const response = await fetch(OVERPASS_ENDPOINT, {
     method: "POST",

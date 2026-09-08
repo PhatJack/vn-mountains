@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   Map,
   MapClusterLayer,
@@ -19,6 +19,7 @@ interface VietnamMapNewProps {
   mountains: Mountain[];
   selectedMountain: { lat: number; lng: number } | null;
   onMountainSelect: (lat: number, lng: number) => void;
+  toolbar?: ReactNode;
 }
 
 const emptyCollection: FeatureCollection<Point> = {
@@ -31,6 +32,7 @@ export default function VietnamMapNew({
 	mountains,
   selectedMountain,
   onMountainSelect,
+  toolbar,
 }: VietnamMapNewProps) {
   const mapRef = useRef<MapRef | null>(null);
   const [selected, setSelected] = useState<{
@@ -105,6 +107,7 @@ export default function VietnamMapNew({
       zoom={5.5}
       styles={mapStyles}
     >
+      {toolbar}
       <MapTerrain />
 
       {/* {mountains && <MountainLayer data={mountains} />} */}
