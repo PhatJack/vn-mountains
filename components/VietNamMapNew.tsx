@@ -124,23 +124,6 @@ export default function VietnamMapNew({
       <MapTerrain />
 
       {data && <MountainLayer data={data} />}
-
-      <MapClusterLayer
-        data={input}
-        clusterMaxZoom={20}
-        clusterColors={["#4ade80", "#facc15", "#f97316"]}
-        clusterThresholds={[10, 30]}
-        pointColor="#10b981"
-        onPointClick={handlePointClick}
-      />
-      {selected && (
-        <MountainDetailSheet
-          mountain={selected}
-          onOpenChange={(open) => {
-            if (!open) setSelected(null);
-          }}
-        />
-      )}
       <MapControls
         position="bottom-right"
         showZoom

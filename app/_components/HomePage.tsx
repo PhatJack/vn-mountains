@@ -52,7 +52,7 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
             <div className="absolute top-3 right-3 z-10 flex gap-4">
               <ThemeToggle />
               <MapStyles />
-              <LanguagesSelect />
+              {/* <LanguagesSelect /> */}
             </div>
           }
         />
