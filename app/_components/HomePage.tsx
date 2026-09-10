@@ -28,11 +28,6 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
     setSelectedId(found?.id ?? null);
   };
 
-  const handleMapSelect = (lat: number, lng: number) => {
-    const found = mountains.find((m) => m.lat === lat && m.lng === lng);
-    setSelectedId(found?.id ?? null);
-  };
-
   return (
     <div className="flex h-dvh">
       <div className="w-80 shrink-0">
@@ -47,7 +42,6 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
         <VietnamMapNew
           data={featureCollection}
           selectedMountain={selectedMountain}
-          onMountainSelect={handleMapSelect}
           toolbar={
             <div className="absolute top-3 right-3 z-10 flex gap-4">
               <ThemeToggle />

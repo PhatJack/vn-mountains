@@ -129,7 +129,7 @@ export default function MountainLayer({ data }: MountainLayerProps) {
           "text-size": 12,
           "text-offset": [0, 1.5],
           "text-anchor": "top",
-          "text-font": ["Open Sans Regular"],
+          "text-font": ["Open Sans"],
         },
         paint: {
           "text-color": "#111827",

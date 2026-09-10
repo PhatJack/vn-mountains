@@ -17,28 +17,16 @@ import MountainLayer from "./map-components/mountain-layer";
 interface VietnamMapNewProps {
   data: MountainFeatureCollection | null;
   selectedMountain: { lat: number; lng: number } | null;
-  onMountainSelect: (lat: number, lng: number) => void;
+  // onMountainSelect: (lat: number, lng: number) => void;
   toolbar?: ReactNode;
 }
-
-const emptyCollection: FeatureCollection<Point> = {
-  type: "FeatureCollection",
-  features: [],
-};
 
 export default function VietnamMapNew({
   data,
   selectedMountain,
-  onMountainSelect,
   toolbar,
 }: VietnamMapNewProps) {
   const mapRef = useRef<MapRef | null>(null);
-  const [selected, setSelected] = useState<{
-    name: string;
-    elevation: number | null;
-    lat: number;
-    lng: number;
-  } | null>(null);
 
   const style = useMapStore((s) => s.style);
   const setMapLoading = useMapStore((s) => s.setMapLoading);
