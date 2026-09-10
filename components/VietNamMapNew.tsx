@@ -8,7 +8,7 @@ import {
   type MapRef,
 } from "@/components/ui/map";
 import MountainDetailSheet from "@/components/MountainDetailSheet";
-import type { Mountain, MountainFeatureCollection } from "@/lib/overpass";
+import type { MountainFeatureCollection } from "@/services/api";
 import type { Feature, Point, FeatureCollection } from "geojson";
 import { useMapStore, MAP_STYLES } from "@/stores/map-store";
 import MapTerrain from "./map-components/map-terrain";
@@ -16,7 +16,6 @@ import MountainLayer from "./map-components/mountain-layer";
 
 interface VietnamMapNewProps {
   data: MountainFeatureCollection | null;
-  mountains: Mountain[];
   selectedMountain: { lat: number; lng: number } | null;
   onMountainSelect: (lat: number, lng: number) => void;
   toolbar?: ReactNode;
@@ -29,7 +28,6 @@ const emptyCollection: FeatureCollection<Point> = {
 
 export default function VietnamMapNew({
   data,
-	mountains,
   selectedMountain,
   onMountainSelect,
   toolbar,
@@ -92,10 +90,25 @@ export default function VietnamMapNew({
 
   useEffect(() => {
     if (!selectedMountain) return;
-    mapRef.current?.flyTo({
+    const map = mapRef.current;
+    if (!map) return;
+
+    // Cancel any in-flight animation to handle rapid clicks
+    if (map.isMoving()) {
+      map.stop();
+    }
+
+    // Use jumpTo for instant navigation - starts tile loading immediately
+    // without animation delay. This ensures tiles begin loading right away.
+    map.jumpTo({
       center: [selectedMountain.lng, selectedMountain.lat],
       zoom: 16,
-      duration: 1000,
+      padding: {
+        top: 50,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      },
     });
   }, [selectedMountain]);
 
@@ -110,7 +123,7 @@ export default function VietnamMapNew({
       {toolbar}
       <MapTerrain />
 
-      {/* {mountains && <MountainLayer data={mountains} />} */}
+      {data && <MountainLayer data={data} />}
 
       <MapClusterLayer
         data={input}

@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { Mountain, Search, MapPin, ArrowUpFromLine } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import type { Mountain as MountainType } from "@/lib/overpass";
+import type { Mountain as MountainType } from "@/services/api";
 import Image from "next/image";
 
 interface MountainSidebarProps {
@@ -40,6 +41,7 @@ export default function MountainSidebar({
   selectedId,
 }: MountainSidebarProps) {
   const [search, setSearch] = useState("");
+  const viewportRef = useRef<HTMLDivElement>(null);
 
   const filtered = useMemo(() => {
     if (!search.trim()) return mountains;
@@ -54,6 +56,14 @@ export default function MountainSidebar({
   const totalCount = mountains.length;
   const filteredCount = filtered.length;
 
+  const virtualizer = useVirtualizer({
+    count: filtered.length,
+    getScrollElement: () => viewportRef.current,
+    estimateSize: () => 56,
+    overscan: 8,
+    getItemKey: (index) => filtered[index]?.id ?? index,
+  });
+
   return (
     <Card className="flex h-full flex-col rounded-none border-0 border-r">
       <CardHeader className="border-b">
@@ -64,6 +74,7 @@ export default function MountainSidebar({
             width={70}
             height={70}
             className="aspect-square"
+						loading="eager"
           />
         </CardTitle>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -99,41 +110,55 @@ export default function MountainSidebar({
             <p>No mountains found</p>
           </div>
         ) : (
-          <ScrollArea className="h-full">
-            <div className="flex flex-col">
-              {filtered.map((mountain, index) => (
-                <div key={mountain.id}>
-                  <button
-                    type="button"
-                    onClick={() => onSelect(mountain.lat, mountain.lng)}
-                    className={cn(
-                      "flex w-full flex-col gap-1 px-4 py-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground",
-                      selectedId === mountain.id &&
-                        "bg-accent text-accent-foreground",
-                    )}
+          <ScrollArea className="h-full" viewportRef={viewportRef}>
+            <div
+              className="relative w-full"
+              style={{ height: virtualizer.getTotalSize() }}
+            >
+              {virtualizer.getVirtualItems().map((virtualRow) => {
+                const mountain = filtered[virtualRow.index];
+                return (
+                  <div
+                    key={mountain.id}
+                    data-index={virtualRow.index}
+                    ref={virtualizer.measureElement}
+                    className="absolute left-0 top-0 w-full"
+                    style={{
+                      transform: `translateY(${virtualRow.start}px)`,
+                    }}
                   >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="truncate text-sm font-medium">
-                        {mountain.name}
-                      </span>
-                      {mountain.elevation !== null ? (
-                        <Badge variant="secondary" className="shrink-0">
-                          <ArrowUpFromLine className="size-3" />
-                          {mountain.elevation} m
-                        </Badge>
-                      ) : (
-                        <Badge variant="outline" className="shrink-0">
-                          N/A
-                        </Badge>
+                    <button
+                      type="button"
+                      onClick={() => onSelect(mountain.lat, mountain.lng)}
+                      className={cn(
+                        "flex w-full flex-col gap-1 px-4 py-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground",
+                        selectedId === mountain.id &&
+                          "bg-accent text-accent-foreground",
                       )}
-                    </div>
-                    <span className="text-xs text-muted-foreground">
-                      {mountain.lat.toFixed(4)}, {mountain.lng.toFixed(4)}
-                    </span>
-                  </button>
-                  {index < filtered.length - 1 && <Separator />}
-                </div>
-              ))}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="truncate text-sm font-medium">
+                          {mountain.name}
+                        </span>
+                        {mountain.elevation !== null ? (
+                          <Badge variant="secondary" className="shrink-0">
+                            <ArrowUpFromLine className="size-3" />
+                            {mountain.elevation} m
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="shrink-0">
+                            N/A
+                          </Badge>
+                        )}
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        {mountain.lat.toFixed(4)}, {mountain.lng.toFixed(4)}
+                      </span>
+                    </button>
+                    {virtualRow.index < filtered.length - 1 && <Separator />}
+                  </div>
+                );
+              })}
             </div>
           </ScrollArea>
         )}

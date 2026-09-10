@@ -5,7 +5,7 @@ import { useMap } from "@/components/ui/map";
 
 import type {
   MountainFeatureCollection,
-} from "@/lib/overpass";
+} from "@/services/api";
 import { GeoJSONSource, Popup } from "maplibre-gl";
 
 interface MountainLayerProps {
