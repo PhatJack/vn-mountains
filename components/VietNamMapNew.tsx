@@ -69,25 +69,6 @@ export default function VietnamMapNew({
     };
   }, [setMapLoading]);
 
-  const input = data ?? emptyCollection;
-
-  const handlePointClick = (
-    feature: Feature<Point>,
-    coordinates: [number, number],
-  ) => {
-    const props = feature.properties as {
-      name?: string;
-      ele?: number | null;
-    };
-    setSelected({
-      name: props.name ?? "Unknown Peak",
-      elevation: props.ele ?? null,
-      lat: coordinates[1],
-      lng: coordinates[0],
-    });
-    onMountainSelect(coordinates[1], coordinates[0]);
-  };
-
   useEffect(() => {
     if (!selectedMountain) return;
     const map = mapRef.current;
@@ -121,7 +102,7 @@ export default function VietnamMapNew({
       styles={mapStyles}
     >
       {toolbar}
-      <MapTerrain />
+      {/* <MapTerrain /> */}
 
       {data && <MountainLayer data={data} />}
       <MapControls

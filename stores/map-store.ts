@@ -17,7 +17,7 @@ interface MapStore {
 
 export const useMapStore = create<MapStore>((set) => ({
   isMapLoading: true,
-  style: "default",
+  style: "openstreetmap",
   setMapLoading: (loading) => set({ isMapLoading: loading }),
   setStyle: (style) => set({ style }),
 }));
