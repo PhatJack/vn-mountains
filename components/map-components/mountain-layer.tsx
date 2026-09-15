@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useMap } from "@/components/ui/map";
+import { MapPopup, useMap } from "@/components/ui/map";
 
 import type { MountainFeatureCollection } from "@/services/api";
 import { GeoJSONSource, Popup } from "maplibre-gl";
@@ -167,6 +167,9 @@ export default function MountainLayer({ data }: MountainLayerProps) {
 
       map.on("click", "mountains-point", (event) => {
         const feature = event.features?.[0];
+        const { lat, lng } = event.lngLat;
+
+        console.log(event);
 
         if (!feature) return;
 
@@ -176,36 +179,46 @@ export default function MountainLayer({ data }: MountainLayerProps) {
 
         const ele = properties?.ele;
 
-        new Popup()
-          .setLngLat(event.lngLat)
-          .setHTML(
-            `
-              <div style="
-                min-width: 180px;
-                padding: 4px;
-              ">
-                <strong>
-                  ${name}
-                </strong>
+        map.flyTo({
+          center: [lng, lat],
+          zoom: 14,
+          duration: 800,
+          essential: true,
+        });
+				// <MapPopup>
 
-                ${
-                  ele
-                    ? `
-                      <div style="
-                        margin-top: 6px;
-                      ">
-                        Elevation:
-                        <strong>
-                          ${Number(ele).toLocaleString("vi-VN")} m
-                        </strong>
-                      </div>
-                    `
-                    : ""
-                }
-              </div>
-            `,
-          )
-          .addTo(map);
+				// </MapPopup>
+
+        // new Popup()
+        //   .setLngLat(event.lngLat)
+        //   .setHTML(
+        //     `
+        //       <div style="
+        //         min-width: 180px;
+        //         padding: 4px;
+        //       ">
+        //         <strong>
+        //           ${name}
+        //         </strong>
+
+        //         ${
+        //           ele
+        //             ? `
+        //               <div style="
+        //                 margin-top: 6px;
+        //               ">
+        //                 Elevation:
+        //                 <strong>
+        //                   ${Number(ele).toLocaleString("vi-VN")} m
+        //                 </strong>
+        //               </div>
+        //             `
+        //             : ""
+        //         }
+        //       </div>
+        //     `,
+        //   )
+        //   .addTo(map);
       });
 
       // ==========================

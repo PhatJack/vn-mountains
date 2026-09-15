@@ -318,6 +318,33 @@ const Map = forwardRef<MapRef, MapProps>(function Map(
     const styleLoadHandler = () => {
       styleSwapInFlightRef.current = false;
       setIsStyleLoaded(true);
+
+      // After a full style swap the map's sources/layers are cleared.
+      // Re-add the Vietnam boundary source and layer if they're missing so
+      // the boundary persists when the user switches styles.
+      try {
+        if (!map.getSource("vietnam-boundary")) {
+          map.addSource("vietnam-boundary", {
+            type: "geojson",
+            data: "/vietnam.geojson",
+          });
+        }
+
+        if (!map.getLayer("vietnam-boundary-line")) {
+          map.addLayer({
+            id: "vietnam-boundary-line",
+            type: "line",
+            source: "vietnam-boundary",
+            paint: {
+              "line-color": "#FF3333",
+              "line-width": 2,
+              "line-opacity": 0.75,
+            },
+          });
+        }
+      } catch (err) {
+        // ignore: map may be in an intermediate state during teardown
+      }
     };
     const loadHandler = () => setIsLoaded(true);
 
@@ -328,22 +355,32 @@ const Map = forwardRef<MapRef, MapProps>(function Map(
     };
 
     const onLoad = () => {
-      map.addSource("vietnam-boundary", {
-        type: "geojson",
-        data: "/vietnam.geojson",
-      });
+      // Guard against duplicate sources/layers (may happen during style swaps)
+      try {
+        if (!map.getSource("vietnam-boundary")) {
+          map.addSource("vietnam-boundary", {
+            type: "geojson",
+            data: "/vietnam.geojson",
+          });
+        }
 
-      map.addLayer({
-        id: "vietnam-boundary-line",
-        type: "line",
-        source: "vietnam-boundary",
-        paint: {
-          "line-color": "#FFD444",
-          "line-width": 2,
-          "line-opacity": 0.75,
-        },
-      });
-			loadHandler();
+        if (!map.getLayer("vietnam-boundary-line")) {
+          map.addLayer({
+            id: "vietnam-boundary-line",
+            type: "line",
+            source: "vietnam-boundary",
+            paint: {
+              "line-color": "#FF3333",
+              "line-width": 2,
+              "line-opacity": 0.75,
+            },
+          });
+        }
+      } catch (err) {
+        // ignore potential race conditions where map is not ready
+      }
+
+      loadHandler();
     };
 
     map.on("load", onLoad);
