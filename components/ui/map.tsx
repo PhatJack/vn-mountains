@@ -289,6 +289,11 @@ const Map = forwardRef<MapRef, MapProps>(function Map(
   useEffect(() => {
     if (!containerRef.current) return;
 
+    const VIETNAM_BOUNDS: [[number, number], [number, number]] = [
+      [102.14, 8.18],
+      [109.46, 23.39],
+    ];
+
     const initialStyle =
       resolvedTheme === "dark" ? mapStyles.dark : mapStyles.light;
     currentStyleRef.current = initialStyle;
@@ -297,12 +302,18 @@ const Map = forwardRef<MapRef, MapProps>(function Map(
       container: containerRef.current,
       style: initialStyle,
       renderWorldCopies: false,
+
       attributionControl: {
         compact: true,
       },
       ...props,
       ...viewport,
+      // maxBounds: VIETNAM_BOUNDS,
     });
+
+    // map.fitBounds(VIETNAM_BOUNDS, {
+    //   padding: 40,
+    // });
 
     const styleLoadHandler = () => {
       styleSwapInFlightRef.current = false;
@@ -316,13 +327,32 @@ const Map = forwardRef<MapRef, MapProps>(function Map(
       onViewportChangeRef.current?.(getViewport(map));
     };
 
-    map.on("load", loadHandler);
+    const onLoad = () => {
+      map.addSource("vietnam-boundary", {
+        type: "geojson",
+        data: "/vietnam.geojson",
+      });
+
+      map.addLayer({
+        id: "vietnam-boundary-line",
+        type: "line",
+        source: "vietnam-boundary",
+        paint: {
+          "line-color": "#FFD444",
+          "line-width": 2,
+          "line-opacity": 0.75,
+        },
+      });
+			loadHandler();
+    };
+
+    map.on("load", onLoad);
     map.on("style.load", styleLoadHandler);
     map.on("move", handleMove);
     setMapInstance(map);
 
     return () => {
-      map.off("load", loadHandler);
+      map.off("load", onLoad);
       map.off("style.load", styleLoadHandler);
       map.off("move", handleMove);
       map.remove();
@@ -1935,7 +1965,7 @@ function MapClusterLayer<
   const clusterLayerId = `clusters-${id}`;
   const clusterCountLayerId = `cluster-count-${id}`;
   const unclusteredLayerId = `unclustered-point-${id}`;
-	const unclusteredImageId = `unclustered-image-${id}`;
+  const unclusteredImageId = `unclustered-image-${id}`;
 
   const stylePropsRef = useRef({
     clusterColors,
@@ -1995,7 +2025,7 @@ function MapClusterLayer<
       filter: ["has", "point_count"],
       layout: {
         "text-field": "{point_count_abbreviated}",
-        "text-font": ["Open Sans Semibold"],
+        "text-font": ["Open Sans"],
         "text-size": 12,
       },
       paint: {
@@ -2004,8 +2034,6 @@ function MapClusterLayer<
     });
 
     // Add unclustered point layer
-    // const mountainIcon = async () => await map.loadImage("/mountain.png");
-    // map.addImage(unclusteredImageId,mountainIcon)
     map.addLayer({
       id: unclusteredLayerId,
       type: "circle",

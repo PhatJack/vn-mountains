@@ -69,15 +69,16 @@ export default function VietnamMapNew({
 
     // Use jumpTo for instant navigation - starts tile loading immediately
     // without animation delay. This ensures tiles begin loading right away.
-    map.jumpTo({
+    map.flyTo({
       center: [selectedMountain.lng, selectedMountain.lat],
-      zoom: 16,
-      padding: {
-        top: 50,
-        bottom: 0,
-        left: 0,
-        right: 0,
-      },
+      zoom: 14,
+      duration: 1500,
+      // padding: {
+      //   top: 50,
+      //   bottom: 0,
+      //   left: 0,
+      //   right: 0,
+      // },
     });
   }, [selectedMountain]);
 
