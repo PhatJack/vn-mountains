@@ -6,11 +6,33 @@ import { useMap } from "@/components/ui/map";
 const TERRAIN_SOURCE = "terrainSource";
 const HILLSHADE_SOURCE = "hillshadeSource";
 
-export default function MapTerrain() {
+interface MapTerrainProps {
+  enabled: boolean;
+  restorePitch: number;
+}
+
+export default function MapTerrain({ enabled, restorePitch }: MapTerrainProps) {
   const { map, isLoaded } = useMap();
 
   useEffect(() => {
     if (!map || !isLoaded) return;
+
+    if (!enabled) {
+      map.setTerrain(null);
+
+      if (map.getLayer("hillshade")) {
+        map.removeLayer("hillshade");
+      }
+      if (map.getSource(HILLSHADE_SOURCE)) {
+        map.removeSource(HILLSHADE_SOURCE);
+      }
+      if (map.getSource(TERRAIN_SOURCE)) {
+        map.removeSource(TERRAIN_SOURCE);
+      }
+
+      map.setPitch(restorePitch);
+      return;
+    }
 
     if (!map.getSource(TERRAIN_SOURCE)) {
       map.addSource(TERRAIN_SOURCE, {
@@ -35,14 +57,9 @@ export default function MapTerrain() {
         source: HILLSHADE_SOURCE,
 
         paint: {
-          "hillshade-shadow-color":
-            "#473B24",
-
-          "hillshade-highlight-color":
-            "#ffffff",
-
-          "hillshade-accent-color":
-            "#8c7a55",
+          "hillshade-shadow-color": "#473B24",
+          "hillshade-highlight-color": "#ffffff",
+          "hillshade-accent-color": "#8c7a55",
         },
       });
     }
@@ -53,7 +70,7 @@ export default function MapTerrain() {
     });
 
     map.setPitch(60);
-  }, [map, isLoaded]);
+  }, [enabled, map, isLoaded, restorePitch]);
 
   return null;
 }

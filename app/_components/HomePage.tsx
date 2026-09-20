@@ -43,11 +43,11 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
           data={featureCollection}
           selectedMountain={selectedMountain}
           toolbar={
-            <div className="absolute top-3 right-3 z-10 flex gap-4">
+            <>
               <ThemeToggle />
               <MapStyles />
               {/* <LanguagesSelect /> */}
-            </div>
+            </>
           }
         />
       </div>
