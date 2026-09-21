@@ -13,6 +13,8 @@ import type { Feature, Point, FeatureCollection } from "geojson";
 import { useMapStore, MAP_STYLES } from "@/stores/map-store";
 import MapTerrain from "./map-components/map-terrain";
 import MapTerrainToggle from "./map-components/map-terrain-toggle";
+import MapContours from "./map-components/map-contours";
+import MapContoursToggle from "./map-components/map-contours-toggle";
 import MountainLayer from "./map-components/mountain-layer";
 
 interface VietnamMapNewProps {
@@ -29,6 +31,7 @@ export default function VietnamMapNew({
 }: VietnamMapNewProps) {
   const mapRef = useRef<MapRef | null>(null);
   const [terrainEnabled, setTerrainEnabled] = useState(false);
+  const [contoursEnabled, setContoursEnabled] = useState(false);
 
   const style = useMapStore((s) => s.style);
   const setMapLoading = useMapStore((s) => s.setMapLoading);
@@ -95,8 +98,10 @@ export default function VietnamMapNew({
       <div className="absolute top-3 right-3 z-10 flex gap-4">
         {toolbar}
         <MapTerrainToggle onEnabledChange={setTerrainEnabled} />
+        <MapContoursToggle onEnabledChange={setContoursEnabled} />
       </div>
       <MapTerrain enabled={terrainEnabled} restorePitch={is3D ? 60 : 0} />
+      <MapContours enabled={contoursEnabled} />
 
       {data && <MountainLayer data={data} />}
       <MapControls
