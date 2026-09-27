@@ -3,4 +3,5 @@ export const API_BASE_URL =
 
 export const ENDPOINTS = {
   mountains: "/mountains",
+  mountainDetail: "/mountains",
 } as const;

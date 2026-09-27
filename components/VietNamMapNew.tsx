@@ -7,19 +7,20 @@ import {
   MapControls,
   type MapRef,
 } from "@/components/ui/map";
-import MountainDetailSheet from "@/components/MountainDetailSheet";
+import MountainDetailDialog from "@/components/MountainDetailDialog";
 import type { MountainFeatureCollection } from "@/services/api";
-import type { Feature, Point, FeatureCollection } from "geojson";
 import { useMapStore, MAP_STYLES } from "@/stores/map-store";
 import MapTerrain from "./map-components/map-terrain";
 import MapTerrainToggle from "./map-components/map-terrain-toggle";
 import MapContours from "./map-components/map-contours";
 import MapContoursToggle from "./map-components/map-contours-toggle";
 import MountainLayer from "./map-components/mountain-layer";
+import type { Mountain } from "@/services/api";
 
 interface VietnamMapNewProps {
   data: MountainFeatureCollection | null;
   selectedMountain: { lat: number; lng: number } | null;
+  mountains?: Mountain[];
   // onMountainSelect: (lat: number, lng: number) => void;
   toolbar?: ReactNode;
 }
@@ -27,11 +28,17 @@ interface VietnamMapNewProps {
 export default function VietnamMapNew({
   data,
   selectedMountain,
+  mountains = [],
   toolbar,
 }: VietnamMapNewProps) {
   const mapRef = useRef<MapRef | null>(null);
   const [terrainEnabled, setTerrainEnabled] = useState(false);
   const [contoursEnabled, setContoursEnabled] = useState(false);
+  const [selectedDetail, setSelectedDetail] = useState<{
+    id: number;
+    lat: number;
+    lng: number;
+  } | null>(null);
 
   const style = useMapStore((s) => s.style);
   const setMapLoading = useMapStore((s) => s.setMapLoading);
@@ -103,13 +110,35 @@ export default function VietnamMapNew({
       <MapTerrain enabled={terrainEnabled} restorePitch={is3D ? 60 : 0} />
       <MapContours enabled={contoursEnabled} />
 
-      {data && <MountainLayer data={data} />}
+      {data && (
+        <MountainLayer
+          data={data}
+          onMountainSelect={(selection) => setSelectedDetail(selection)}
+        />
+      )}
       <MapControls
         position="bottom-right"
         showZoom
         showCompass
         showFullscreen
         showLocate
+      />
+      <MountainDetailDialog
+        mountainId={selectedDetail?.id ?? null}
+        summary={
+          selectedDetail
+            ? mountains.find((mountain) => mountain.id === selectedDetail.id) ?? {
+                id: selectedDetail.id,
+                name: "Unknown Peak",
+                elevation: null,
+                lat: selectedDetail.lat,
+                lng: selectedDetail.lng,
+              }
+            : null
+        }
+        onOpenChange={(open) => {
+          if (!open) setSelectedDetail(null);
+        }}
       />
     </Map>
   );

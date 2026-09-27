@@ -8,11 +8,16 @@ import { GeoJSONSource, Popup } from "maplibre-gl";
 
 interface MountainLayerProps {
   data: MountainFeatureCollection;
+  onMountainSelect?: (selection: {
+    id: number;
+    lat: number;
+    lng: number;
+  }) => void;
 }
 
 const SOURCE_ID = "mountains";
 
-export default function MountainLayer({ data }: MountainLayerProps) {
+export default function MountainLayer({ data, onMountainSelect }: MountainLayerProps) {
   const { map, isLoaded } = useMap();
 
   useEffect(() => {
@@ -169,11 +174,12 @@ export default function MountainLayer({ data }: MountainLayerProps) {
         const feature = event.features?.[0];
         const { lat, lng } = event.lngLat;
 
-        console.log(event);
-
         if (!feature) return;
 
         const properties = feature.properties;
+        const id = Number(properties?.id);
+
+        if (!Number.isSafeInteger(id)) return;
 
         const name = properties?.name ?? "Unknown Peak";
 
@@ -185,6 +191,8 @@ export default function MountainLayer({ data }: MountainLayerProps) {
           duration: 800,
           essential: true,
         });
+
+        onMountainSelect?.({ id, lat, lng });
 				// <MapPopup>
 
 				// </MapPopup>
@@ -264,7 +272,7 @@ export default function MountainLayer({ data }: MountainLayerProps) {
         map.removeSource(SOURCE_ID);
       }
     };
-  }, [map, isLoaded, data]);
+  }, [map, isLoaded, data, onMountainSelect]);
 
   return null;
 }

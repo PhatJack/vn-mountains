@@ -54,7 +54,9 @@ export default function MapContours({ enabled }: MapContoursProps) {
       tiles: [
         demSource.contourProtocolUrl({
           thresholds: contourThresholds,
+          //default=1 for meters
           multiplier: 1,
+					// multiplier: 3.28084,
           contourLayer: "contours",
           elevationKey: "ele",
           levelKey: "level",

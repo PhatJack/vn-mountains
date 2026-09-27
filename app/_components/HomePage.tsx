@@ -41,6 +41,7 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
       <div className="relative flex-1">
         <VietnamMapNew
           data={featureCollection}
+          mountains={mountains}
           selectedMountain={selectedMountain}
           toolbar={
             <>
