@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useMountainDetail } from "@/services/api";
 import type { Mountain, MountainDetail } from "@/services/api";
+import { formatLabel, formatValue, epochToDateTime } from "@/lib/utils";
 
 interface MountainDetailDialogProps {
   mountainId: number | null;
@@ -27,34 +28,37 @@ interface MountainDetailDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-function formatLabel(key: string) {
-  return key
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/^./, (char) => char.toUpperCase());
-}
-
-function formatValue(value: unknown): string | null {
-  if (value === null || value === undefined || value === "") return null;
-  if (typeof value === "object") return JSON.stringify(value);
-  return String(value);
-}
-
 function DetailQuote({ mountain }: { mountain: MountainDetail }) {
   const fields = Object.entries(mountain).filter(([key, value]) => {
-    return key !== "images" && key !== "imageUrl" && formatValue(value) !== null;
+    // exclude image fields and createdAt; display updatedAt as formatted datetime
+    if (
+      key === "images" ||
+      key === "imageUrl" ||
+      key === "createdAt" ||
+      key === "id" ||
+      key === "nameAscii" ||
+      key === "tags"
+    )
+      return false;
+    if (key === "updatedAt") return epochToDateTime(value as any) !== null;
+    return formatValue(value) !== null;
   });
 
   return (
-    <blockquote className="flex max-h-80 flex-col gap-3 overflow-y-auto border-l-2 border-primary/30 pl-4 text-sm">
+    <div className="flex max-h-80 flex-col gap-3 overflow-y-auto text-sm">
       {fields.map(([key, value]) => (
         <div key={key} className="flex flex-col gap-1">
           <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             {formatLabel(key)}
           </dt>
-          <dd className="break-words text-foreground">{formatValue(value)}</dd>
+          <dd className="wrap-break-word text-foreground">
+            {key === "updatedAt"
+              ? epochToDateTime(value as any)
+              : formatValue(value)}
+          </dd>
         </div>
       ))}
-    </blockquote>
+    </div>
   );
 }
 
@@ -87,8 +91,13 @@ export default function MountainDetailDialog({
       new Set(
         [
           mountain.imageUrl,
-          ...(mountain.images ?? []).flatMap((image) => [image.imageUrl, image.url]),
-        ].filter((url): url is string => typeof url === "string" && url.length > 0),
+          ...(mountain.images ?? []).flatMap((image) => [
+            image.imageUrl,
+            image.url,
+          ]),
+        ].filter(
+          (url): url is string => typeof url === "string" && url.length > 0,
+        ),
       ),
     );
   }, [mountain]);
@@ -97,9 +106,11 @@ export default function MountainDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90dvh] max-w-4xl overflow-y-auto">
+      <DialogContent className="max-h-[90dvh] max-w-6xl w-full overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{mountain?.name ?? summary?.name ?? "Mountain details"}</DialogTitle>
+          <DialogTitle>
+            {mountain?.name ?? summary?.name ?? "Mountain details"}
+          </DialogTitle>
           <DialogDescription>
             {detailQuery.isLoading
               ? "Loading mountain information..."
@@ -109,8 +120,8 @@ export default function MountainDetailDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-          <div className="min-w-0">
+        <div className="grid gap-6 grid-cols-1">
+          <div className="min-w-0 w-full">
             {detailQuery.isLoading && (
               <Skeleton className="aspect-4/3 w-full rounded-lg" />
             )}
@@ -139,7 +150,10 @@ export default function MountainDetailDialog({
                   <CarouselPrevious />
                   <CarouselNext />
                 </Carousel>
-                <div className="flex justify-center gap-1.5" aria-label="Image slides">
+                <div
+                  className="flex justify-center gap-1.5"
+                  aria-label="Image slides"
+                >
                   {imageUrls.map((src, index) => (
                     <Button
                       key={src}
@@ -157,11 +171,15 @@ export default function MountainDetailDialog({
             )}
           </div>
 
-          <div className="min-w-0">
+          <div className="min-w-0 w-full">
             {detailQuery.isError && (
               <div className="flex flex-col gap-3 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm">
                 <p>Unable to load the full mountain information.</p>
-                <Button type="button" variant="outline" onClick={() => detailQuery.refetch()}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => detailQuery.refetch()}
+                >
                   Retry
                 </Button>
               </div>
@@ -172,9 +190,18 @@ export default function MountainDetailDialog({
             ) : (
               summary && (
                 <blockquote className="flex flex-col gap-3 border-l-2 border-primary/30 pl-4 text-sm">
-                  <div><span className="text-muted-foreground">Elevation:</span> {summary.elevation ?? "N/A"} m</div>
-                  <div><span className="text-muted-foreground">Latitude:</span> {summary.lat.toFixed(4)}</div>
-                  <div><span className="text-muted-foreground">Longitude:</span> {summary.lng.toFixed(4)}</div>
+                  <div>
+                    <span className="text-muted-foreground">Elevation:</span>{" "}
+                    {summary.elevation ?? "N/A"} m
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Latitude:</span>{" "}
+                    {summary.lat.toFixed(4)}
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Longitude:</span>{" "}
+                    {summary.lng.toFixed(4)}
+                  </div>
                 </blockquote>
               )
             )}
