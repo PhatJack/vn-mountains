@@ -40,7 +40,7 @@ function DetailQuote({ mountain }: { mountain: MountainDetail }) {
       key === "tags"
     )
       return false;
-    if (key === "updatedAt") return epochToDateTime(value as any) !== null;
+    if (key === "updatedAt") return epochToDateTime(value as number) !== null;
     return formatValue(value) !== null;
   });
 
@@ -53,7 +53,7 @@ function DetailQuote({ mountain }: { mountain: MountainDetail }) {
           </dt>
           <dd className="wrap-break-word text-foreground">
             {key === "updatedAt"
-              ? epochToDateTime(value as any)
+              ? epochToDateTime(value as number)
               : formatValue(value)}
           </dd>
         </div>

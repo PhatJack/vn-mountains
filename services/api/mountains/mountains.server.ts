@@ -60,7 +60,7 @@ export async function getMountainsData(): Promise<MountainsData> {
   try {
     mountains = await fetchMountainsFromApi();
   } catch (err) {
-    // console.error("[mountains] API unavailable, falling back to data.json", err);
+    console.error("[mountains] API unavailable, falling back to data.json", err);
     mountains = loadFromFallback();
   }
 

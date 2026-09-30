@@ -5,7 +5,6 @@ import MountainSidebar from "@/components/MountainSidebar";
 import VietnamMapNew from "@/components/VietNamMapNew";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { MapStyles } from "@/components/MapStyles";
-import LanguagesSelect from "@/components/Languages";
 import { useMountains, mountainsToFeatureCollection } from "@/services/api";
 import type { MountainsData } from "@/services/api/mountains/mountains.server";
 

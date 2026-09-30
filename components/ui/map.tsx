@@ -2002,7 +2002,7 @@ function MapClusterLayer<
   const clusterLayerId = `clusters-${id}`;
   const clusterCountLayerId = `cluster-count-${id}`;
   const unclusteredLayerId = `unclustered-point-${id}`;
-  const unclusteredImageId = `unclustered-image-${id}`;
+  // const unclusteredImageId = `unclustered-image-${id}`;
 
   const stylePropsRef = useRef({
     clusterColors,
