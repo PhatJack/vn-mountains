@@ -45,7 +45,7 @@ function DetailQuote({ mountain }: { mountain: MountainDetail }) {
   });
 
   return (
-    <div className="flex max-h-80 flex-col gap-3 overflow-y-auto text-sm">
+    <div className="grid grid-cols-1 md:grid-cols-3 max-h-80  gap-3 overflow-y-auto text-sm">
       {fields.map(([key, value]) => (
         <div key={key} className="flex flex-col gap-1">
           <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
@@ -106,7 +106,7 @@ export default function MountainDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90dvh] max-w-6xl w-full overflow-y-auto">
+      <DialogContent className="max-h-[90dvh] max-w-6xl min-w-4xl w-full overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {mountain?.name ?? summary?.name ?? "Mountain details"}
