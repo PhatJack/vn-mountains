@@ -14,11 +14,33 @@ export interface MountainDetail extends Omit<Mountain, "id"> {
   province?: string | null;
   description?: string | null;
   imageUrl?: string | null;
-  images?: Array<{ imageUrl?: string | null; url?: string | null }>;
+  images?: MountainImage[];
   tags?: unknown;
   createdAt?: number | null;
   updatedAt?: number | null;
 }
+
+export interface MountainImage {
+  id: string;
+  imageUrl: string;
+  url?: string;
+  sortOrder: number;
+}
+
+export interface CreateMountainInput {
+  osmId?: number;
+  name: string;
+  nameAscii?: string;
+  altName?: string;
+  latitude: number;
+  longitude: number;
+  elevation?: number;
+  province?: string;
+  description?: string;
+  imageUrl?: string;
+}
+
+export type UpdateMountainInput = Partial<CreateMountainInput>;
 
 export interface MountainFeature {
   type: "Feature";
