@@ -8,11 +8,7 @@ import { GeoJSONSource, Popup } from "maplibre-gl";
 
 interface MountainLayerProps {
   data: MountainFeatureCollection;
-  onMountainSelect?: (selection: {
-    id: number;
-    lat: number;
-    lng: number;
-  }) => void;
+  onMountainSelect?: (selection: { id: number; lat: number; lng: number }) => void;
 }
 
 const SOURCE_ID = "mountains";
@@ -69,15 +65,7 @@ export default function MountainLayer({ data, onMountainSelect }: MountainLayerP
         source: SOURCE_ID,
         filter: ["has", "point_count"],
         paint: {
-          "circle-color": [
-            "step",
-            ["get", "point_count"],
-            "#51bbd6",
-            10,
-            "#f1f075",
-            30,
-            "#f28cb1",
-          ],
+          "circle-color": ["step", ["get", "point_count"], "#51bbd6", 10, "#f1f075", 30, "#f28cb1"],
           "circle-radius": ["step", ["get", "point_count"], 18, 10, 22, 30, 28],
           "circle-stroke-width": 2,
           "circle-stroke-color": "#ffffff",
@@ -193,9 +181,9 @@ export default function MountainLayer({ data, onMountainSelect }: MountainLayerP
         });
 
         onMountainSelect?.({ id, lat, lng });
-				// <MapPopup>
+        // <MapPopup>
 
-				// </MapPopup>
+        // </MapPopup>
 
         // new Popup()
         //   .setLngLat(event.lngLat)
@@ -257,16 +245,13 @@ export default function MountainLayer({ data, onMountainSelect }: MountainLayerP
 
       if (!map.getStyle()) return;
 
-      [
-        "mountains-label",
-        "mountains-point",
-        "mountain-cluster-count",
-        "mountain-clusters",
-      ].forEach((id) => {
-        if (map.getLayer(id)) {
-          map.removeLayer(id);
-        }
-      });
+      ["mountains-label", "mountains-point", "mountain-cluster-count", "mountain-clusters"].forEach(
+        (id) => {
+          if (map.getLayer(id)) {
+            map.removeLayer(id);
+          }
+        },
+      );
 
       if (map.getSource(SOURCE_ID)) {
         map.removeSource(SOURCE_ID);

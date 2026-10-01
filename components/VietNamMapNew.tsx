@@ -1,12 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import {
-  Map,
-  MapClusterLayer,
-  MapControls,
-  type MapRef,
-} from "@/components/ui/map";
+import { Map, MapClusterLayer, MapControls, type MapRef } from "@/components/ui/map";
 import MountainDetailDialog from "@/components/MountainDetailDialog";
 import type { MountainFeatureCollection } from "@/services/api";
 import { useMapStore, MAP_STYLES } from "@/stores/map-store";
@@ -45,9 +40,7 @@ export default function VietnamMapNew({
 
   const selectedStyle = MAP_STYLES[style] as string | undefined;
   const is3D = style === "openstreetmap3d";
-  const mapStyles = selectedStyle
-    ? { light: selectedStyle, dark: selectedStyle }
-    : undefined;
+  const mapStyles = selectedStyle ? { light: selectedStyle, dark: selectedStyle } : undefined;
 
   useEffect(() => {
     if (mapRef.current) {
@@ -111,29 +104,20 @@ export default function VietnamMapNew({
       <MapContours enabled={contoursEnabled} />
 
       {data && (
-        <MountainLayer
-          data={data}
-          onMountainSelect={(selection) => setSelectedDetail(selection)}
-        />
+        <MountainLayer data={data} onMountainSelect={(selection) => setSelectedDetail(selection)} />
       )}
-      <MapControls
-        position="bottom-right"
-        showZoom
-        showCompass
-        showFullscreen
-        showLocate
-      />
+      <MapControls position="bottom-right" showZoom showCompass showFullscreen showLocate />
       <MountainDetailDialog
         mountainId={selectedDetail?.id ?? null}
         summary={
           selectedDetail
-            ? mountains.find((mountain) => mountain.id === selectedDetail.id) ?? {
+            ? (mountains.find((mountain) => mountain.id === selectedDetail.id) ?? {
                 id: selectedDetail.id,
                 name: "Unknown Peak",
                 elevation: null,
                 lat: selectedDetail.lat,
                 lng: selectedDetail.lng,
-              }
+              })
             : null
         }
         onOpenChange={(open) => {

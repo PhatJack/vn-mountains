@@ -40,6 +40,7 @@ export default function MountainSidebar({
   onSelect,
   selectedId,
 }: MountainSidebarProps) {
+  "use no memo";
   const [search, setSearch] = useState("");
   const viewportRef = useRef<HTMLDivElement>(null);
 
@@ -55,7 +56,6 @@ export default function MountainSidebar({
 
   const totalCount = mountains.length;
   const filteredCount = filtered.length;
-
   const virtualizer = useVirtualizer({
     count: filtered.length,
     getScrollElement: () => viewportRef.current,
@@ -74,7 +74,7 @@ export default function MountainSidebar({
             width={70}
             height={70}
             className="aspect-square"
-						loading="eager"
+            loading="eager"
           />
         </CardTitle>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -88,10 +88,9 @@ export default function MountainSidebar({
           )}
         </div>
       </CardHeader>
-
       <div className="px-4 pt-3">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search mountains..."
             value={search}
@@ -111,10 +110,7 @@ export default function MountainSidebar({
           </div>
         ) : (
           <ScrollArea className="h-full" viewportRef={viewportRef}>
-            <div
-              className="relative w-full"
-              style={{ height: virtualizer.getTotalSize() }}
-            >
+            <div className="relative w-full" style={{ height: virtualizer.getTotalSize() }}>
               {virtualizer.getVirtualItems().map((virtualRow) => {
                 const mountain = filtered[virtualRow.index];
                 return (
@@ -122,7 +118,7 @@ export default function MountainSidebar({
                     key={mountain.id}
                     data-index={virtualRow.index}
                     ref={virtualizer.measureElement}
-                    className="absolute left-0 top-0 w-full"
+                    className="absolute top-0 left-0 w-full"
                     style={{
                       transform: `translateY(${virtualRow.start}px)`,
                     }}
@@ -132,14 +128,11 @@ export default function MountainSidebar({
                       onClick={() => onSelect(mountain.lat, mountain.lng)}
                       className={cn(
                         "flex w-full flex-col gap-1 px-4 py-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground",
-                        selectedId === mountain.id &&
-                          "bg-accent text-accent-foreground",
+                        selectedId === mountain.id && "bg-accent text-accent-foreground",
                       )}
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className="truncate text-sm font-medium">
-                          {mountain.name}
-                        </span>
+                        <span className="truncate text-sm font-medium">{mountain.name}</span>
                         {mountain.elevation !== null ? (
                           <Badge variant="secondary" className="shrink-0">
                             <ArrowUpFromLine className="size-3" />

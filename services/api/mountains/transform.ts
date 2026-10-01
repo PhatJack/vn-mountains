@@ -1,8 +1,4 @@
-import {
-  type Mountain,
-  type MountainFeature,
-  type MountainFeatureCollection,
-} from "../types";
+import { type Mountain, type MountainFeature, type MountainFeatureCollection } from "../types";
 
 export function sortMountainsByElevation(mountains: Mountain[]): Mountain[] {
   return [...mountains].sort((a, b) => {
@@ -13,9 +9,7 @@ export function sortMountainsByElevation(mountains: Mountain[]): Mountain[] {
   });
 }
 
-export function mountainsToFeatureCollection(
-  mountains: Mountain[],
-): MountainFeatureCollection {
+export function mountainsToFeatureCollection(mountains: Mountain[]): MountainFeatureCollection {
   const features: MountainFeature[] = mountains.map((m) => ({
     type: "Feature",
     geometry: {

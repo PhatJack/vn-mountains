@@ -29,12 +29,12 @@ An interactive map of mountains and peaks across Vietnam, built with Next.js, Ma
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start development server |
-| `pnpm build` | Create production build |
-| `pnpm start` | Start production server |
-| `pnpm lint` | Run ESLint |
+| Command      | Description              |
+| ------------ | ------------------------ |
+| `pnpm dev`   | Start development server |
+| `pnpm build` | Create production build  |
+| `pnpm start` | Start production server  |
+| `pnpm lint`  | Run ESLint               |
 
 ## Project Structure
 

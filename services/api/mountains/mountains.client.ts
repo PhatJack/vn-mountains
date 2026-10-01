@@ -7,9 +7,7 @@ export async function fetchMountains(): Promise<Mountain[]> {
   return data;
 }
 
-export async function fetchMountainDetail(
-  id: number,
-): Promise<MountainDetail> {
+export async function fetchMountainDetail(id: number): Promise<MountainDetail> {
   const { data } = await api.get<MountainDetail | { data: MountainDetail }>(
     ENDPOINTS.mountainDetail,
     { params: { id } },

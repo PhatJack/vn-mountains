@@ -5,7 +5,6 @@ import MountainSidebar from "@/components/MountainSidebar";
 import VietnamMapNew from "@/components/VietNamMapNew";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { MapStyles } from "@/components/MapStyles";
-import LanguagesSelect from "@/components/Languages";
 import { useMountains, mountainsToFeatureCollection } from "@/services/api";
 import type { MountainsData } from "@/services/api/mountains/mountains.server";
 
@@ -17,10 +16,7 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
   } | null>(null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const featureCollection = useMemo(
-    () => mountainsToFeatureCollection(mountains),
-    [mountains],
-  );
+  const featureCollection = useMemo(() => mountainsToFeatureCollection(mountains), [mountains]);
 
   const handleSidebarSelect = (lat: number, lng: number) => {
     setSelectedMountain({ lat, lng });

@@ -2,7 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { Mountain } from "lucide-react";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 
@@ -28,9 +37,7 @@ interface MapTerrainToggleProps {
   onEnabledChange: (enabled: boolean) => void;
 }
 
-export default function MapTerrainToggle({
-  onEnabledChange,
-}: MapTerrainToggleProps) {
+export default function MapTerrainToggle({ onEnabledChange }: MapTerrainToggleProps) {
   const [enabled, setEnabled] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dontAskAgain, setDontAskAgain] = useState(false);
@@ -91,12 +98,8 @@ export default function MapTerrainToggle({
   return (
     <>
       <div className="inline-flex h-9 items-center gap-2 rounded-md border border-border bg-background/90 px-2.5 text-sm font-medium shadow-xs backdrop-blur">
-        <Mountain aria-hidden="true" size={20}/>
-        <Switch
-          checked={enabled}
-          onCheckedChange={handleCheckedChange}
-          aria-label="Terrain map"
-        />
+        <Mountain aria-hidden="true" size={20} />
+        <Switch checked={enabled} onCheckedChange={handleCheckedChange} aria-label="Terrain map" />
       </div>
 
       <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -104,8 +107,8 @@ export default function MapTerrainToggle({
           <AlertDialogHeader>
             <AlertDialogTitle>Enable terrain map?</AlertDialogTitle>
             <AlertDialogDescription>
-              Enabling terrain map may affect performance and cause lag,
-              especially on lower-end devices.
+              Enabling terrain map may affect performance and cause lag, especially on lower-end
+              devices.
             </AlertDialogDescription>
           </AlertDialogHeader>
 

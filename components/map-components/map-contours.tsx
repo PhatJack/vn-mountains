@@ -11,8 +11,7 @@ const CONTOUR_LABELS = "mountains-contour-labels";
 
 // Mapterhorn serves 512px Terrarium-encoded elevation tiles, the same source used by terrain mode.
 const DEM_TILES =
-  process.env.NEXT_PUBLIC_DEM_TILES_URL ??
-  "https://tiles.mapterhorn.com/{z}/{x}/{y}.webp";
+  process.env.NEXT_PUBLIC_DEM_TILES_URL ?? "https://tiles.mapterhorn.com/{z}/{x}/{y}.webp";
 
 const contourThresholds = {
   5: [100, 500],
@@ -56,7 +55,7 @@ export default function MapContours({ enabled }: MapContoursProps) {
           thresholds: contourThresholds,
           //default=1 for meters
           multiplier: 1,
-					// multiplier: 3.28084,
+          // multiplier: 3.28084,
           contourLayer: "contours",
           elevationKey: "ele",
           levelKey: "level",
