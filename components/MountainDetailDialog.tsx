@@ -24,7 +24,7 @@ import { formatLabel, formatValue, epochToDateTime } from "@/lib/utils";
 import Image from "next/image";
 
 interface MountainDetailDialogProps {
-  mountainId: number | null;
+  mountainId: string | null;
   summary: Mountain | null;
   onOpenChange: (open: boolean) => void;
 }

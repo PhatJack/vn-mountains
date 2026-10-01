@@ -8,7 +8,7 @@ import { GeoJSONSource, Popup } from "maplibre-gl";
 
 interface MountainLayerProps {
   data: MountainFeatureCollection;
-  onMountainSelect?: (selection: { id: number; lat: number; lng: number }) => void;
+  onMountainSelect?: (selection: { id: string; lat: number; lng: number }) => void;
 }
 
 const SOURCE_ID = "mountains";
@@ -165,13 +165,7 @@ export default function MountainLayer({ data, onMountainSelect }: MountainLayerP
         if (!feature) return;
 
         const properties = feature.properties;
-        const id = Number(properties?.id);
-
-        if (!Number.isSafeInteger(id)) return;
-
-        const name = properties?.name ?? "Unknown Peak";
-
-        const ele = properties?.ele;
+        const id = String(properties?.id);
 
         map.flyTo({
           center: [lng, lat],

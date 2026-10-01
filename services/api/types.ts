@@ -1,5 +1,5 @@
 export interface Mountain {
-  id: number;
+  id: string;
   name: string;
   elevation: number | null;
   lat: number;

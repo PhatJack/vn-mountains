@@ -30,7 +30,7 @@ export default function VietnamMapNew({
   const [terrainEnabled, setTerrainEnabled] = useState(false);
   const [contoursEnabled, setContoursEnabled] = useState(false);
   const [selectedDetail, setSelectedDetail] = useState<{
-    id: number;
+    id: string;
     lat: number;
     lng: number;
   } | null>(null);

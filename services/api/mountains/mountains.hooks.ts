@@ -13,10 +13,10 @@ export function useMountains(initialData: Mountain[]) {
   });
 }
 
-export function useMountainDetail(id: number | null) {
+export function useMountainDetail(id: string | null) {
   return useQuery({
     queryKey: ["mountain", id],
-    queryFn: () => fetchMountainDetail(id as number),
+    queryFn: () => fetchMountainDetail(id as string),
     enabled: id !== null,
   });
 }
