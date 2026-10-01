@@ -21,6 +21,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useMountainDetail } from "@/services/api";
 import type { Mountain, MountainDetail } from "@/services/api";
 import { formatLabel, formatValue, epochToDateTime } from "@/lib/utils";
+import Image from "next/image";
 
 interface MountainDetailDialogProps {
   mountainId: number | null;
@@ -138,10 +139,11 @@ export default function MountainDetailDialog({
                     {imageUrls.map((src) => (
                       <CarouselItem key={src}>
                         <div className="aspect-4/3 overflow-hidden rounded-lg bg-muted">
-                          <img
+                          <Image
                             src={src}
                             alt={mountain?.name ?? "Mountain"}
                             className="size-full object-cover"
+														fill
                           />
                         </div>
                       </CarouselItem>
