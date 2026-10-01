@@ -14,7 +14,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
-	prettier
+  prettier,
 ]);
 
 export default eslintConfig;

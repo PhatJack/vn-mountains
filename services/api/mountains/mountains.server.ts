@@ -2,10 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { API_BASE_URL } from "../endpoints";
 import type { Mountain, MountainFeatureCollection } from "../types";
-import {
-  mountainsToFeatureCollection,
-  sortMountainsByElevation,
-} from "./transform";
+import { mountainsToFeatureCollection, sortMountainsByElevation } from "./transform";
 
 export interface MountainsData {
   mountains: Mountain[];

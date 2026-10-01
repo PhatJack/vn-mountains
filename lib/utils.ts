@@ -7,9 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatLabel(key: string) {
-  return key
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/^./, (char) => char.toUpperCase());
+  return key.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/^./, (char) => char.toUpperCase());
 }
 
 export function formatValue(value: unknown): string | null {

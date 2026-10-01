@@ -46,16 +46,14 @@ function DetailQuote({ mountain }: { mountain: MountainDetail }) {
   });
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 max-h-80  gap-3 overflow-y-auto text-sm">
+    <div className="grid max-h-80 grid-cols-1 gap-3 overflow-y-auto text-sm md:grid-cols-3">
       {fields.map(([key, value]) => (
         <div key={key} className="flex flex-col gap-1">
-          <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
             {formatLabel(key)}
           </dt>
           <dd className="wrap-break-word text-foreground">
-            {key === "updatedAt"
-              ? epochToDateTime(value as number)
-              : formatValue(value)}
+            {key === "updatedAt" ? epochToDateTime(value as number) : formatValue(value)}
           </dd>
         </div>
       ))}
@@ -92,13 +90,8 @@ export default function MountainDetailDialog({
       new Set(
         [
           mountain.imageUrl,
-          ...(mountain.images ?? []).flatMap((image) => [
-            image.imageUrl,
-            image.url,
-          ]),
-        ].filter(
-          (url): url is string => typeof url === "string" && url.length > 0,
-        ),
+          ...(mountain.images ?? []).flatMap((image) => [image.imageUrl, image.url]),
+        ].filter((url): url is string => typeof url === "string" && url.length > 0),
       ),
     );
   }, [mountain]);
@@ -107,11 +100,9 @@ export default function MountainDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90dvh] max-w-6xl min-w-4xl w-full overflow-y-auto">
+      <DialogContent className="max-h-[90dvh] w-full max-w-6xl min-w-4xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            {mountain?.name ?? summary?.name ?? "Mountain details"}
-          </DialogTitle>
+          <DialogTitle>{mountain?.name ?? summary?.name ?? "Mountain details"}</DialogTitle>
           <DialogDescription>
             {detailQuery.isLoading
               ? "Loading mountain information..."
@@ -121,11 +112,9 @@ export default function MountainDetailDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-6 grid-cols-1">
-          <div className="min-w-0 w-full">
-            {detailQuery.isLoading && (
-              <Skeleton className="aspect-4/3 w-full rounded-lg" />
-            )}
+        <div className="grid grid-cols-1 gap-6">
+          <div className="w-full min-w-0">
+            {detailQuery.isLoading && <Skeleton className="aspect-4/3 w-full rounded-lg" />}
 
             {!detailQuery.isLoading && imageUrls.length > 0 && (
               <div className="flex flex-col gap-3 px-12">
@@ -143,7 +132,7 @@ export default function MountainDetailDialog({
                             src={src}
                             alt={mountain?.name ?? "Mountain"}
                             className="size-full object-cover"
-														fill
+                            fill
                           />
                         </div>
                       </CarouselItem>
@@ -152,10 +141,7 @@ export default function MountainDetailDialog({
                   <CarouselPrevious />
                   <CarouselNext />
                 </Carousel>
-                <div
-                  className="flex justify-center gap-1.5"
-                  aria-label="Image slides"
-                >
+                <div className="flex justify-center gap-1.5" aria-label="Image slides">
                   {imageUrls.map((src, index) => (
                     <Button
                       key={src}
@@ -173,15 +159,11 @@ export default function MountainDetailDialog({
             )}
           </div>
 
-          <div className="min-w-0 w-full">
+          <div className="w-full min-w-0">
             {detailQuery.isError && (
               <div className="flex flex-col gap-3 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm">
                 <p>Unable to load the full mountain information.</p>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => detailQuery.refetch()}
-                >
+                <Button type="button" variant="outline" onClick={() => detailQuery.refetch()}>
                   Retry
                 </Button>
               </div>

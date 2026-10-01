@@ -1,11 +1,5 @@
 import React, { useCallback } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { LANGUAGES } from "@/constant/languages";
 import { useMap } from "./ui/map";
 
@@ -34,11 +28,7 @@ const LanguagesSelect = () => {
   );
 
   return (
-    <Select
-      items={LANGUAGES}
-      onValueChange={handleOnChangeLanguage}
-      defaultValue={"en"}
-    >
+    <Select items={LANGUAGES} onValueChange={handleOnChangeLanguage} defaultValue={"en"}>
       <SelectTrigger>
         <SelectValue placeholder={"Select Language..."} />
       </SelectTrigger>

@@ -1,5 +1,4 @@
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:7001";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:7001";
 
 export const ENDPOINTS = {
   mountains: "/mountains",

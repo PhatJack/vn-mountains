@@ -16,10 +16,7 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
   } | null>(null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const featureCollection = useMemo(
-    () => mountainsToFeatureCollection(mountains),
-    [mountains],
-  );
+  const featureCollection = useMemo(() => mountainsToFeatureCollection(mountains), [mountains]);
 
   const handleSidebarSelect = (lat: number, lng: number) => {
     setSelectedMountain({ lat, lng });
