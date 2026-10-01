@@ -1,68 +1,41 @@
-## Project
+# GitNexus — Code Intelligence
 
-- **Framework:** Next.js 16 (App Router), React 19, TypeScript
-- **Package manager:** pnpm — never use npm/yarn
-- **UI:** shadcn/ui (base-vega style, `@base-ui/react` primitives — NOT radix)
-- **Styling:** Tailwind v4, CSS variables in `app/globals.css`
-- **Icons:** lucide-react — never assume a different icon library
-- **React Compiler:** enabled in `next.config.ts` (`reactCompiler: true`)
+This project is indexed by GitNexus as **vn-mountains** (683 symbols, 1351 relationships, 39 execution flows).
 
-## Commands
+> Index stale? Run `node .gitnexus/run.cjs analyze --index-only` from the project root — it auto-selects an available runner. No `.gitnexus/run.cjs` yet? Bootstrap with `npx`, `bunx`, or `pnpm dlx` — e.g. `bunx gitnexus@latest analyze` (npm 11 npx crash; #1939).
 
-```bash
-pnpm run dev          # dev server
-pnpm run build        # production build
-pnpm run start        # start production build
-pnpm run lint         # eslint (no --fix flag)
-npx tsc --noEmit      # typecheck (not in scripts — run manually)
-```
+## Always Do
 
-No test framework is configured. Run lint + typecheck before committing.
+- **MUST run impact before editing.** Use `impact({target: "symbolName", direction: "upstream"})` or `node .gitnexus/run.cjs impact "symbolName" --direction upstream --repo .`; report callers, processes, and risk. Never substitute grep for graph analysis.
+- **MUST analyze graph changes before committing.** Use `detect_changes({scope: "all"})` (MCP) or `node .gitnexus/run.cjs detect-changes --scope all --repo .` (CLI fallback). `partial: true` or `truncated: true` is not a clean check — a zero means unseen, not unaffected; re-run it. For regression review: `detect_changes({scope: "compare", base_ref: "main"})` or `node .gitnexus/run.cjs detect-changes --scope compare --base-ref "main" --repo .`.
+- MUST warn on HIGH/CRITICAL `risk` pre-edit; never use `riskSharedAxes` to waive a HIGH/CRITICAL `risk` warning. Compare File/symbol: MCP File omits axes; Graph-RAG expands File.
+- **MUST treat `risk: UNKNOWN` as unresolved, not as low.** An empty caller set is not evidence the symbol is unused — it can also mean the callers are not resolvable by the index (plain-object property access, dynamic dispatch, cross-language calls). `impact` pairs `UNKNOWN` with a `riskNote` saying so. Confirm with a text search before treating the symbol as safe to change or delete; do not proceed on the strength of a zero.
+- **MUST use `query({search_query: "concept"})` for concepts/flows, `context({name: "symbolName"})` for a named symbol, or `impact` for blast radius, on read-only callers, dependencies, imports, or execution flow.** Graph first; text search only for empty/`UNKNOWN`/literals.
+- For security review, `explain({target: "fileOrSymbol"})` lists taint findings (source→sink flows; needs `analyze --pdg`).
 
-## Data & API architecture
+## Never Do
 
-- `app/page.tsx` fetches data **server-side** via `getMountainsData()` in `services/api/mountains/mountains.server.ts` — do NOT fetch client-side on the page.
-- The server module calls `GET ${API_BASE_URL}/mountains` with ISR (`revalidate: 300`) and **falls back to `constant/data.json`** when the API is unreachable.
-- The client re-fetches/hydrates through React Query: `useMountains(initialData)` in `mountains.hooks.ts` (queryKey `["mountains"]`, 5 min staleTime).
-- `lib/overpass.ts` is dead code — not imported anywhere. Do not extend it.
+- NEVER edit a function, class, or method before MCP/CLI impact analysis.
+- NEVER ignore HIGH or CRITICAL risk warnings from impact analysis, and never read `UNKNOWN` as an all-clear — it means the walk could not answer, which is the one verdict that requires confirming by other means.
+- NEVER rename symbols with find-and-replace — use `rename` which understands the call graph.
+- NEVER commit before MCP/CLI graph change analysis.
 
-## Env / config
+## Resources
 
-- `NEXT_PUBLIC_API_URL` (default `http://localhost:7001`) — local API serving `/mountains`. No key needed to run; without an API server the app uses the `constant/data.json` fallback.
-- `NEXT_PUBLIC_MAPTILER_KEY` is listed in `.env.example` but **unused by current code** — map tiles come from OpenFreeMap/CartoCDN via `stores/map-store.ts` (`MAP_STYLES`).
+| Resource | Use for |
+| --- | --- |
+| `gitnexus://repo/vn-mountains/context` | Codebase overview, check index freshness |
+| `gitnexus://repo/vn-mountains/clusters` | All functional areas |
+| `gitnexus://repo/vn-mountains/processes` | All execution flows |
+| `gitnexus://repo/vn-mountains/process/{name}` | Step-by-step execution trace |
 
-## Architecture
+## CLI
 
-```
-app/page.tsx                    → server component, calls getMountainsData()
-app/_components/HomePage.tsx    → client page, React Query hydration, wires sidebar + map
-components/VietNamMapNew.tsx    → map (NOT VietNamMap — renamed/stale)
-components/ui/map.tsx           → MapLibre GL wrapper (Map/MapClusterLayer/MapControls, useMap())
-components/map-components/      → mountain-layer.tsx (clusters + markers), map-terrain.tsx
-components/MountainSidebar.tsx  → search/filter sidebar
-components/MountainDetailSheet.tsx → peak detail sheet
-components/{theme,query,sonner}-provider.tsx → providers (wired in app/layout.tsx)
-services/api/                   → endpoints, types, mountains/{client,hooks,server,transform}
-stores/map-store.ts             → Zustand store (map style, loading)
-constant/data.json              → fallback JSON served by mountains.server.ts
-lib/axios.ts                    → axios instance (baseURL from NEXT_PUBLIC_API_URL)
-```
-
-## shadcn/ui
-
-Component skill: `.agents/skills/shadcn/SKILL.md` — read it before adding or modifying UI components.
-
-- Add components via `pnpm dlx shadcn@latest add <name>` (not npx)
-- Use `pnpm dlx shadcn@latest docs <component>` for API docs before using a component
-- Check installed components in `components/ui/` before importing — don't import uninstalled components
-- Installed: badge, button, card, carousel, checkbox, dialog, dropdown-menu, empty, input, map, scroll-area, select, separator, sheet, skeleton, switch, toast, tooltip
-- Key rules: `flex flex-col gap-*` not `space-y-*`, semantic colors only, `cn()` for conditional classes, `truncate` shorthand, `size-*` for equal w/h
-- Icons in buttons use `data-icon` attribute, no sizing classes on icons
-
-## Key details
-
-- Data flows are **server-first**: `mountains.server.ts` fetches with `cache: "force-cache"` + `revalidate`. Don't add client-side data fetching to the page.
-- MapLibre GL (not Mapbox) for the map tile rendering
-- Path alias: `@/*` maps to project root
-- Fonts: Inter (main via `--font-sans`), Geist + Geist Mono
-- Locale files: `constant/languages.ts`
+| Task | Read this skill file |
+| --- | --- |
+| Understand architecture / "How does X work?" | `.claude/skills/gitnexus-exploring/SKILL.md` |
+| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus-impact-analysis/SKILL.md` |
+| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus-debugging/SKILL.md` |
+| Rename / extract / split / refactor | `.claude/skills/gitnexus-refactoring/SKILL.md` |
+| Tools, resources, schema reference | `.claude/skills/gitnexus-guide/SKILL.md` |
+| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus-cli/SKILL.md` |
