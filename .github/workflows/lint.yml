@@ -37,5 +37,8 @@ jobs:
       - name: Prettier
         run: pnpm format:check
 
+      - name: Next Typegen
+        run: pnpm next typegen
+
       - name: Type check
         run: pnpm exec tsc --noEmit
