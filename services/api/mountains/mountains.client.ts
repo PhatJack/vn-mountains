@@ -4,9 +4,15 @@ import type {
   CreateMountainInput,
   Mountain,
   MountainDetail,
-  MountainImage,
+  MountainPhoto,
   UpdateMountainInput,
 } from "../types";
+
+export interface UploadMountainPhotoInput {
+  file: File;
+  caption?: string;
+  takenAt?: string;
+}
 
 export async function fetchMountains(): Promise<Mountain[]> {
   const { data } = await api.get<Mountain[]>(ENDPOINTS.mountains);
@@ -14,10 +20,7 @@ export async function fetchMountains(): Promise<Mountain[]> {
 }
 
 export async function fetchMountainDetail(id: string): Promise<MountainDetail> {
-  const { data } = await api.get<MountainDetail>(
-    ENDPOINTS.mountainByOsmId,
-    { params: { id } },
-  );
+  const { data } = await api.get<MountainDetail>(ENDPOINTS.mountainById(id));
 
   return data;
 }
@@ -40,30 +43,31 @@ export async function deleteMountain(id: string): Promise<MountainDetail> {
   return data;
 }
 
-export async function fetchMountainImages(mountainId: string): Promise<MountainImage[]> {
-  const { data } = await api.get<MountainImage[]>(ENDPOINTS.mountainImages(mountainId));
+export async function fetchMountainPhotos(mountainId: string): Promise<MountainPhoto[]> {
+  const { data } = await api.get<MountainPhoto[]>(ENDPOINTS.mountainPhotos(mountainId));
   return data;
 }
 
-export async function uploadMountainImage(
+export async function uploadMountainPhoto(
   mountainId: string,
-  file: File,
-): Promise<MountainImage> {
+  input: UploadMountainPhotoInput,
+): Promise<MountainPhoto> {
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("file", input.file);
+  if (input.caption?.trim()) formData.append("caption", input.caption.trim());
+  if (input.takenAt) formData.append("takenAt", new Date(input.takenAt).toISOString());
 
-  const { data } = await api.post<MountainImage>(
-    ENDPOINTS.mountainImages(mountainId),
-    formData,
-    { headers: { "Content-Type": "multipart/form-data" } },
-  );
+  const { data } = await api.post<MountainPhoto>(ENDPOINTS.mountainPhotos(mountainId), formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
 
   return data;
 }
 
-export async function deleteMountainImage(mountainId: string, imageId: string): Promise<{ id: string }> {
-  const { data } = await api.delete<{ id: string }>(
-    ENDPOINTS.mountainImage(mountainId, imageId),
-  );
+export async function deleteMountainPhoto(
+  mountainId: string,
+  photoId: string,
+): Promise<{ id: string }> {
+  const { data } = await api.delete<{ id: string }>(ENDPOINTS.mountainPhoto(mountainId, photoId));
   return data;
 }

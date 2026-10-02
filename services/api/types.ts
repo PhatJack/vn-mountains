@@ -1,43 +1,41 @@
 export interface Mountain {
   id: string;
   name: string;
-  elevation: number | null;
+  elevationM: number | null;
   lat: number;
   lng: number;
 }
 
 export interface MountainDetail extends Omit<Mountain, "id"> {
-  id: string | number;
-  osmId?: number | null;
-  nameAscii?: string | null;
-  altName?: string | null;
-  province?: string | null;
+  id: string;
+  nameVi?: string | null;
   description?: string | null;
-  imageUrl?: string | null;
-  images?: MountainImage[];
-  tags?: unknown;
+  difficulty?: "easy" | "moderate" | "hard" | "extreme" | null;
+  rangeId?: string | null;
+  photos?: MountainPhoto[];
   createdAt?: number | null;
   updatedAt?: number | null;
 }
 
-export interface MountainImage {
+export interface MountainPhoto {
   id: string;
-  imageUrl: string;
-  url?: string;
-  sortOrder: number;
+  storageKey: string;
+  caption: string | null;
+  takenAt: string | null;
+  status: "pending" | "approved" | "rejected";
+  createdAt: number;
+  updatedAt: number;
 }
 
 export interface CreateMountainInput {
   osmId?: number;
   name: string;
-  nameAscii?: string;
-  altName?: string;
+  slug: string;
+  nameVi?: string;
   latitude: number;
   longitude: number;
-  elevation?: number;
-  province?: string;
+  elevationM?: number;
   description?: string;
-  imageUrl?: string;
 }
 
 export type UpdateMountainInput = Partial<CreateMountainInput>;
@@ -49,7 +47,7 @@ export interface MountainFeature {
     coordinates: [number, number];
   };
   properties: {
-    id: number;
+    id: string;
     name: string;
     ele: number | null;
   };

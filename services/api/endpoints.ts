@@ -1,10 +1,15 @@
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:7001";
+export const R2_PUBLIC_URL = (process.env.NEXT_PUBLIC_R2_PUBLIC_URL ?? "").replace(/\/$/, "");
 
 export const ENDPOINTS = {
   mountains: "/mountains",
   mountainById: (id: string) => `/mountains/${id}`,
   mountainByOsmId: "/mountains",
-  mountainImages: (mountainId: string) => `/mountains/${mountainId}/images`,
-  mountainImage: (mountainId: string, imageId: string) =>
-    `/mountains/${mountainId}/images/${imageId}`,
+  mountainPhotos: (mountainId: string) => `/mountains/${mountainId}/photos`,
+  mountainPhoto: (mountainId: string, photoId: string) =>
+    `/mountains/${mountainId}/photos/${photoId}`,
 } as const;
+
+export function mountainPhotoUrl(storageKey: string): string {
+  return R2_PUBLIC_URL ? `${R2_PUBLIC_URL}/${storageKey}` : storageKey;
+}

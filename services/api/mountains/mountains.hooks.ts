@@ -1,8 +1,13 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Mountain } from "../types";
-import { fetchMountainDetail, fetchMountains } from "./mountains.client";
+import {
+  fetchMountainDetail,
+  fetchMountains,
+  uploadMountainPhoto,
+  type UploadMountainPhotoInput,
+} from "./mountains.client";
 
 export function useMountains(initialData: Mountain[]) {
   return useQuery({
@@ -18,5 +23,17 @@ export function useMountainDetail(id: string | null) {
     queryKey: ["mountain", id],
     queryFn: () => fetchMountainDetail(id as string),
     enabled: id !== null,
+  });
+}
+
+export function useUploadMountainPhoto() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ mountainId, input }: { mountainId: string; input: UploadMountainPhotoInput }) =>
+      uploadMountainPhoto(mountainId, input),
+    onSuccess: (_photo, { mountainId }) => {
+      return queryClient.invalidateQueries({ queryKey: ["mountain", mountainId] });
+    },
   });
 }

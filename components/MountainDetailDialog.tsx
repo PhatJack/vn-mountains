@@ -21,7 +21,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useMountainDetail } from "@/services/api";
 import type { Mountain, MountainDetail } from "@/services/api";
 import { formatLabel, formatValue, epochToDateTime } from "@/lib/utils";
+import { mountainPhotoUrl } from "@/services/api";
 import Image from "next/image";
+import { ImagePlus } from "lucide-react";
+import AddMountainPhotoDialog from "@/components/AddMountainPhotoDialog";
 
 interface MountainDetailDialogProps {
   mountainId: string | null;
@@ -31,14 +34,13 @@ interface MountainDetailDialogProps {
 
 function DetailQuote({ mountain }: { mountain: MountainDetail }) {
   const fields = Object.entries(mountain).filter(([key, value]) => {
-    // exclude image fields and createdAt; display updatedAt as formatted datetime
+    // Photos are rendered in the gallery; timestamps are handled separately.
     if (
-      key === "images" ||
-      key === "imageUrl" ||
+      key === "slug" ||
+      key === "photos" ||
       key === "createdAt" ||
       key === "id" ||
-      key === "nameAscii" ||
-      key === "tags"
+      key === "nameVi"
     )
       return false;
     if (key === "updatedAt") return epochToDateTime(value as number) !== null;
@@ -69,6 +71,7 @@ export default function MountainDetailDialog({
   const detailQuery = useMountainDetail(mountainId);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [activeSlide, setActiveSlide] = useState(0);
+  const [addPhotoOpen, setAddPhotoOpen] = useState(false);
 
   useEffect(() => {
     if (!carouselApi) return;
@@ -83,17 +86,13 @@ export default function MountainDetailDialog({
   }, [carouselApi]);
 
   const mountain = detailQuery.data;
-  const imageUrls = useMemo(() => {
+  const photos = useMemo(() => {
     if (!mountain) return [];
 
-    return Array.from(
-      new Set(
-        [
-          mountain.imageUrl,
-          ...(mountain.images ?? []).flatMap((image) => [image.imageUrl, image.url]),
-        ].filter((url): url is string => typeof url === "string" && url.length > 0),
-      ),
-    );
+    return (mountain.photos ?? []).map((photo) => ({
+      ...photo,
+      url: mountainPhotoUrl(photo.storageKey),
+    }));
   }, [mountain]);
 
   const open = mountainId !== null;
@@ -101,23 +100,30 @@ export default function MountainDetailDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90dvh] w-full max-w-6xl min-w-4xl overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{mountain?.name ?? summary?.name ?? "Mountain details"}</DialogTitle>
-          <DialogDescription>
-            {detailQuery.isLoading
-              ? "Loading mountain information..."
-              : detailQuery.isError
-                ? "Mountain information could not be loaded."
-                : "Mountain information and images"}
-          </DialogDescription>
+        <DialogHeader className="sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex flex-col gap-2">
+            <DialogTitle>{mountain?.name ?? summary?.name ?? "Mountain details"}</DialogTitle>
+            <DialogDescription>
+              {detailQuery.isLoading
+                ? "Loading mountain information..."
+                : detailQuery.isError
+                  ? "Mountain information could not be loaded."
+                  : "Mountain information and images"}
+            </DialogDescription>
+          </div>
         </DialogHeader>
-
+        {mountainId && (
+          <Button type="button" onClick={() => setAddPhotoOpen(true)}>
+            <ImagePlus data-icon="inline-start" />
+            Add Photo
+          </Button>
+        )}
         <div className="grid grid-cols-1 gap-6">
           <div className="w-full min-w-0">
             {detailQuery.isLoading && <Skeleton className="aspect-4/3 w-full rounded-lg" />}
 
-            {!detailQuery.isLoading && imageUrls.length > 0 && (
-              <div className="flex flex-col gap-3 px-12">
+            {!detailQuery.isLoading && photos.length > 0 && (
+              <div className="flex w-full flex-col items-center gap-3 overflow-hidden">
                 <Carousel
                   setApi={(api) => {
                     setCarouselApi(api);
@@ -125,36 +131,31 @@ export default function MountainDetailDialog({
                   className="w-full"
                 >
                   <CarouselContent>
-                    {imageUrls.map((src) => (
-                      <CarouselItem key={src}>
-                        <div className="aspect-4/3 overflow-hidden rounded-lg bg-muted">
+                    {photos.map((photo) => (
+                      <CarouselItem key={photo.id}>
+                        <div className="relative aspect-video overflow-hidden rounded-lg">
                           <Image
-                            src={src}
+                            src={photo.url}
                             alt={mountain?.name ?? "Mountain"}
-                            className="size-full object-cover"
+                            className="size-full object-contain"
                             fill
                           />
                         </div>
+                        {(photo.caption || photo.takenAt) && (
+                          <div className="mt-2 text-center text-sm text-muted-foreground">
+                            {photo.caption}
+                            {photo.caption && photo.takenAt ? " · " : ""}
+                            {photo.takenAt
+                              ? new Date(photo.takenAt).toLocaleDateString("vi-VN")
+                              : null}
+                          </div>
+                        )}
                       </CarouselItem>
                     ))}
                   </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
+                  <CarouselPrevious className={"left-0"}/>
+                  <CarouselNext className={"right-0"}/>
                 </Carousel>
-                <div className="flex justify-center gap-1.5" aria-label="Image slides">
-                  {imageUrls.map((src, index) => (
-                    <Button
-                      key={src}
-                      type="button"
-                      variant={index === activeSlide ? "default" : "outline"}
-                      size="icon-xs"
-                      aria-label={`Go to image ${index + 1}`}
-                      onClick={() => carouselApi?.scrollTo(index)}
-                    >
-                      <span className="sr-only">Image {index + 1}</span>
-                    </Button>
-                  ))}
-                </div>
               </div>
             )}
           </div>
@@ -176,7 +177,7 @@ export default function MountainDetailDialog({
                 <blockquote className="flex flex-col gap-3 border-l-2 border-primary/30 pl-4 text-sm">
                   <div>
                     <span className="text-muted-foreground">Elevation:</span>{" "}
-                    {summary.elevation ?? "N/A"} m
+                    {summary.elevationM ?? "N/A"} m
                   </div>
                   <div>
                     <span className="text-muted-foreground">Latitude:</span>{" "}
@@ -192,6 +193,13 @@ export default function MountainDetailDialog({
           </div>
         </div>
       </DialogContent>
+      {mountainId && (
+        <AddMountainPhotoDialog
+          mountainId={mountainId}
+          open={addPhotoOpen}
+          onOpenChange={setAddPhotoOpen}
+        />
+      )}
     </Dialog>
   );
 }

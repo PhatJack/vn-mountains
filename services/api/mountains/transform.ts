@@ -2,10 +2,10 @@ import { type Mountain, type MountainFeature, type MountainFeatureCollection } f
 
 export function sortMountainsByElevation(mountains: Mountain[]): Mountain[] {
   return [...mountains].sort((a, b) => {
-    if (a.elevation === null && b.elevation === null) return 0;
-    if (a.elevation === null) return 1;
-    if (b.elevation === null) return -1;
-    return b.elevation - a.elevation;
+    if (a.elevationM === null && b.elevationM === null) return 0;
+    if (a.elevationM === null) return 1;
+    if (b.elevationM === null) return -1;
+    return b.elevationM - a.elevationM;
   });
 }
 
@@ -19,7 +19,7 @@ export function mountainsToFeatureCollection(mountains: Mountain[]): MountainFea
     properties: {
       id: m.id,
       name: m.name,
-      ele: m.elevation,
+      ele: m.elevationM,
     },
   }));
 

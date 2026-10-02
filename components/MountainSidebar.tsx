@@ -17,7 +17,7 @@ interface MountainSidebarProps {
   mountains: MountainType[];
   loading: boolean;
   onSelect: (lat: number, lng: number) => void;
-  selectedId: number | null;
+  selectedId: string | null;
 }
 
 function MountainSkeleton() {
@@ -47,11 +47,7 @@ export default function MountainSidebar({
   const filtered = useMemo(() => {
     if (!search.trim()) return mountains;
     const q = search.toLowerCase();
-    return mountains.filter(
-      (m) =>
-        m.name.toLowerCase().includes(q) ||
-        (m.elevation !== null && String(m.elevation).includes(q)),
-    );
+    return mountains.filter((m) => m.name.toLowerCase().includes(q));
   }, [mountains, search]);
 
   const totalCount = mountains.length;
@@ -133,10 +129,10 @@ export default function MountainSidebar({
                     >
                       <div className="flex items-center justify-between gap-2">
                         <span className="truncate text-sm font-medium">{mountain.name}</span>
-                        {mountain.elevation !== null ? (
+                        {mountain.elevationM !== null ? (
                           <Badge variant="secondary" className="shrink-0">
                             <ArrowUpFromLine className="size-3" />
-                            {mountain.elevation} m
+                            {mountain.elevationM} m
                           </Badge>
                         ) : (
                           <Badge variant="outline" className="shrink-0">

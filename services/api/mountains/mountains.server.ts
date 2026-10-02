@@ -31,9 +31,9 @@ function loadFromFallback(): Mountain[] {
   return raw
     .filter((el) => el.lat !== undefined && el.lon !== undefined && el.tags?.name)
     .map((el) => ({
-      id: el.id,
+      id: String(el.id),
       name: el.tags!.name,
-      elevation: parseElevation(el.tags?.ele),
+      elevationM: parseElevation(el.tags?.ele),
       lat: el.lat,
       lng: el.lon,
     }));
@@ -49,7 +49,9 @@ async function fetchMountainsFromApi(): Promise<Mountain[]> {
     throw new Error(`Mountains API error: ${res.status}`);
   }
 
-  return (await res.json()) as Mountain[];
+  const result = await res.json();
+
+  return result as Mountain[];
 }
 
 export async function getMountainsData(): Promise<MountainsData> {

@@ -14,7 +14,7 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
     lat: number;
     lng: number;
   } | null>(null);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const featureCollection = useMemo(() => mountainsToFeatureCollection(mountains), [mountains]);
 

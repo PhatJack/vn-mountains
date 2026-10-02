@@ -87,6 +87,8 @@ export default function VietnamMapNew({
     });
   }, [selectedMountain]);
 
+	console.log(data)
+
   return (
     <Map
       ref={mapRef}
@@ -114,7 +116,7 @@ export default function VietnamMapNew({
             ? (mountains.find((mountain) => mountain.id === selectedDetail.id) ?? {
                 id: selectedDetail.id,
                 name: "Unknown Peak",
-                elevation: null,
+                elevationM: null,
                 lat: selectedDetail.lat,
                 lng: selectedDetail.lng,
               })
