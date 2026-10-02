@@ -71,7 +71,6 @@ export default function AddMountainPhotoDialog({
   }, [open, form, resetUpload]);
 
   const onSubmit = form.handleSubmit(async (values) => {
-    console.log(values);
     try {
       await uploadPhoto({
         mountainId,
