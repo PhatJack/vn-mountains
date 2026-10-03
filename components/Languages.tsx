@@ -3,8 +3,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { LANGUAGES } from "@/constant/languages";
-import { US,VN } from 'country-flag-icons/react/3x2'
-
+import { US, VN } from "country-flag-icons/react/3x2";
 
 const LanguagesSelect = () => {
   const locale = useLocale();
@@ -29,7 +28,7 @@ const LanguagesSelect = () => {
       <SelectContent>
         {LANGUAGES.map((lang) => (
           <SelectItem key={`lang-${lang.value}`} value={lang.value}>
-            {lang.value === "en" ? <US /> : <VN />}{' '}{lang.label}
+            {lang.value === "en" ? <US /> : <VN />} {lang.label}
           </SelectItem>
         ))}
       </SelectContent>

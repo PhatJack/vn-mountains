@@ -31,21 +31,19 @@ type AddPhotoFormValues = FieldValues & {
   takenAt?: string;
 };
 
-const addPhotoSchema = (t: (key: string) => string) => z.object({
-  file: z
-    .any()
-    .refine((file) => file instanceof File, t("photo.fileRequired"))
-    .refine(
-      (file) => !file || ACCEPTED_FILE_TYPES.includes(file.type),
-      t("photo.fileTypes"),
-    )
-    .refine((file) => !file || file.size <= MAX_FILE_SIZE, t("photo.fileSize")),
-  caption: z.string().trim().max(500, t("photo.captionLength")),
-  takenAt: z
-    .string()
-    .optional()
-    .refine((value) => !value || !Number.isNaN(Date.parse(value)), t("photo.invalidDate")),
-});
+const addPhotoSchema = (t: (key: string) => string) =>
+  z.object({
+    file: z
+      .any()
+      .refine((file) => file instanceof File, t("photo.fileRequired"))
+      .refine((file) => !file || ACCEPTED_FILE_TYPES.includes(file.type), t("photo.fileTypes"))
+      .refine((file) => !file || file.size <= MAX_FILE_SIZE, t("photo.fileSize")),
+    caption: z.string().trim().max(500, t("photo.captionLength")),
+    takenAt: z
+      .string()
+      .optional()
+      .refine((value) => !value || !Number.isNaN(Date.parse(value)), t("photo.invalidDate")),
+  });
 
 interface AddMountainPhotoDialogProps {
   mountainId: string;
@@ -68,7 +66,7 @@ export default function AddMountainPhotoDialog({
     resolver: zodResolver(addPhotoSchema(t) as never) as unknown as Resolver<AddPhotoFormValues>,
     defaultValues: { file: undefined, caption: "", takenAt: "" },
     mode: "onSubmit",
-		reValidateMode: "onChange",
+    reValidateMode: "onChange",
   });
 
   useEffect(() => {
@@ -99,10 +97,8 @@ export default function AddMountainPhotoDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-        <DialogTitle>{t("photo.title")}</DialogTitle>
-          <DialogDescription>
-            {t("photo.description")}
-          </DialogDescription>
+          <DialogTitle>{t("photo.title")}</DialogTitle>
+          <DialogDescription>{t("photo.description")}</DialogDescription>
         </DialogHeader>
 
         <form id="submit-image-form" onSubmit={onSubmit}>
@@ -126,9 +122,7 @@ export default function AddMountainPhotoDialog({
                       field.onChange(event.target.files?.[0]);
                     }}
                   />
-                  <FieldDescription>
-                    {t("photo.fileDescription")}
-                  </FieldDescription>
+                  <FieldDescription>{t("photo.fileDescription")}</FieldDescription>
                   {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
                 </Field>
               )}
@@ -157,7 +151,9 @@ export default function AddMountainPhotoDialog({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="submit-image-form-taken-at">{t("photo.dateTaken")}</FieldLabel>
+                  <FieldLabel htmlFor="submit-image-form-taken-at">
+                    {t("photo.dateTaken")}
+                  </FieldLabel>
                   <Input
                     {...field}
                     id="submit-image-form-taken-at"

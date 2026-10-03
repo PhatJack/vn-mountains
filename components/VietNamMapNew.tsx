@@ -87,7 +87,6 @@ export default function VietnamMapNew({
     });
   }, [selectedMountain]);
 
-
   return (
     <Map
       ref={mapRef}

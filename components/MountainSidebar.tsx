@@ -80,9 +80,7 @@ export default function MountainSidebar({
           {loading ? (
             t("loading")
           ) : (
-            <>
-              {t("count", { filtered: filteredCount, total: totalCount })}
-            </>
+            <>{t("count", { filtered: filteredCount, total: totalCount })}</>
           )}
         </div>
       </CardHeader>

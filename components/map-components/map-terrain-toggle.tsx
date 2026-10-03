@@ -101,16 +101,18 @@ export default function MapTerrainToggle({ onEnabledChange }: MapTerrainTogglePr
     <>
       <div className="inline-flex h-9 items-center gap-2 rounded-md border border-border bg-background/90 px-2.5 text-sm font-medium shadow-xs backdrop-blur">
         <Mountain aria-hidden="true" size={20} />
-        <Switch checked={enabled} onCheckedChange={handleCheckedChange} aria-label={t("map.terrain")} />
+        <Switch
+          checked={enabled}
+          onCheckedChange={handleCheckedChange}
+          aria-label={t("map.terrain")}
+        />
       </div>
 
       <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{t("map.terrainTitle")}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t("map.terrainDescription")}
-            </AlertDialogDescription>
+            <AlertDialogDescription>{t("map.terrainDescription")}</AlertDialogDescription>
           </AlertDialogHeader>
 
           <label className="flex items-center gap-2 text-sm">

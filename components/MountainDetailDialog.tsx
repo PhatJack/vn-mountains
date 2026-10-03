@@ -93,7 +93,9 @@ export default function MountainDetailDialog({
       <DialogContent className="max-h-[90dvh] w-full max-w-6xl min-w-4xl overflow-y-auto">
         <DialogHeader className="sm:flex-row sm:items-start sm:justify-between">
           <div className="flex flex-col gap-2">
-            <DialogTitle>{mountain?.name ?? summary?.name ?? t("mountainDetail.title")}</DialogTitle>
+            <DialogTitle>
+              {mountain?.name ?? summary?.name ?? t("mountainDetail.title")}
+            </DialogTitle>
             <DialogDescription>
               {detailQuery.isLoading
                 ? t("mountainDetail.loading")
@@ -115,9 +117,7 @@ export default function MountainDetailDialog({
 
             {!detailQuery.isLoading && photos.length > 0 && (
               <div className="flex w-full flex-col items-center gap-3 overflow-hidden">
-                <Carousel
-                  className="w-full"
-                >
+                <Carousel className="w-full">
                   <CarouselContent>
                     {photos.map((photo) => (
                       <CarouselItem key={photo.id}>
