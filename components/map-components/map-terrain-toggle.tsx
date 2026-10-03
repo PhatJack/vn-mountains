@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
+import { useTranslations } from "next-intl";
 
 const TERRAIN_WARNING_KEY = "mountains-map:terrain-warning-date";
 
@@ -38,6 +39,7 @@ interface MapTerrainToggleProps {
 }
 
 export default function MapTerrainToggle({ onEnabledChange }: MapTerrainToggleProps) {
+  const t = useTranslations();
   const [enabled, setEnabled] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dontAskAgain, setDontAskAgain] = useState(false);
@@ -99,17 +101,18 @@ export default function MapTerrainToggle({ onEnabledChange }: MapTerrainTogglePr
     <>
       <div className="inline-flex h-9 items-center gap-2 rounded-md border border-border bg-background/90 px-2.5 text-sm font-medium shadow-xs backdrop-blur">
         <Mountain aria-hidden="true" size={20} />
-        <Switch checked={enabled} onCheckedChange={handleCheckedChange} aria-label="Terrain map" />
+        <Switch
+          checked={enabled}
+          onCheckedChange={handleCheckedChange}
+          aria-label={t("map.terrain")}
+        />
       </div>
 
       <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Enable terrain map?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Enabling terrain map may affect performance and cause lag, especially on lower-end
-              devices.
-            </AlertDialogDescription>
+            <AlertDialogTitle>{t("map.terrainTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("map.terrainDescription")}</AlertDialogDescription>
           </AlertDialogHeader>
 
           <label className="flex items-center gap-2 text-sm">
@@ -117,12 +120,12 @@ export default function MapTerrainToggle({ onEnabledChange }: MapTerrainTogglePr
               checked={dontAskAgain}
               onCheckedChange={(checked) => setDontAskAgain(checked === true)}
             />
-            <span>Don&apos;t ask again today</span>
+            <span>{t("map.dontAskAgain")}</span>
           </label>
 
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmEnable}>Enable terrain</AlertDialogAction>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmEnable}>{t("map.enableTerrain")}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

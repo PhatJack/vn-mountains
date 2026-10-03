@@ -1,5 +1,5 @@
 import { getMountainsData } from "@/services/api/mountains/mountains.server";
-import HomePage from "./_components/HomePage";
+import HomePage from "@/app/_components/HomePage";
 
 export default async function Home() {
   const initialData = await getMountainsData();

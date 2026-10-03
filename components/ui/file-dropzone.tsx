@@ -42,10 +42,7 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
   const [files, setFiles] = useState<DroppedFile[]>(initialFiles);
   const [error, setError] = useState<string | null>(null);
 
-  const generateId = useCallback(
-    () => Math.random().toString(36).substring(2, 9),
-    [],
-  );
+  const generateId = useCallback(() => Math.random().toString(36).substring(2, 9), []);
 
   const processFiles = useCallback(
     (fileList: FileList | File[]) => {
@@ -65,18 +62,14 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
 
       for (const file of fileArray) {
         if (maxSize && file.size > maxSize) {
-          setError(
-            `File ${file.name} exceeds ${Math.round(maxSize / 1024 / 1024)}MB limit`,
-          );
+          setError(`File ${file.name} exceeds ${Math.round(maxSize / 1024 / 1024)}MB limit`);
           continue;
         }
 
         const droppedFile: DroppedFile = {
           id: generateId(),
           file,
-          preview: file.type.startsWith("image/")
-            ? URL.createObjectURL(file)
-            : undefined,
+          preview: file.type.startsWith("image/") ? URL.createObjectURL(file) : undefined,
         };
         newFiles.push(droppedFile);
       }
@@ -147,11 +140,11 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         className={cn(
-          "relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed transition-all duration-200 overflow-hidden",
+          "relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-200",
           isDragging
             ? "border-primary/70 bg-linear-to-b from-[#092a36] to-black shadow-2xl"
             : "border-zinc-300 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900",
-          disabled && "opacity-50 cursor-not-allowed",
+          disabled && "cursor-not-allowed opacity-50",
           // Ensure simple styling when not active/dragging
           !isDragging && "p-8",
         )}
@@ -170,7 +163,7 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
           <AnimatePresence>
             {isDragging ? (
               <motion.div
-                className="flex flex-col items-center text-center p-8 w-full h-full justify-center"
+                className="flex h-full w-full flex-col items-center justify-center p-8 text-center"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
@@ -191,15 +184,11 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
                   <Upload size={36} strokeWidth={1.5} />
                 </motion.div>
 
-                <h3 className="mb-2 text-2xl font-bold text-foreground">
-                  Drop files here
-                </h3>
+                <h3 className="mb-2 text-2xl font-bold text-foreground">Drop files here</h3>
 
-                <p className="text-muted-foreground mb-4">
-                  Release to upload your files
-                </p>
+                <p className="mb-4 text-muted-foreground">Release to upload your files</p>
 
-                <div className="text-muted-foreground mt-2 flex flex-wrap items-center justify-center gap-2 text-xs">
+                <div className="mt-2 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
                   <div className="flex items-center rounded-full bg-zinc-800 px-3 py-1 text-white">
                     <FileUp size={12} className="mr-1" />
                     <span>Max {Math.round(maxSize / 1024 / 1024)}MB</span>
@@ -221,9 +210,7 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
                 <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                   Drag & drop files here
                 </p>
-                <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                  or click to browse
-                </p>
+                <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">or click to browse</p>
                 {maxSize && (
                   <p className="mt-2 text-xs text-zinc-400 dark:text-zinc-500">
                     Max {Math.round(maxSize / 1024 / 1024)}MB per file
@@ -236,9 +223,7 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
       </div>
 
       {/* Error message */}
-      {error && (
-        <p className="text-sm text-red-500 dark:text-red-400">{error}</p>
-      )}
+      {error && <p className="text-sm text-red-500 dark:text-red-400">{error}</p>}
 
       {/* File list */}
       {files.length > 0 && (
@@ -265,7 +250,7 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
                 </div>
               )}
               <div className="min-w-0">
-                <p className="truncate text-sm font-medium text-zinc-700 dark:text-zinc-300 max-w-32">
+                <p className="max-w-32 truncate text-sm font-medium text-zinc-700 dark:text-zinc-300">
                   {file.file.name}
                 </p>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">

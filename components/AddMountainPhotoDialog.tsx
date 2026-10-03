@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImagePlus, LoaderCircle } from "lucide-react";
 import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type FieldValues, type Resolver } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -20,27 +20,30 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useUploadMountainPhoto } from "@/services/api";
+import { useTranslations } from "next-intl";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 
-const addPhotoSchema = z.object({
-  file: z
-    .any()
-    .refine((file) => file instanceof File, "Please choose an image")
-    .refine(
-      (file) => !file || ACCEPTED_FILE_TYPES.includes(file.type),
-      "Only JPEG, PNG, GIF, or WebP images are allowed",
-    )
-    .refine((file) => !file || file.size <= MAX_FILE_SIZE, "The image must be 5 MB or smaller"),
-  caption: z.string().trim().max(500, "Caption must be 500 characters or fewer"),
-  takenAt: z
-    .string()
-    .optional()
-    .refine((value) => !value || !Number.isNaN(Date.parse(value)), "Please enter a valid date"),
-});
+type AddPhotoFormValues = FieldValues & {
+  file: File;
+  caption: string;
+  takenAt?: string;
+};
 
-type AddPhotoFormValues = z.infer<typeof addPhotoSchema>;
+const addPhotoSchema = (t: (key: string) => string) =>
+  z.object({
+    file: z
+      .any()
+      .refine((file) => file instanceof File, t("photo.fileRequired"))
+      .refine((file) => !file || ACCEPTED_FILE_TYPES.includes(file.type), t("photo.fileTypes"))
+      .refine((file) => !file || file.size <= MAX_FILE_SIZE, t("photo.fileSize")),
+    caption: z.string().trim().max(500, t("photo.captionLength")),
+    takenAt: z
+      .string()
+      .optional()
+      .refine((value) => !value || !Number.isNaN(Date.parse(value)), t("photo.invalidDate")),
+  });
 
 interface AddMountainPhotoDialogProps {
   mountainId: string;
@@ -53,16 +56,17 @@ export default function AddMountainPhotoDialog({
   open,
   onOpenChange,
 }: AddMountainPhotoDialogProps) {
+  const t = useTranslations();
   const {
     isPending: isUploading,
     mutateAsync: uploadPhoto,
     reset: resetUpload,
   } = useUploadMountainPhoto();
   const form = useForm<AddPhotoFormValues>({
-    resolver: zodResolver(addPhotoSchema),
+    resolver: zodResolver(addPhotoSchema(t) as never) as unknown as Resolver<AddPhotoFormValues>,
     defaultValues: { file: undefined, caption: "", takenAt: "" },
     mode: "onSubmit",
-		reValidateMode: "onChange",
+    reValidateMode: "onChange",
   });
 
   useEffect(() => {
@@ -82,21 +86,19 @@ export default function AddMountainPhotoDialog({
           takenAt: values.takenAt || undefined,
         },
       });
-      toast.success("Photo added successfully");
+      toast.success(t("photo.success"));
       form.reset();
       onOpenChange(false);
     } catch {
-      toast.error("Could not add photo. Please try again.");
+      toast.error(t("photo.error"));
     }
   });
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Add your mountain photo</DialogTitle>
-          <DialogDescription>
-            Share a memory from your trip. Images must be 5 MB or smaller.
-          </DialogDescription>
+          <DialogTitle>{t("photo.title")}</DialogTitle>
+          <DialogDescription>{t("photo.description")}</DialogDescription>
         </DialogHeader>
 
         <form id="submit-image-form" onSubmit={onSubmit}>
@@ -106,7 +108,7 @@ export default function AddMountainPhotoDialog({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="submit-image-form-file">Photo</FieldLabel>
+                  <FieldLabel htmlFor="submit-image-form-file">{t("photo.file")}</FieldLabel>
                   <Input
                     ref={field.ref}
                     name={field.name}
@@ -120,9 +122,7 @@ export default function AddMountainPhotoDialog({
                       field.onChange(event.target.files?.[0]);
                     }}
                   />
-                  <FieldDescription>
-                    JPEG, PNG, GIF, or WebP.Maximum <strong>5 MB</strong>
-                  </FieldDescription>
+                  <FieldDescription>{t("photo.fileDescription")}</FieldDescription>
                   {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
                 </Field>
               )}
@@ -133,11 +133,11 @@ export default function AddMountainPhotoDialog({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="submit-image-form-caption">Caption</FieldLabel>
+                  <FieldLabel htmlFor="submit-image-form-caption">{t("photo.caption")}</FieldLabel>
                   <Textarea
                     {...field}
                     id="submit-image-form-caption"
-                    placeholder="What was this moment like?"
+                    placeholder={t("photo.captionPlaceholder")}
                     aria-invalid={fieldState.invalid}
                     disabled={isUploading}
                   />
@@ -151,7 +151,9 @@ export default function AddMountainPhotoDialog({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="submit-image-form-taken-at">Date taken</FieldLabel>
+                  <FieldLabel htmlFor="submit-image-form-taken-at">
+                    {t("photo.dateTaken")}
+                  </FieldLabel>
                   <Input
                     {...field}
                     id="submit-image-form-taken-at"
@@ -172,7 +174,7 @@ export default function AddMountainPhotoDialog({
               onClick={() => onOpenChange(false)}
               disabled={isUploading}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button type="submit" disabled={isUploading}>
               {isUploading ? (
@@ -180,7 +182,7 @@ export default function AddMountainPhotoDialog({
               ) : (
                 <ImagePlus data-icon="inline-start" />
               )}
-              {isUploading ? "Uploading..." : "Add Photo"}
+              {isUploading ? t("photo.uploading") : t("mountainDetail.addPhoto")}
             </Button>
           </DialogFooter>
         </form>

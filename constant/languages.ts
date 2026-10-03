@@ -5,6 +5,6 @@ export const LANGUAGES = [
   },
   {
     value: "vi",
-    label: "VietNam",
+    label: "Tiếng Việt",
   },
 ];

@@ -9,14 +9,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useMapStore, type MapStyleKey } from "@/stores/map-store";
-
-const options: { label: string; value: MapStyleKey }[] = [
-  { label: "Default (Carto)", value: "default" },
-  { label: "OpenStreetMap", value: "openstreetmap" },
-  { label: "OpenStreetMap 3D", value: "openstreetmap3d" },
-];
+import { useTranslations } from "next-intl";
 
 export function MapStyles() {
+  const t = useTranslations("map");
+  const options: { label: string; value: MapStyleKey }[] = [
+    { label: t("default"), value: "default" },
+    { label: t("openstreetmap"), value: "openstreetmap" },
+    { label: t("openstreetmap3d"), value: "openstreetmap3d" },
+  ];
   const style = useMapStore((s) => s.style);
   const setStyle = useMapStore((s) => s.setStyle);
 

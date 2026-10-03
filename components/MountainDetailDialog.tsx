@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-  type CarouselApi,
 } from "@/components/ui/carousel";
 import {
   Dialog,
@@ -25,6 +24,7 @@ import { mountainPhotoUrl } from "@/services/api";
 import Image from "next/image";
 import { ImagePlus } from "lucide-react";
 import AddMountainPhotoDialog from "@/components/AddMountainPhotoDialog";
+import { useTranslations } from "next-intl";
 
 interface MountainDetailDialogProps {
   mountainId: string | null;
@@ -72,22 +72,9 @@ export default function MountainDetailDialog({
   summary,
   onOpenChange,
 }: MountainDetailDialogProps) {
+  const t = useTranslations();
   const detailQuery = useMountainDetail(mountainId);
-  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
-  const [activeSlide, setActiveSlide] = useState(0);
   const [addPhotoOpen, setAddPhotoOpen] = useState(false);
-
-  useEffect(() => {
-    if (!carouselApi) return;
-
-    const onSelect = () => setActiveSlide(carouselApi.selectedScrollSnap());
-    onSelect();
-    carouselApi.on("select", onSelect);
-
-    return () => {
-      carouselApi.off("select", onSelect);
-    };
-  }, [carouselApi]);
 
   const mountain = detailQuery.data;
   const photos = useMemo(() => {
@@ -106,20 +93,22 @@ export default function MountainDetailDialog({
       <DialogContent className="max-h-[90dvh] w-full max-w-6xl min-w-4xl overflow-y-auto">
         <DialogHeader className="sm:flex-row sm:items-start sm:justify-between">
           <div className="flex flex-col gap-2">
-            <DialogTitle>{mountain?.name ?? summary?.name ?? "Mountain details"}</DialogTitle>
+            <DialogTitle>
+              {mountain?.name ?? summary?.name ?? t("mountainDetail.title")}
+            </DialogTitle>
             <DialogDescription>
               {detailQuery.isLoading
-                ? "Loading mountain information..."
+                ? t("mountainDetail.loading")
                 : detailQuery.isError
-                  ? "Mountain information could not be loaded."
-                  : "Mountain information and images"}
+                  ? t("mountainDetail.error")
+                  : t("mountainDetail.description")}
             </DialogDescription>
           </div>
         </DialogHeader>
         {mountainId && (
           <Button type="button" onClick={() => setAddPhotoOpen(true)}>
             <ImagePlus data-icon="inline-start" />
-            Add Photo
+            {t("mountainDetail.addPhoto")}
           </Button>
         )}
         <div className="grid grid-cols-1 gap-6">
@@ -128,19 +117,14 @@ export default function MountainDetailDialog({
 
             {!detailQuery.isLoading && photos.length > 0 && (
               <div className="flex w-full flex-col items-center gap-3 overflow-hidden">
-                <Carousel
-                  setApi={(api) => {
-                    setCarouselApi(api);
-                  }}
-                  className="w-full"
-                >
+                <Carousel className="w-full">
                   <CarouselContent>
                     {photos.map((photo) => (
                       <CarouselItem key={photo.id}>
                         <div className="relative aspect-video overflow-hidden rounded-lg">
                           <Image
                             src={photo.url}
-                            alt={mountain?.name ?? "Mountain"}
+                            alt={mountain?.name ?? t("mountainDetail.imageAlt")}
                             className="size-full object-contain"
                             fill
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -168,9 +152,9 @@ export default function MountainDetailDialog({
           <div className="w-full min-w-0">
             {detailQuery.isError && (
               <div className="flex flex-col gap-3 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm">
-                <p>Unable to load the full mountain information.</p>
+                <p>{t("mountainDetail.loadError")}</p>
                 <Button type="button" variant="outline" onClick={() => detailQuery.refetch()}>
-                  Retry
+                  {t("common.retry")}
                 </Button>
               </div>
             )}
@@ -181,15 +165,15 @@ export default function MountainDetailDialog({
               summary && (
                 <blockquote className="flex flex-col gap-3 border-l-2 border-primary/30 pl-4 text-sm">
                   <div>
-                    <span className="text-muted-foreground">Elevation:</span>{" "}
-                    {summary.elevationM ?? "N/A"} m
+                    <span className="text-muted-foreground">{t("mountainDetail.elevation")}:</span>{" "}
+                    {summary.elevationM ?? t("common.notAvailable")} m
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Latitude:</span>{" "}
+                    <span className="text-muted-foreground">{t("mountainDetail.latitude")}:</span>{" "}
                     {summary.lat.toFixed(4)}
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Longitude:</span>{" "}
+                    <span className="text-muted-foreground">{t("mountainDetail.longitude")}:</span>{" "}
                     {summary.lng.toFixed(4)}
                   </div>
                 </blockquote>
