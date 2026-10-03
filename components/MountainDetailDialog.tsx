@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useMountainDetail } from "@/services/api";
 import type { Mountain, MountainDetail } from "@/services/api";
-import { formatLabel, formatValue, epochToDateTime } from "@/lib/utils";
+import { formatLabel, formatValue, epochToDateTime, coordinateToDMS } from "@/lib/utils";
 import { mountainPhotoUrl } from "@/services/api";
 import Image from "next/image";
 import { ImagePlus } from "lucide-react";
@@ -55,7 +55,11 @@ function DetailQuote({ mountain }: { mountain: MountainDetail }) {
             {formatLabel(key)}
           </dt>
           <dd className="wrap-break-word text-foreground">
-            {key === "updatedAt" ? epochToDateTime(value as number) : formatValue(value)}
+            {key === "updatedAt"
+              ? epochToDateTime(value as number)
+              : key === "lat" || key === "lng"
+                ? coordinateToDMS(value as number, key === "lat" ? "latitude" : "longitude")
+                : formatValue(value)}
           </dd>
         </div>
       ))}
@@ -139,6 +143,7 @@ export default function MountainDetailDialog({
                             alt={mountain?.name ?? "Mountain"}
                             className="size-full object-contain"
                             fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           />
                         </div>
                         {(photo.caption || photo.takenAt) && (
@@ -153,8 +158,8 @@ export default function MountainDetailDialog({
                       </CarouselItem>
                     ))}
                   </CarouselContent>
-                  <CarouselPrevious className={"left-0"}/>
-                  <CarouselNext className={"right-0"}/>
+                  <CarouselPrevious className={"left-0"} />
+                  <CarouselNext className={"right-0"} />
                 </Carousel>
               </div>
             )}

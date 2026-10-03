@@ -61,6 +61,8 @@ export default function AddMountainPhotoDialog({
   const form = useForm<AddPhotoFormValues>({
     resolver: zodResolver(addPhotoSchema),
     defaultValues: { file: undefined, caption: "", takenAt: "" },
+    mode: "onSubmit",
+		reValidateMode: "onChange",
   });
 
   useEffect(() => {
@@ -118,7 +120,9 @@ export default function AddMountainPhotoDialog({
                       field.onChange(event.target.files?.[0]);
                     }}
                   />
-                  <FieldDescription>JPEG, PNG, GIF, or WebP.Maximum <strong>5 MB</strong></FieldDescription>
+                  <FieldDescription>
+                    JPEG, PNG, GIF, or WebP.Maximum <strong>5 MB</strong>
+                  </FieldDescription>
                   {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
                 </Field>
               )}

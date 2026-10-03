@@ -30,3 +30,23 @@ export function epochToDateTime(epoch?: number | string | null) {
 
   return format(date, "dd/MM/yyyy HH:mm:ss");
 }
+
+// only for latitudes and longitudes in decimal degrees
+export function coordinateToDMS(coordinate: number, type: "latitude" | "longitude") {
+  const abs = Math.abs(coordinate);
+
+  const degrees = Math.floor(abs);
+  const minutesDecimal = (abs - degrees) * 60;
+  const minutes = Math.floor(minutesDecimal);
+  const seconds = (minutesDecimal - minutes) * 60;
+
+  let direction: string;
+
+  if (type === "latitude") {
+    direction = coordinate >= 0 ? "N" : "S";
+  } else {
+    direction = coordinate >= 0 ? "E" : "W";
+  }
+
+  return `${degrees}° ${minutes}′ ${seconds.toFixed(2)}″ ${direction}`;
+}
