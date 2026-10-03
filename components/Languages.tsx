@@ -1,41 +1,35 @@
 import React, { useCallback } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { usePathname, useRouter } from "next/navigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { LANGUAGES } from "@/constant/languages";
-import { useMap } from "./ui/map";
+import { US,VN } from 'country-flag-icons/react/3x2'
+
 
 const LanguagesSelect = () => {
-  const { map } = useMap();
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+  const t = useTranslations("language");
 
   const handleOnChangeLanguage = useCallback(
     (language: string | null) => {
-      map?.getStyle().layers?.forEach((layer) => {
-        console.log(layer.id, layer.type);
-      });
-      // map?.setLayoutProperty("label_country_1", "text-field", [
-      //   "get",
-      //   `name:${language}`,
-      // ]);
-      // map?.setLayoutProperty("label_country_2", "text-field", [
-      //   "get",
-      //   `name:${language}`,
-      // ]);
-      // map?.setLayoutProperty("label_country_3", "text-field", [
-      //   "get",
-      //   `name:${language}`,
-      // ]);
+      if (!language || language === locale) return;
+      const pathnameWithoutLocale = pathname.replace(/^\/(vi|en)(?=\/|$)/, "") || "/";
+      router.replace(`/${language}${pathnameWithoutLocale}`);
     },
-    [map],
+    [locale, pathname, router],
   );
 
   return (
-    <Select items={LANGUAGES} onValueChange={handleOnChangeLanguage} defaultValue={"en"}>
-      <SelectTrigger>
-        <SelectValue placeholder={"Select Language..."} />
+    <Select items={LANGUAGES} onValueChange={handleOnChangeLanguage} value={locale}>
+      <SelectTrigger aria-label={t("label")}>
+        <SelectValue placeholder={t("select")} />
       </SelectTrigger>
       <SelectContent>
         {LANGUAGES.map((lang) => (
           <SelectItem key={`lang-${lang.value}`} value={lang.value}>
-            {lang.label}
+            {lang.value === "en" ? <US /> : <VN />}{' '}{lang.label}
           </SelectItem>
         ))}
       </SelectContent>

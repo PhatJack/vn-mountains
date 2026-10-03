@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import type { Mountain as MountainType } from "@/services/api";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface MountainSidebarProps {
   mountains: MountainType[];
@@ -41,6 +42,7 @@ export default function MountainSidebar({
   selectedId,
 }: MountainSidebarProps) {
   "use no memo";
+  const t = useTranslations("sidebar");
   const [search, setSearch] = useState("");
   const viewportRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +68,7 @@ export default function MountainSidebar({
         <CardTitle className="flex items-center justify-center">
           <Image
             src={"/logo.png"}
-            alt="VietNam Mountains"
+            alt={t("logoAlt")}
             width={70}
             height={70}
             className="aspect-square"
@@ -76,10 +78,10 @@ export default function MountainSidebar({
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <MapPin className="size-3.5" />
           {loading ? (
-            "Loading peaks..."
+            t("loading")
           ) : (
             <>
-              {filteredCount} of {totalCount} peaks
+              {t("count", { filtered: filteredCount, total: totalCount })}
             </>
           )}
         </div>
@@ -88,7 +90,7 @@ export default function MountainSidebar({
         <div className="relative">
           <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search mountains..."
+            placeholder={t("searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-8"
@@ -102,7 +104,7 @@ export default function MountainSidebar({
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center gap-2 px-4 py-8 text-center text-sm text-muted-foreground">
             <Mountain className="size-8 opacity-50" />
-            <p>No mountains found</p>
+            <p>{t("empty")}</p>
           </div>
         ) : (
           <ScrollArea className="h-full" viewportRef={viewportRef}>

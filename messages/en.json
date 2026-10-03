@@ -1,0 +1,69 @@
+{
+  "metadata": {
+    "title": "Vietnam Mountains",
+    "description": "Explore the majestic mountains of Vietnam"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "retry": "Retry",
+    "close": "Close",
+    "notAvailable": "N/A"
+  },
+  "language": {
+    "label": "Language",
+    "select": "Select language",
+    "english": "English",
+    "vietnamese": "Vietnamese"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "map": {
+    "default": "Default (Carto)",
+    "openstreetmap": "OpenStreetMap",
+    "openstreetmap3d": "OpenStreetMap 3D",
+    "terrain": "Terrain map",
+    "terrainTitle": "Enable terrain map?",
+    "terrainDescription": "Enabling terrain map may affect performance and cause lag, especially on lower-end devices.",
+    "dontAskAgain": "Don't ask again today",
+    "enableTerrain": "Enable terrain"
+  },
+  "sidebar": {
+    "logoAlt": "Vietnam Mountains",
+    "loading": "Loading peaks...",
+    "count": "{filtered} of {total} peaks",
+    "searchPlaceholder": "Search mountains...",
+    "empty": "No mountains found"
+  },
+  "mountainDetail": {
+    "title": "Mountain details",
+    "loading": "Loading mountain information...",
+    "error": "Mountain information could not be loaded.",
+    "description": "Mountain information and images",
+    "addPhoto": "Add Photo",
+    "imageAlt": "Mountain",
+    "loadError": "Unable to load the full mountain information.",
+    "elevation": "Elevation",
+    "latitude": "Latitude",
+    "longitude": "Longitude"
+  },
+  "photo": {
+    "success": "Photo added successfully",
+    "error": "Could not add photo. Please try again.",
+    "title": "Add your mountain photo",
+    "description": "Share a memory from your trip. Images must be 5 MB or smaller.",
+    "file": "Photo",
+    "caption": "Caption",
+    "captionPlaceholder": "What was this moment like?",
+    "dateTaken": "Date taken",
+    "fileDescription": "JPEG, PNG, GIF, or WebP. Maximum 5 MB",
+    "fileRequired": "Please choose an image",
+    "fileTypes": "Only JPEG, PNG, GIF, or WebP images are allowed",
+    "fileSize": "The image must be 5 MB or smaller",
+    "captionLength": "Caption must be 500 characters or fewer",
+    "invalidDate": "Please enter a valid date",
+    "uploading": "Uploading..."
+  }
+}

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 const r2PublicUrl = process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
 const r2RemotePattern = r2PublicUrl
@@ -22,4 +23,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
+
+export default withNextIntl(nextConfig);

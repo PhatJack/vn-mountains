@@ -1,0 +1,69 @@
+{
+  "metadata": {
+    "title": "Núi Việt Nam",
+    "description": "Khám phá những ngọn núi hùng vĩ của Việt Nam"
+  },
+  "common": {
+    "cancel": "Hủy",
+    "retry": "Thử lại",
+    "close": "Đóng",
+    "notAvailable": "N/A"
+  },
+  "language": {
+    "label": "Ngôn ngữ",
+    "select": "Chọn ngôn ngữ",
+    "english": "English",
+    "vietnamese": "Tiếng Việt"
+  },
+  "theme": {
+    "light": "Sáng",
+    "dark": "Tối",
+    "system": "Hệ thống"
+  },
+  "map": {
+    "default": "Mặc định (Carto)",
+    "openstreetmap": "OpenStreetMap",
+    "openstreetmap3d": "OpenStreetMap 3D",
+    "terrain": "Bản đồ địa hình",
+    "terrainTitle": "Bật bản đồ địa hình?",
+    "terrainDescription": "Bản đồ địa hình có thể ảnh hưởng đến hiệu suất và gây giật lag, đặc biệt trên thiết bị cấu hình thấp.",
+    "dontAskAgain": "Không hỏi lại hôm nay",
+    "enableTerrain": "Bật địa hình"
+  },
+  "sidebar": {
+    "logoAlt": "Núi Việt Nam",
+    "loading": "Đang tải các đỉnh núi...",
+    "count": "{filtered} trên {total} đỉnh núi",
+    "searchPlaceholder": "Tìm kiếm núi...",
+    "empty": "Không tìm thấy ngọn núi nào"
+  },
+  "mountainDetail": {
+    "title": "Thông tin núi",
+    "loading": "Đang tải thông tin núi...",
+    "error": "Không thể tải thông tin núi.",
+    "description": "Thông tin và hình ảnh ngọn núi",
+    "addPhoto": "Thêm ảnh",
+    "imageAlt": "Núi",
+    "loadError": "Không thể tải đầy đủ thông tin ngọn núi.",
+    "elevation": "Độ cao",
+    "latitude": "Vĩ độ",
+    "longitude": "Kinh độ"
+  },
+  "photo": {
+    "success": "Đã thêm ảnh thành công",
+    "error": "Không thể thêm ảnh. Vui lòng thử lại.",
+    "title": "Thêm ảnh núi của bạn",
+    "description": "Chia sẻ kỷ niệm từ chuyến đi. Ảnh phải có dung lượng từ 5 MB trở xuống.",
+    "file": "Ảnh",
+    "caption": "Chú thích",
+    "captionPlaceholder": "Khoảnh khắc này như thế nào?",
+    "dateTaken": "Ngày chụp",
+    "fileDescription": "JPEG, PNG, GIF hoặc WebP. Tối đa 5 MB",
+    "fileRequired": "Vui lòng chọn một ảnh",
+    "fileTypes": "Chỉ cho phép ảnh JPEG, PNG, GIF hoặc WebP",
+    "fileSize": "Ảnh phải có dung lượng từ 5 MB trở xuống",
+    "captionLength": "Chú thích không được quá 500 ký tự",
+    "invalidDate": "Vui lòng nhập ngày hợp lệ",
+    "uploading": "Đang tải lên..."
+  }
+}
