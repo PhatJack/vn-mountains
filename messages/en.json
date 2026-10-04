@@ -76,6 +76,7 @@
     "caption": "Caption",
     "captionPlaceholder": "What was this moment like?",
     "dateTaken": "Date taken",
+    "pickDate": "Pick a date",
     "fileDescription": "JPEG, PNG, GIF, or WebP. Maximum 5 MB",
     "fileRequired": "Please choose an image",
     "fileTypes": "Only JPEG, PNG, GIF, or WebP images are allowed",

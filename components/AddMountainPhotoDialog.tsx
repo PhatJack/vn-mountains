@@ -3,15 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImagePlus, LoaderCircle } from "lucide-react";
 import { useEffect } from "react";
-import {
-  Controller,
-  FormProvider,
-  useForm,
-  type FieldValues,
-  type Resolver,
-} from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { vi } from "react-day-picker/locale/vi";
+import { enUS } from "react-day-picker/locale/en-US";
 
 import {
   Dialog,
@@ -22,20 +18,20 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import InputImage from "@/components/ui/input-image";
 import { useUploadMountainPhoto } from "@/services/api";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { DateTimePicker } from "./ui/date-picker";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 
-type AddPhotoFormValues = FieldValues & {
+type AddPhotoFormValues = {
   file: File;
   caption: string;
-  takenAt?: string;
+  takenAt?: Date;
 };
 
 const addPhotoSchema = (t: (key: string) => string) =>
@@ -47,9 +43,9 @@ const addPhotoSchema = (t: (key: string) => string) =>
       .refine((file) => !file || file.size <= MAX_FILE_SIZE, t("photo.fileSize")),
     caption: z.string().trim().max(500, t("photo.captionLength")),
     takenAt: z
-      .string()
+      .date()
       .optional()
-      .refine((value) => !value || !Number.isNaN(Date.parse(value)), t("photo.invalidDate")),
+      .refine((value) => !value || !Number.isNaN(value), t("photo.invalidDate")),
   });
 
 interface AddMountainPhotoDialogProps {
@@ -63,6 +59,7 @@ export default function AddMountainPhotoDialog({
   open,
   onOpenChange,
 }: AddMountainPhotoDialogProps) {
+  const locale = useLocale();
   const t = useTranslations();
   const {
     isPending: isUploading,
@@ -70,10 +67,8 @@ export default function AddMountainPhotoDialog({
     reset: resetUpload,
   } = useUploadMountainPhoto();
   const form = useForm<AddPhotoFormValues>({
-    resolver: zodResolver(addPhotoSchema(t) as never) as unknown as Resolver<AddPhotoFormValues>,
-    defaultValues: { file: undefined, caption: "", takenAt: "" },
-    mode: "onSubmit",
-    reValidateMode: "onChange",
+    resolver: zodResolver(addPhotoSchema(t)),
+    defaultValues: { file: undefined, caption: "", takenAt: new Date() },
   });
 
   useEffect(() => {
@@ -90,7 +85,7 @@ export default function AddMountainPhotoDialog({
         input: {
           file: values.file,
           caption: values.caption,
-          takenAt: values.takenAt || undefined,
+          takenAt: String(values.takenAt) || undefined,
         },
       });
       toast.success(t("photo.success"));
@@ -151,12 +146,14 @@ export default function AddMountainPhotoDialog({
                     <FieldLabel htmlFor="submit-image-form-taken-at">
                       {t("photo.dateTaken")}
                     </FieldLabel>
-                    <Input
-                      {...field}
-                      id="submit-image-form-taken-at"
-                      type="datetime-local"
-                      aria-invalid={fieldState.invalid}
+                    <DateTimePicker
+                      value={field.value ? new Date(field.value) : undefined}
+                      onChange={(date) => field.onChange(date?.toISOString() ?? "")}
                       disabled={isUploading}
+                      placeholder={t("photo.pickDate")}
+                      granularity="day"
+                      displayFormat={{ hour24: "MMMM do, yyyy" }}
+                      locale={locale === "vi" ? vi : enUS}
                     />
                     {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
                   </Field>

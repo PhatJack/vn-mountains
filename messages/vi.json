@@ -76,6 +76,7 @@
     "caption": "Chú thích",
     "captionPlaceholder": "Khoảnh khắc này như thế nào?",
     "dateTaken": "Ngày chụp",
+    "pickDate": "Chọn ngày",
     "fileDescription": "JPEG, PNG, GIF hoặc WebP. Tối đa 5 MB",
     "fileRequired": "Vui lòng chọn một ảnh",
     "fileTypes": "Chỉ cho phép ảnh JPEG, PNG, GIF hoặc WebP",
