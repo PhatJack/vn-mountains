@@ -28,7 +28,10 @@
     "terrainTitle": "Bật bản đồ địa hình?",
     "terrainDescription": "Bản đồ địa hình có thể ảnh hưởng đến hiệu suất và gây giật lag, đặc biệt trên thiết bị cấu hình thấp.",
     "dontAskAgain": "Không hỏi lại hôm nay",
-    "enableTerrain": "Bật địa hình"
+    "enableTerrain": "Bật địa hình",
+    "locationTooltip": "📍 Bạn chưa lạc đường... đâu nhé.",
+    "locationTitle": "📍 Bạn đang ở đây, nhà thám hiểm!",
+    "locationDescription": "Vị trí hiện tại của bạn"
   },
   "sidebar": {
     "logoAlt": "Núi Việt Nam",
@@ -44,10 +47,25 @@
     "description": "Thông tin và hình ảnh ngọn núi",
     "addPhoto": "Thêm ảnh",
     "imageAlt": "Núi",
+    "unknownPeak": "Núi chưa xác định",
     "loadError": "Không thể tải đầy đủ thông tin ngọn núi.",
     "elevation": "Độ cao",
     "latitude": "Vĩ độ",
-    "longitude": "Kinh độ"
+    "longitude": "Kinh độ",
+    "fields": {
+      "name": "Tên",
+      "nameVi": "Tên tiếng Việt",
+      "description": "Mô tả",
+      "difficulty": "Mức độ khó",
+      "elevationM": "Độ cao",
+      "lat": "Vĩ độ",
+      "lng": "Kinh độ",
+      "rangeId": "Phạm vi",
+      "createdAt": "Ngày tạo",
+      "updatedAt": "Cập nhật cuối",
+      "slug": "Slug",
+      "photos": "Ảnh"
+    }
   },
   "photo": {
     "success": "Đã thêm ảnh thành công",
@@ -64,6 +82,17 @@
     "fileSize": "Ảnh phải có dung lượng từ 5 MB trở xuống",
     "captionLength": "Chú thích không được quá 500 ký tự",
     "invalidDate": "Vui lòng nhập ngày hợp lệ",
-    "uploading": "Đang tải lên..."
+    "uploading": "Đang tải lên...",
+    "dropImageHere": "Thả ảnh vào đây hoặc nhấn để chọn",
+    "maxSizeLabel": "Kích thước tối đa: {size}MB",
+    "removeImage": "Xóa ảnh",
+    "uploadFile": "Tải lên tệp",
+    "uploadedImage": "Ảnh đã tải lên",
+    "singleImageUploader": "Tải lên một ảnh duy nhất",
+    "api": "API",
+    "fileTooLarge": "Tệp vượt quá dung lượng tối đa {size}.",
+    "filesTooLarge": "Một số tệp vượt quá dung lượng tối đa {size}.",
+    "invalidFileType": "Tệp \"{fileName}\" không thuộc định dạng được chấp nhận.",
+    "maxFiles": "Bạn chỉ có thể tải lên tối đa {count} tệp."
   }
 }

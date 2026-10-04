@@ -33,6 +33,12 @@ interface MountainDetailDialogProps {
 }
 
 function DetailQuote({ mountain }: { mountain: MountainDetail }) {
+  const t = useTranslations();
+  const fieldLabel = (key: string) => {
+    const translationKey = `mountainDetail.fields.${key}`;
+    return t.has(translationKey) ? t(translationKey) : formatLabel(key);
+  };
+
   const fields = Object.entries(mountain).filter(([key, value]) => {
     // Photos are rendered in the gallery; timestamps are handled separately.
     if (
@@ -52,7 +58,7 @@ function DetailQuote({ mountain }: { mountain: MountainDetail }) {
       {fields.map(([key, value]) => (
         <div key={key} className="flex flex-col gap-1">
           <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            {formatLabel(key)}
+            {fieldLabel(key)}
           </dt>
           <dd className="wrap-break-word text-foreground">
             {key === "updatedAt"
