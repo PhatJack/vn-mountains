@@ -28,7 +28,10 @@
     "terrainTitle": "Bật bản đồ địa hình?",
     "terrainDescription": "Bản đồ địa hình có thể ảnh hưởng đến hiệu suất và gây giật lag, đặc biệt trên thiết bị cấu hình thấp.",
     "dontAskAgain": "Không hỏi lại hôm nay",
-    "enableTerrain": "Bật địa hình"
+    "enableTerrain": "Bật địa hình",
+    "locationTooltip": "📍 Bạn chưa lạc đường... đâu nhé.",
+    "locationTitle": "📍 Bạn đang ở đây, nhà thám hiểm!",
+    "locationDescription": "Vị trí hiện tại của bạn"
   },
   "sidebar": {
     "logoAlt": "Núi Việt Nam",
@@ -44,10 +47,25 @@
     "description": "Thông tin và hình ảnh ngọn núi",
     "addPhoto": "Thêm ảnh",
     "imageAlt": "Núi",
+    "unknownPeak": "Núi chưa xác định",
     "loadError": "Không thể tải đầy đủ thông tin ngọn núi.",
     "elevation": "Độ cao",
     "latitude": "Vĩ độ",
-    "longitude": "Kinh độ"
+    "longitude": "Kinh độ",
+    "fields": {
+      "name": "Tên",
+      "nameVi": "Tên tiếng Việt",
+      "description": "Mô tả",
+      "difficulty": "Mức độ khó",
+      "elevationM": "Độ cao",
+      "lat": "Vĩ độ",
+      "lng": "Kinh độ",
+      "rangeId": "Phạm vi",
+      "createdAt": "Ngày tạo",
+      "updatedAt": "Cập nhật cuối",
+      "slug": "Slug",
+      "photos": "Ảnh"
+    }
   },
   "photo": {
     "success": "Đã thêm ảnh thành công",

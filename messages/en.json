@@ -28,7 +28,10 @@
     "terrainTitle": "Enable terrain map?",
     "terrainDescription": "Enabling terrain map may affect performance and cause lag, especially on lower-end devices.",
     "dontAskAgain": "Don't ask again today",
-    "enableTerrain": "Enable terrain"
+    "enableTerrain": "Enable terrain",
+    "locationTooltip": "📍 You're not lost... yet.",
+    "locationTitle": "📍 You are here, explorer!",
+    "locationDescription": "Your current location"
   },
   "sidebar": {
     "logoAlt": "Vietnam Mountains",
@@ -44,10 +47,25 @@
     "description": "Mountain information and images",
     "addPhoto": "Add Photo",
     "imageAlt": "Mountain",
+    "unknownPeak": "Unknown Peak",
     "loadError": "Unable to load the full mountain information.",
     "elevation": "Elevation",
     "latitude": "Latitude",
-    "longitude": "Longitude"
+    "longitude": "Longitude",
+    "fields": {
+      "name": "Name",
+      "nameVi": "Vietnamese name",
+      "description": "Description",
+      "difficulty": "Difficulty",
+      "elevationM": "Elevation",
+      "lat": "Latitude",
+      "lng": "Longitude",
+      "rangeId": "Range",
+      "createdAt": "Created at",
+      "updatedAt": "Updated at",
+      "slug": "Slug",
+      "photos": "Photos"
+    }
   },
   "photo": {
     "success": "Photo added successfully",

@@ -135,7 +135,7 @@ export default function VietnamMapNew({
           selectedDetail
             ? (mountains.find((mountain) => mountain.id === selectedDetail.id) ?? {
                 id: selectedDetail.id,
-                name: "Unknown Peak",
+                name: t("mountainDetail.unknownPeak"),
                 elevationM: null,
                 lat: selectedDetail.lat,
                 lng: selectedDetail.lng,
@@ -158,11 +158,11 @@ export default function VietnamMapNew({
             </div>
           </MarkerContent>
 
-          <MarkerTooltip>📍 You&apos;re not lost... yet.</MarkerTooltip>
+          <MarkerTooltip>{t("map.locationTooltip")}</MarkerTooltip>
 
           <MarkerPopup>
             <div className="space-y-1">
-              <p className="font-medium text-foreground">📍 You are here, explorer!</p>
+              <p className="font-medium text-foreground">{t("map.locationTitle")}</p>
 
               <p className="text-xs text-muted-foreground">
                 {coordinateToDMS(location.lat, "latitude")},{" "}
