@@ -82,6 +82,17 @@
     "fileSize": "Ảnh phải có dung lượng từ 5 MB trở xuống",
     "captionLength": "Chú thích không được quá 500 ký tự",
     "invalidDate": "Vui lòng nhập ngày hợp lệ",
-    "uploading": "Đang tải lên..."
+    "uploading": "Đang tải lên...",
+    "dropImageHere": "Thả ảnh vào đây hoặc nhấn để chọn",
+    "maxSizeLabel": "Kích thước tối đa: {size}MB",
+    "removeImage": "Xóa ảnh",
+    "uploadFile": "Tải lên tệp",
+    "uploadedImage": "Ảnh đã tải lên",
+    "singleImageUploader": "Tải lên một ảnh duy nhất",
+    "api": "API",
+    "fileTooLarge": "Tệp vượt quá dung lượng tối đa {size}.",
+    "filesTooLarge": "Một số tệp vượt quá dung lượng tối đa {size}.",
+    "invalidFileType": "Tệp \"{fileName}\" không thuộc định dạng được chấp nhận.",
+    "maxFiles": "Bạn chỉ có thể tải lên tối đa {count} tệp."
   }
 }

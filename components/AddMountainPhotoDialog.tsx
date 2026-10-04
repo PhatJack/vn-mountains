@@ -3,7 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImagePlus, LoaderCircle } from "lucide-react";
 import { useEffect } from "react";
-import { Controller, useForm, type FieldValues, type Resolver } from "react-hook-form";
+import {
+  Controller,
+  FormProvider,
+  useForm,
+  type FieldValues,
+  type Resolver,
+} from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -15,10 +21,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import InputImage from "@/components/ui/input-image";
 import { useUploadMountainPhoto } from "@/services/api";
 import { useTranslations } from "next-intl";
 
@@ -101,91 +108,82 @@ export default function AddMountainPhotoDialog({
           <DialogDescription>{t("photo.description")}</DialogDescription>
         </DialogHeader>
 
-        <form id="submit-image-form" onSubmit={onSubmit}>
-          <FieldGroup>
-            <Controller
-              name="file"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="submit-image-form-file">{t("photo.file")}</FieldLabel>
-                  <Input
-                    ref={field.ref}
-                    name={field.name}
-                    id="submit-image-form-file"
-                    type="file"
-                    accept={ACCEPTED_FILE_TYPES.join(",")}
-                    aria-invalid={fieldState.invalid}
-                    disabled={isUploading}
-                    onBlur={field.onBlur}
-                    onChange={(event) => {
-                      field.onChange(event.target.files?.[0]);
-                    }}
-                  />
-                  <FieldDescription>{t("photo.fileDescription")}</FieldDescription>
-                  {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
-                </Field>
-              )}
-            />
+        <FormProvider {...form}>
+          <form id="submit-image-form" onSubmit={onSubmit}>
+            <FieldGroup>
+              <Controller
+                name="file"
+                control={form.control}
+                render={({ fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="submit-image-form-file">{t("photo.file")}</FieldLabel>
+                    <InputImage />
+                    {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
+                  </Field>
+                )}
+              />
 
-            <Controller
-              name="caption"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="submit-image-form-caption">{t("photo.caption")}</FieldLabel>
-                  <Textarea
-                    {...field}
-                    id="submit-image-form-caption"
-                    placeholder={t("photo.captionPlaceholder")}
-                    aria-invalid={fieldState.invalid}
-                    disabled={isUploading}
-                  />
-                  {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
-                </Field>
-              )}
-            />
+              <Controller
+                name="caption"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="submit-image-form-caption">
+                      {t("photo.caption")}
+                    </FieldLabel>
+                    <Textarea
+                      {...field}
+                      id="submit-image-form-caption"
+                      placeholder={t("photo.captionPlaceholder")}
+                      aria-invalid={fieldState.invalid}
+                      disabled={isUploading}
+                    />
+                    {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
+                  </Field>
+                )}
+              />
 
-            <Controller
-              name="takenAt"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="submit-image-form-taken-at">
-                    {t("photo.dateTaken")}
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="submit-image-form-taken-at"
-                    type="datetime-local"
-                    aria-invalid={fieldState.invalid}
-                    disabled={isUploading}
-                  />
-                  {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
-                </Field>
-              )}
-            />
-          </FieldGroup>
+              <Controller
+                name="takenAt"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="submit-image-form-taken-at">
+                      {t("photo.dateTaken")}
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="submit-image-form-taken-at"
+                      type="datetime-local"
+                      aria-invalid={fieldState.invalid}
+                      disabled={isUploading}
+                    />
+                    {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
 
-          <DialogFooter className="mt-6">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-              disabled={isUploading}
-            >
-              {t("common.cancel")}
-            </Button>
-            <Button type="submit" disabled={isUploading}>
-              {isUploading ? (
-                <LoaderCircle data-icon="inline-start" className="animate-spin" />
-              ) : (
-                <ImagePlus data-icon="inline-start" />
-              )}
-              {isUploading ? t("photo.uploading") : t("mountainDetail.addPhoto")}
-            </Button>
-          </DialogFooter>
-        </form>
+            <DialogFooter className="mt-6">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+                disabled={isUploading}
+              >
+                {t("common.cancel")}
+              </Button>
+              <Button type="submit" disabled={isUploading}>
+                {isUploading ? (
+                  <LoaderCircle data-icon="inline-start" className="animate-spin" />
+                ) : (
+                  <ImagePlus data-icon="inline-start" />
+                )}
+                {isUploading ? t("photo.uploading") : t("mountainDetail.addPhoto")}
+              </Button>
+            </DialogFooter>
+          </form>
+        </FormProvider>
       </DialogContent>
     </Dialog>
   );

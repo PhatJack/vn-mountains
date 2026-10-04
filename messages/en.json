@@ -82,6 +82,17 @@
     "fileSize": "The image must be 5 MB or smaller",
     "captionLength": "Caption must be 500 characters or fewer",
     "invalidDate": "Please enter a valid date",
-    "uploading": "Uploading..."
+    "uploading": "Uploading...",
+    "dropImageHere": "Drop your image here or click to browse",
+    "maxSizeLabel": "Max size: {size}MB",
+    "removeImage": "Remove image",
+    "uploadFile": "Upload file",
+    "uploadedImage": "Uploaded image",
+    "singleImageUploader": "Single image uploader",
+    "api": "API",
+    "fileTooLarge": "File exceeds the maximum size of {size}.",
+    "filesTooLarge": "Some files exceed the maximum size of {size}.",
+    "invalidFileType": "File \"{fileName}\" is not an accepted file type.",
+    "maxFiles": "You can only upload a maximum of {count} files."
   }
 }
