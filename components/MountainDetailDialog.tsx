@@ -33,6 +33,7 @@ interface MountainDetailDialogProps {
 }
 
 function DetailQuote({ mountain }: { mountain: MountainDetail }) {
+	const t = useTranslations()
   const fields = Object.entries(mountain).filter(([key, value]) => {
     // Photos are rendered in the gallery; timestamps are handled separately.
     if (

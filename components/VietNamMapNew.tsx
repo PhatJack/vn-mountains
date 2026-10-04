@@ -1,7 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Map, MapClusterLayer, MapControls, type MapRef } from "@/components/ui/map";
+import {
+  Map,
+  MapClusterLayer,
+  MapControls,
+  MapMarker,
+  MarkerContent,
+  MarkerPopup,
+  MarkerTooltip,
+  type MapRef,
+} from "@/components/ui/map";
 import MountainDetailDialog from "@/components/MountainDetailDialog";
 import type { MountainFeatureCollection } from "@/services/api";
 import { useMapStore, MAP_STYLES } from "@/stores/map-store";
@@ -11,6 +20,8 @@ import MapContours from "./map-components/map-contours";
 import MapContoursToggle from "./map-components/map-contours-toggle";
 import MountainLayer from "./map-components/mountain-layer";
 import type { Mountain } from "@/services/api";
+import { useTranslations } from "next-intl";
+import { coordinateToDMS } from "@/lib/utils";
 
 interface VietnamMapNewProps {
   data: MountainFeatureCollection | null;
@@ -27,6 +38,7 @@ export default function VietnamMapNew({
   toolbar,
 }: VietnamMapNewProps) {
   const mapRef = useRef<MapRef | null>(null);
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [terrainEnabled, setTerrainEnabled] = useState(false);
   const [contoursEnabled, setContoursEnabled] = useState(false);
   const [selectedDetail, setSelectedDetail] = useState<{
@@ -34,6 +46,7 @@ export default function VietnamMapNew({
     lat: number;
     lng: number;
   } | null>(null);
+  const t = useTranslations();
 
   const style = useMapStore((s) => s.style);
   const setMapLoading = useMapStore((s) => s.setMapLoading);
@@ -106,7 +119,16 @@ export default function VietnamMapNew({
       {data && (
         <MountainLayer data={data} onMountainSelect={(selection) => setSelectedDetail(selection)} />
       )}
-      <MapControls position="bottom-right" showZoom showCompass showFullscreen showLocate />
+      <MapControls
+        position="bottom-right"
+        showZoom
+        showCompass
+        showFullscreen
+        showLocate
+        onLocate={(coord) => {
+          setLocation({ lat: coord.latitude, lng: coord.longitude });
+        }}
+      />
       <MountainDetailDialog
         mountainId={selectedDetail?.id ?? null}
         summary={
@@ -124,6 +146,32 @@ export default function VietnamMapNew({
           if (!open) setSelectedDetail(null);
         }}
       />
+      {location && (
+        <MapMarker latitude={location.lat} longitude={location.lng}>
+          <MarkerContent>
+            <div className="relative flex size-6 items-center justify-center">
+              {/* Ripple */}
+              <div className="absolute size-6 animate-ping rounded-full bg-primary/40" />
+
+              {/* Marker */}
+              <div className="relative size-4 rounded-full border-2 border-white bg-primary shadow-lg" />
+            </div>
+          </MarkerContent>
+
+          <MarkerTooltip>📍 You&apos;re not lost... yet.</MarkerTooltip>
+
+          <MarkerPopup>
+            <div className="space-y-1">
+              <p className="font-medium text-foreground">📍 You are here, explorer!</p>
+
+              <p className="text-xs text-muted-foreground">
+                {coordinateToDMS(location.lat, "latitude")},{" "}
+                {coordinateToDMS(location.lng, "longitude")}
+              </p>
+            </div>
+          </MarkerPopup>
+        </MapMarker>
+      )}
     </Map>
   );
 }
