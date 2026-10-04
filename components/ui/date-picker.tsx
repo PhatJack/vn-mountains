@@ -2,7 +2,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { add, format } from "date-fns";
+import { format } from "date-fns";
 import { type Locale, enUS } from "date-fns/locale";
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { Clock } from "lucide-react";
@@ -718,22 +718,14 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
       if (!newDay) {
         return;
       }
-      if (!defaultPopupValue) {
-        newDay.setHours(month?.getHours() ?? 0, month?.getMinutes() ?? 0, month?.getSeconds() ?? 0);
-        onMonthChange?.(newDay);
-        setMonth(newDay);
-        return;
-      }
-      const diff = newDay.getTime() - defaultPopupValue.getTime();
-      const diffInDays = diff / (1000 * 60 * 60 * 24);
-      const newDateFull = add(defaultPopupValue, { days: Math.ceil(diffInDays) });
-      newDateFull.setHours(
+      const nextMonth = new Date(newDay);
+      nextMonth.setHours(
         month?.getHours() ?? 0,
         month?.getMinutes() ?? 0,
         month?.getSeconds() ?? 0,
       );
-      onMonthChange?.(newDateFull);
-      setMonth(newDateFull);
+      onMonthChange?.(nextMonth);
+      setMonth(nextMonth);
     };
 
     const onSelect = (newDay?: Date) => {
