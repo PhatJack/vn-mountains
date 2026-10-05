@@ -62,3 +62,5 @@ export function coordinateToDMS(coordinate: number, type: "latitude" | "longitud
  * formatNumber(1000000); // "1,000,000"
  */
 export const formatNumber = (value: number) => new Intl.NumberFormat("en-US").format(value);
+
+export const hasValue = (value: unknown) => value !== null && value !== undefined && value !== "";

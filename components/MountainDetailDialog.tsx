@@ -17,14 +17,13 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useMountainDetail } from "@/services/api";
+import { useMountainDetail, mountainPhotoUrl } from "@/services/api";
 import type { Mountain, MountainDetail } from "@/services/api";
-import { epochToDateTime, coordinateToDMS, formatNumber } from "@/lib/utils";
-import { mountainPhotoUrl } from "@/services/api";
+import { epochToDateTime, coordinateToDMS, formatNumber, hasValue } from "@/lib/utils";
 import Image from "next/image";
 import { ImagePlus } from "lucide-react";
 import AddMountainPhotoDialog from "@/components/AddMountainPhotoDialog";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { StarRating } from "./customs/star-rating";
 
 interface MountainDetailDialogProps {
@@ -34,6 +33,7 @@ interface MountainDetailDialogProps {
 }
 
 function DetailQuote({ mountain }: { mountain: MountainDetail }) {
+  const t = useTranslations();
   const difficultyRating: Record<NonNullable<MountainDetail["difficulty"]>, number> = {
     beginner: 1,
     basic: 2,
@@ -42,83 +42,77 @@ function DetailQuote({ mountain }: { mountain: MountainDetail }) {
     extremely_hard: 5,
   };
 
-  const hasValue = (value: unknown) => value !== null && value !== undefined && value !== "";
-
   return (
     <div className="grid max-h-80 grid-cols-1 gap-3 overflow-y-auto text-sm md:grid-cols-3">
       {hasValue(mountain.description) && (
         <div className="flex flex-col gap-1 md:col-span-3">
           <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Mô tả
+            {t("mountainDetail.fields.description")}
           </dt>
           <dd className="wrap-break-word text-foreground">{mountain.description}</dd>
         </div>
       )}
-
       {mountain.difficulty && (
         <div className="flex flex-col gap-1">
           <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Độ khó
+            {t("mountainDetail.fields.difficulty")}
           </dt>
           <dd className="flex items-center gap-2 text-foreground">
             <StarRating rating={difficultyRating[mountain.difficulty]} />
-            <span>{mountain.difficulty}</span>
+            <span>{t(`mountainDetail.difficulty.${mountain.difficulty}`)}</span>
           </dd>
         </div>
       )}
-
       {hasValue(mountain.elevationM) && (
         <div className="flex flex-col gap-1">
           <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Độ cao
+            {t("mountainDetail.fields.elevationM")}
           </dt>
           <dd className="text-foreground">{formatNumber(mountain.elevationM!)} m</dd>
         </div>
       )}
-
       {hasValue(mountain.trailDistanceKm) && (
         <div className="flex flex-col gap-1">
           <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Độ dài cung đường
+            {t("mountainDetail.fields.trailDistanceKm")}
           </dt>
-          <dd className="text-foreground">Khoảng {mountain.trailDistanceKm} km</dd>
+          <dd className="text-foreground">
+            {t("mountainDetail.approximately")} {mountain.trailDistanceKm} km
+          </dd>
         </div>
       )}
-
       {hasValue(mountain.averageClimbingDuration) && (
         <div className="flex flex-col gap-1">
           <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Thời gian leo núi trung bình
+            {t("mountainDetail.fields.averageClimbingDuration")}
           </dt>
           <dd className="text-foreground">{mountain.averageClimbingDuration}</dd>
         </div>
       )}
-
       {hasValue(mountain.recommendedClimbingPeriod) && (
         <div className="flex flex-col gap-1">
           <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Thời gian leo núi thích hợp
+            {t("mountainDetail.fields.recommendedClimbingPeriod")}
           </dt>
           <dd className="text-foreground">{mountain.recommendedClimbingPeriod}</dd>
         </div>
       )}
-
-      <div className="flex flex-col gap-1">
-        <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Vĩ độ</dt>
-        <dd className="text-foreground">{coordinateToDMS(mountain.latitude, "latitude")}</dd>
-      </div>
-
       <div className="flex flex-col gap-1">
         <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-          Kinh độ
+          {t("mountainDetail.fields.lat")}
+        </dt>
+        <dd className="text-foreground">{coordinateToDMS(mountain.latitude, "latitude")}</dd>
+      </div>
+      <div className="flex flex-col gap-1">
+        <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+          {t("mountainDetail.fields.lng")}
         </dt>
         <dd className="text-foreground">{coordinateToDMS(mountain.longitude, "longitude")}</dd>
       </div>
-
       {hasValue(mountain.updatedAt) && (
         <div className="flex flex-col gap-1">
           <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Cập nhật cuối
+            {t("mountainDetail.fields.updatedAt")}
           </dt>
           <dd className="text-foreground">{epochToDateTime(mountain.updatedAt!)}</dd>
         </div>
@@ -133,19 +127,18 @@ export default function MountainDetailDialog({
   onOpenChange,
 }: MountainDetailDialogProps) {
   const t = useTranslations();
+  const locale = useLocale();
   const detailQuery = useMountainDetail(mountainId);
   const [addPhotoOpen, setAddPhotoOpen] = useState(false);
-
   const mountain = detailQuery.data;
-  const photos = useMemo(() => {
-    if (!mountain) return [];
-
-    return (mountain.photos ?? []).map((photo) => ({
-      ...photo,
-      url: mountainPhotoUrl(photo.storageKey),
-    }));
-  }, [mountain]);
-
+  const photos = useMemo(
+    () =>
+      (mountain?.photos ?? []).map((photo) => ({
+        ...photo,
+        url: mountainPhotoUrl(photo.storageKey),
+      })),
+    [mountain],
+  );
   const open = mountainId !== null;
 
   return (
@@ -174,7 +167,6 @@ export default function MountainDetailDialog({
         <div className="grid grid-cols-1 gap-6">
           <div className="w-full min-w-0">
             {detailQuery.isLoading && <Skeleton className="aspect-4/3 w-full rounded-lg" />}
-
             {!detailQuery.isLoading && photos.length > 0 && (
               <div className="flex w-full flex-col items-center gap-3 overflow-hidden">
                 <Carousel className="w-full">
@@ -195,20 +187,21 @@ export default function MountainDetailDialog({
                             {photo.caption}
                             {photo.caption && photo.takenAt ? " · " : ""}
                             {photo.takenAt
-                              ? new Date(photo.takenAt).toLocaleDateString("vi-VN")
+                              ? new Date(photo.takenAt).toLocaleDateString(
+                                  locale === "vi" ? "vi-VN" : "en-US",
+                                )
                               : null}
                           </div>
                         )}
                       </CarouselItem>
                     ))}
                   </CarouselContent>
-                  <CarouselPrevious className={"left-0"} />
-                  <CarouselNext className={"right-0"} />
+                  <CarouselPrevious className="left-0" />
+                  <CarouselNext className="right-0" />
                 </Carousel>
               </div>
             )}
           </div>
-
           <div className="w-full min-w-0">
             {detailQuery.isError && (
               <div className="flex flex-col gap-3 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm">
@@ -218,7 +211,6 @@ export default function MountainDetailDialog({
                 </Button>
               </div>
             )}
-
             {mountain ? (
               <DetailQuote mountain={mountain} />
             ) : (

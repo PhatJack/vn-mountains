@@ -52,6 +52,14 @@
     "elevation": "Elevation (m)",
     "latitude": "Latitude",
     "longitude": "Longitude",
+    "approximately": "Approximately",
+    "difficulty": {
+      "beginner": "Beginner",
+      "basic": "Basic",
+      "advanced": "Advanced",
+      "challenging": "Challenging",
+      "extremely_hard": "Extremely hard"
+    },
     "fields": {
       "name": "Name",
       "nameVi": "Vietnamese name",
@@ -64,7 +72,10 @@
       "createdAt": "Created at",
       "updatedAt": "Updated at",
       "slug": "Slug",
-      "photos": "Photos"
+      "photos": "Photos",
+      "trailDistanceKm": "Trail distance",
+      "averageClimbingDuration": "Average climbing duration",
+      "recommendedClimbingPeriod": "Recommended climbing period"
     }
   },
   "photo": {

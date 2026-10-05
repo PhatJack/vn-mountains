@@ -52,6 +52,14 @@
     "elevation": "Độ cao (m)",
     "latitude": "Vĩ độ",
     "longitude": "Kinh độ",
+    "approximately": "Khoảng",
+    "difficulty": {
+      "beginner": "Dễ",
+      "basic": "Cơ bản",
+      "advanced": "Nâng cao",
+      "challenging": "Khó",
+      "extremely_hard": "Cực khó"
+    },
     "fields": {
       "name": "Tên",
       "nameVi": "Tên tiếng Việt",
@@ -64,7 +72,10 @@
       "createdAt": "Ngày tạo",
       "updatedAt": "Cập nhật cuối",
       "slug": "Slug",
-      "photos": "Ảnh"
+      "photos": "Ảnh",
+      "trailDistanceKm": "Độ dài cung đường",
+      "averageClimbingDuration": "Thời gian leo núi trung bình",
+      "recommendedClimbingPeriod": "Thời gian leo núi thích hợp"
     }
   },
   "photo": {

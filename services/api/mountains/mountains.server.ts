@@ -34,8 +34,8 @@ function loadFromFallback(): Mountain[] {
       id: String(el.id),
       name: el.tags!.name,
       elevationM: parseElevation(el.tags?.ele),
-      lat: el.lat,
-      lng: el.lon,
+      latitude: el.lat,
+      longitude: el.lon,
     }));
 }
 
