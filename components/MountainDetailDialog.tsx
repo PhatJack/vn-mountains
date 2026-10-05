@@ -20,8 +20,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useMountainDetail } from "@/services/api";
 import type { Mountain, MountainDetail } from "@/services/api";
 import {
-  formatLabel,
-  formatValue,
   epochToDateTime,
   coordinateToDMS,
   formatNumber,
@@ -31,6 +29,7 @@ import Image from "next/image";
 import { ImagePlus } from "lucide-react";
 import AddMountainPhotoDialog from "@/components/AddMountainPhotoDialog";
 import { useTranslations } from "next-intl";
+import { StarRating } from "./customs/star-rating";
 
 interface MountainDetailDialogProps {
   mountainId: string | null;
@@ -39,44 +38,79 @@ interface MountainDetailDialogProps {
 }
 
 function DetailQuote({ mountain }: { mountain: MountainDetail }) {
-  const t = useTranslations();
-  const fieldLabel = (key: string) => {
-    const translationKey = `mountainDetail.fields.${key}`;
-    return t.has(translationKey) ? t(translationKey) : formatLabel(key);
+  const difficultyRating: Record<NonNullable<MountainDetail["difficulty"]>, number> = {
+    beginner: 1,
+    basic: 2,
+    advanced: 3,
+    challenging: 4,
+    extremely_hard: 5,
   };
 
-  const fields = Object.entries(mountain).filter(([key, value]) => {
-    // Photos are rendered in the gallery; timestamps are handled separately.
-    if (
-      key === "slug" ||
-      key === "photos" ||
-      key === "createdAt" ||
-      key === "id" ||
-      key === "nameVi"
-    )
-      return false;
-    if (key === "updatedAt") return epochToDateTime(value as number) !== null;
-    return formatValue(value) !== null;
-  });
+  const hasValue = (value: unknown) => value !== null && value !== undefined && value !== "";
 
   return (
     <div className="grid max-h-80 grid-cols-1 gap-3 overflow-y-auto text-sm md:grid-cols-3">
-      {fields.map(([key, value]) => (
-        <div key={key} className="flex flex-col gap-1">
-          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            {fieldLabel(key)}
-          </dt>
-          <dd className="wrap-break-word text-foreground">
-            {key === "updatedAt"
-              ? epochToDateTime(value as number)
-              : key === "lat" || key === "lng"
-                ? coordinateToDMS(value as number, key === "lat" ? "latitude" : "longitude")
-                : key === "elevationM"
-                  ? formatNumber(value)
-                  : formatValue(value)}
+      {hasValue(mountain.description) && (
+        <div className="flex flex-col gap-1 md:col-span-3">
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Mô tả</dt>
+          <dd className="wrap-break-word text-foreground">{mountain.description}</dd>
+        </div>
+      )}
+
+      {mountain.difficulty && (
+        <div className="flex flex-col gap-1">
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Độ khó</dt>
+          <dd className="flex items-center gap-2 text-foreground">
+            <StarRating rating={difficultyRating[mountain.difficulty]} />
+            <span>{mountain.difficulty}</span>
           </dd>
         </div>
-      ))}
+      )}
+
+      {hasValue(mountain.elevationM) && (
+        <div className="flex flex-col gap-1">
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Độ cao</dt>
+          <dd className="text-foreground">{formatNumber(mountain.elevationM!)} m</dd>
+        </div>
+      )}
+
+      {hasValue(mountain.trailDistanceKm) && (
+        <div className="flex flex-col gap-1">
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Độ dài cung đường</dt>
+          <dd className="text-foreground">Khoảng {mountain.trailDistanceKm} km</dd>
+        </div>
+      )}
+
+      {hasValue(mountain.averageClimbingDuration) && (
+        <div className="flex flex-col gap-1">
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Thời gian leo núi trung bình</dt>
+          <dd className="text-foreground">{mountain.averageClimbingDuration}</dd>
+        </div>
+      )}
+
+      {hasValue(mountain.recommendedClimbingPeriod) && (
+        <div className="flex flex-col gap-1">
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Thời gian leo núi thích hợp</dt>
+          <dd className="text-foreground">{mountain.recommendedClimbingPeriod}</dd>
+        </div>
+      )}
+
+      <div className="flex flex-col gap-1">
+        <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Vĩ độ</dt>
+        <dd className="text-foreground">{coordinateToDMS(mountain.latitude, "latitude")}</dd>
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Kinh độ</dt>
+        <dd className="text-foreground">{coordinateToDMS(mountain.longitude, "longitude")}</dd>
+      </div>
+
+      {hasValue(mountain.updatedAt) && (
+        <div className="flex flex-col gap-1">
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Cập nhật cuối</dt>
+          <dd className="text-foreground">{epochToDateTime(mountain.updatedAt!)}</dd>
+        </div>
+      )}
     </div>
   );
 }
@@ -184,11 +218,11 @@ export default function MountainDetailDialog({
                   </div>
                   <div>
                     <span className="text-muted-foreground">{t("mountainDetail.latitude")}:</span>{" "}
-                    {summary.lat.toFixed(4)}
+                    {summary.latitude.toFixed(4)}
                   </div>
                   <div>
                     <span className="text-muted-foreground">{t("mountainDetail.longitude")}:</span>{" "}
-                    {summary.lng.toFixed(4)}
+                    {summary.longitude.toFixed(4)}
                   </div>
                 </blockquote>
               )

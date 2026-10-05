@@ -2,15 +2,18 @@ export interface Mountain {
   id: string;
   name: string;
   elevationM: number | null;
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
 }
 
 export interface MountainDetail extends Omit<Mountain, "id"> {
   id: string;
   nameVi?: string | null;
   description?: string | null;
-  difficulty?: "easy" | "moderate" | "hard" | "extreme" | null;
+  difficulty?: "beginner" | "basic" | "advanced" | "challenging" | "extremely_hard" | null;
+  averageClimbingDuration?: string | null;
+  recommendedClimbingPeriod?: string | null;
+  trailDistanceKm?: number | null;
   rangeId?: string | null;
   photos?: MountainPhoto[];
   createdAt?: number | null;
