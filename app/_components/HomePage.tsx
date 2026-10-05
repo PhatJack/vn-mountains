@@ -21,7 +21,7 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
 
   const handleSidebarSelect = (lat: number, lng: number) => {
     setSelectedMountain({ lat, lng });
-    const found = mountains.find((m) => m.lat === lat && m.lng === lng);
+    const found = mountains.find((m) => m.latitude === lat && m.longitude === lng);
     setSelectedId(found?.id ?? null);
   };
 

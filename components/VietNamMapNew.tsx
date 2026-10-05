@@ -137,8 +137,8 @@ export default function VietnamMapNew({
                 id: selectedDetail.id,
                 name: t("mountainDetail.unknownPeak"),
                 elevationM: null,
-                lat: selectedDetail.lat,
-                lng: selectedDetail.lng,
+                latitude: selectedDetail.lat,
+                longitude: selectedDetail.lng,
               })
             : null
         }

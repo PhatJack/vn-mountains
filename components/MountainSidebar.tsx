@@ -121,7 +121,7 @@ export default function MountainSidebar({
                   >
                     <button
                       type="button"
-                      onClick={() => onSelect(mountain.lat, mountain.lng)}
+                      onClick={() => onSelect(mountain.latitude, mountain.longitude)}
                       className={cn(
                         "flex w-full flex-col gap-1 px-4 py-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground",
                         selectedId === mountain.id && "bg-accent text-accent-foreground",
@@ -141,8 +141,8 @@ export default function MountainSidebar({
                         )}
                       </div>
                       <span className="text-xs text-muted-foreground">
-                        {coordinateToDMS(parseFloat(mountain.lat.toFixed(4)), "latitude")},{" "}
-                        {coordinateToDMS(parseFloat(mountain.lng.toFixed(4)), "longitude")}
+                        {coordinateToDMS(parseFloat(mountain.latitude.toFixed(4)), "latitude")},{" "}
+                        {coordinateToDMS(parseFloat(mountain.longitude.toFixed(4)), "longitude")}
                       </span>
                     </button>
                     {virtualRow.index < filtered.length - 1 && <Separator />}

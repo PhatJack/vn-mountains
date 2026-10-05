@@ -19,11 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useMountainDetail } from "@/services/api";
 import type { Mountain, MountainDetail } from "@/services/api";
-import {
-  epochToDateTime,
-  coordinateToDMS,
-  formatNumber,
-} from "@/lib/utils";
+import { epochToDateTime, coordinateToDMS, formatNumber } from "@/lib/utils";
 import { mountainPhotoUrl } from "@/services/api";
 import Image from "next/image";
 import { ImagePlus } from "lucide-react";
@@ -52,14 +48,18 @@ function DetailQuote({ mountain }: { mountain: MountainDetail }) {
     <div className="grid max-h-80 grid-cols-1 gap-3 overflow-y-auto text-sm md:grid-cols-3">
       {hasValue(mountain.description) && (
         <div className="flex flex-col gap-1 md:col-span-3">
-          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Mô tả</dt>
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            Mô tả
+          </dt>
           <dd className="wrap-break-word text-foreground">{mountain.description}</dd>
         </div>
       )}
 
       {mountain.difficulty && (
         <div className="flex flex-col gap-1">
-          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Độ khó</dt>
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            Độ khó
+          </dt>
           <dd className="flex items-center gap-2 text-foreground">
             <StarRating rating={difficultyRating[mountain.difficulty]} />
             <span>{mountain.difficulty}</span>
@@ -69,28 +69,36 @@ function DetailQuote({ mountain }: { mountain: MountainDetail }) {
 
       {hasValue(mountain.elevationM) && (
         <div className="flex flex-col gap-1">
-          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Độ cao</dt>
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            Độ cao
+          </dt>
           <dd className="text-foreground">{formatNumber(mountain.elevationM!)} m</dd>
         </div>
       )}
 
       {hasValue(mountain.trailDistanceKm) && (
         <div className="flex flex-col gap-1">
-          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Độ dài cung đường</dt>
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            Độ dài cung đường
+          </dt>
           <dd className="text-foreground">Khoảng {mountain.trailDistanceKm} km</dd>
         </div>
       )}
 
       {hasValue(mountain.averageClimbingDuration) && (
         <div className="flex flex-col gap-1">
-          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Thời gian leo núi trung bình</dt>
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            Thời gian leo núi trung bình
+          </dt>
           <dd className="text-foreground">{mountain.averageClimbingDuration}</dd>
         </div>
       )}
 
       {hasValue(mountain.recommendedClimbingPeriod) && (
         <div className="flex flex-col gap-1">
-          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Thời gian leo núi thích hợp</dt>
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            Thời gian leo núi thích hợp
+          </dt>
           <dd className="text-foreground">{mountain.recommendedClimbingPeriod}</dd>
         </div>
       )}
@@ -101,13 +109,17 @@ function DetailQuote({ mountain }: { mountain: MountainDetail }) {
       </div>
 
       <div className="flex flex-col gap-1">
-        <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Kinh độ</dt>
+        <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+          Kinh độ
+        </dt>
         <dd className="text-foreground">{coordinateToDMS(mountain.longitude, "longitude")}</dd>
       </div>
 
       {hasValue(mountain.updatedAt) && (
         <div className="flex flex-col gap-1">
-          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Cập nhật cuối</dt>
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            Cập nhật cuối
+          </dt>
           <dd className="text-foreground">{epochToDateTime(mountain.updatedAt!)}</dd>
         </div>
       )}
