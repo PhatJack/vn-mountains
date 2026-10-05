@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
+import { cn, coordinateToDMS } from "@/lib/utils";
 import type { Mountain as MountainType } from "@/services/api";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -84,7 +84,7 @@ export default function MountainSidebar({
           )}
         </div>
       </CardHeader>
-      <div className="px-4 pt-3">
+      <div className="px-4">
         <div className="relative">
           <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -130,7 +130,7 @@ export default function MountainSidebar({
                       <div className="flex items-center justify-between gap-2">
                         <span className="truncate text-sm font-medium">{mountain.name}</span>
                         {mountain.elevationM !== null ? (
-                          <Badge variant="secondary" className="shrink-0">
+                          <Badge variant="secondary" className="shrink-0 font-medium">
                             <ArrowUpFromLine className="size-3" />
                             {mountain.elevationM} m
                           </Badge>
@@ -141,7 +141,8 @@ export default function MountainSidebar({
                         )}
                       </div>
                       <span className="text-xs text-muted-foreground">
-                        {mountain.lat.toFixed(4)}, {mountain.lng.toFixed(4)}
+                        {coordinateToDMS(parseFloat(mountain.lat.toFixed(4)), "latitude")},{" "}
+                        {coordinateToDMS(parseFloat(mountain.lng.toFixed(4)), "longitude")}
                       </span>
                     </button>
                     {virtualRow.index < filtered.length - 1 && <Separator />}

@@ -49,7 +49,7 @@
     "imageAlt": "Núi",
     "unknownPeak": "Núi chưa xác định",
     "loadError": "Không thể tải đầy đủ thông tin ngọn núi.",
-    "elevation": "Độ cao",
+    "elevation": "Độ cao (m)",
     "latitude": "Vĩ độ",
     "longitude": "Kinh độ",
     "fields": {
@@ -57,7 +57,7 @@
       "nameVi": "Tên tiếng Việt",
       "description": "Mô tả",
       "difficulty": "Mức độ khó",
-      "elevationM": "Độ cao",
+      "elevationM": "Độ cao (m)",
       "lat": "Vĩ độ",
       "lng": "Kinh độ",
       "rangeId": "Phạm vi",

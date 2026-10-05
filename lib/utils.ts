@@ -50,3 +50,15 @@ export function coordinateToDMS(coordinate: number, type: "latitude" | "longitud
 
   return `${degrees}° ${minutes}′ ${seconds.toFixed(2)}″ ${direction}`;
 }
+
+/**
+ * Formats a number with thousand separators.
+ *
+ * @param number - The number to format.
+ * @returns The formatted number as a string.
+ *
+ * @example
+ * formatNumber(2913); // "2,913"
+ * formatNumber(1000000); // "1,000,000"
+ */
+export const formatNumber = (value: number) => new Intl.NumberFormat("en-US").format(value);

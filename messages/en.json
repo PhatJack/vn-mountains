@@ -49,7 +49,7 @@
     "imageAlt": "Mountain",
     "unknownPeak": "Unknown Peak",
     "loadError": "Unable to load the full mountain information.",
-    "elevation": "Elevation",
+    "elevation": "Elevation (m)",
     "latitude": "Latitude",
     "longitude": "Longitude",
     "fields": {
@@ -57,7 +57,7 @@
       "nameVi": "Vietnamese name",
       "description": "Description",
       "difficulty": "Difficulty",
-      "elevationM": "Elevation",
+      "elevationM": "Elevation (m)",
       "lat": "Latitude",
       "lng": "Longitude",
       "rangeId": "Range",

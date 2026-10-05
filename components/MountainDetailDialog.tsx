@@ -19,7 +19,13 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useMountainDetail } from "@/services/api";
 import type { Mountain, MountainDetail } from "@/services/api";
-import { formatLabel, formatValue, epochToDateTime, coordinateToDMS } from "@/lib/utils";
+import {
+  formatLabel,
+  formatValue,
+  epochToDateTime,
+  coordinateToDMS,
+  formatNumber,
+} from "@/lib/utils";
 import { mountainPhotoUrl } from "@/services/api";
 import Image from "next/image";
 import { ImagePlus } from "lucide-react";
@@ -65,7 +71,9 @@ function DetailQuote({ mountain }: { mountain: MountainDetail }) {
               ? epochToDateTime(value as number)
               : key === "lat" || key === "lng"
                 ? coordinateToDMS(value as number, key === "lat" ? "latitude" : "longitude")
-                : formatValue(value)}
+                : key === "elevationM"
+                  ? formatNumber(value)
+                  : formatValue(value)}
           </dd>
         </div>
       ))}
