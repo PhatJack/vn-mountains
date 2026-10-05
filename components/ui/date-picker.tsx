@@ -322,7 +322,7 @@ function Calendar({
             <div className="inline-flex gap-2">
               <Select
                 value={calendarMonth.date.getMonth().toString()}
-                onValueChange={(value: string) => {
+                onValueChange={(value: string | null) => {
                   const newDate = new Date(calendarMonth.date);
                   // Avoid month rollover when the current date is the 29th, 30th, or 31st.
                   newDate.setDate(1);
@@ -345,7 +345,7 @@ function Calendar({
               </Select>
               <Select
                 value={calendarMonth.date.getFullYear().toString()}
-                onValueChange={(value: string) => {
+                onValueChange={(value: string | null) => {
                   const newDate = new Date(calendarMonth.date);
                   newDate.setFullYear(Number(value));
                   props.onMonthChange?.(newDate);
@@ -406,7 +406,10 @@ const TimePeriodSelect = React.forwardRef<HTMLButtonElement, PeriodSelectorProps
 
     return (
       <div className="flex h-10 items-center">
-        <Select defaultValue={period} onValueChange={(value: Period) => handleValueChange(value)}>
+        <Select
+          defaultValue={period}
+          onValueChange={(value: Period | null) => handleValueChange(value as Period)}
+        >
           <SelectTrigger
             ref={ref}
             className="w-[65px] focus:bg-accent focus:text-accent-foreground"

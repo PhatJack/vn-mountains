@@ -45,7 +45,13 @@ const addPhotoSchema = (t: (key: string) => string) =>
     takenAt: z
       .date()
       .optional()
-      .refine((value) => !value || !Number.isNaN(value), t("photo.invalidDate")),
+      .refine((value) => !value || !Number.isNaN(value), t("photo.invalidDate"))
+      .refine((value) => {
+        if (!value) return true;
+        const today = new Date();
+        today.setHours(23, 59, 59, 999);
+        return value <= today;
+      }, t("photo.invalidFutureDate")),
   });
 
 interface AddMountainPhotoDialogProps {
@@ -148,7 +154,7 @@ export default function AddMountainPhotoDialog({
                     </FieldLabel>
                     <DateTimePicker
                       value={field.value ? new Date(field.value) : undefined}
-                      onChange={(date) => field.onChange(date?.toISOString() ?? "")}
+                      onChange={(date) => field.onChange(date)}
                       disabled={isUploading}
                       placeholder={t("photo.pickDate")}
                       granularity="day"

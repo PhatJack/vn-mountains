@@ -94,6 +94,7 @@
     "fileTooLarge": "Tệp vượt quá dung lượng tối đa {size}.",
     "filesTooLarge": "Một số tệp vượt quá dung lượng tối đa {size}.",
     "invalidFileType": "Tệp \"{fileName}\" không thuộc định dạng được chấp nhận.",
-    "maxFiles": "Bạn chỉ có thể tải lên tối đa {count} tệp."
+    "maxFiles": "Bạn chỉ có thể tải lên tối đa {count} tệp.",
+    "invalidFutureDate": "Ngày chụp không thể là ngày trong tương lai."
   }
 }

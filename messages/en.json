@@ -94,6 +94,7 @@
     "fileTooLarge": "File exceeds the maximum size of {size}.",
     "filesTooLarge": "Some files exceed the maximum size of {size}.",
     "invalidFileType": "File \"{fileName}\" is not an accepted file type.",
-    "maxFiles": "You can only upload a maximum of {count} files."
+    "maxFiles": "You can only upload a maximum of {count} files.",
+    "invalidFutureDate": "The date taken cannot be in the future."
   }
 }
