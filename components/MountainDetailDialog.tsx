@@ -19,12 +19,20 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useMountainDetail, mountainPhotoUrl } from "@/services/api";
 import type { Mountain, MountainDetail } from "@/services/api";
-import { epochToDateTime, coordinateToDMS, formatNumber, hasValue } from "@/lib/utils";
+import {
+  epochToDateTime,
+  coordinateToDMS,
+  formatNumber,
+  hasValue,
+  metersToFeet,
+} from "@/lib/utils";
 import Image from "next/image";
-import { ImagePlus } from "lucide-react";
+import { CircleAlertIcon, ImagePlus, PencilSparkles } from "lucide-react";
 import AddMountainPhotoDialog from "@/components/AddMountainPhotoDialog";
 import { useLocale, useTranslations } from "next-intl";
 import { StarRating } from "./customs/star-rating";
+import { TooltipCustom } from "./tooltip-custom";
+import { Alert, AlertAction, AlertTitle } from "./reui/alert";
 
 interface MountainDetailDialogProps {
   mountainId: string | null;
@@ -65,10 +73,37 @@ function DetailQuote({ mountain }: { mountain: MountainDetail }) {
       )}
       {hasValue(mountain.elevationM) && (
         <div className="flex flex-col gap-1">
-          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            {t("mountainDetail.fields.elevationM")}
-          </dt>
-          <dd className="text-foreground">{formatNumber(mountain.elevationM!)} m</dd>
+          <TooltipCustom
+            render={
+              <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                {t("mountainDetail.fields.elevationM")}
+              </dt>
+            }
+          >
+            <div className="flex flex-col gap-1 p-3">
+              {/** biome-ignore lint/performance/noImgElement: "Kibo UI is framework agnostic" */}
+              <Image
+                alt="Preview"
+                className="mb-1 h-37.5 w-64.25 rounded-md"
+                height={300}
+                src="/elevation_calculation.png"
+                width={514}
+              />
+              <p className="text-center font-semibold">Độ cao của 1 nơi so với mực nước biển</p>
+            </div>
+            {/* <div className="">
+              <Image
+                src="/elevation_calculation.png"
+                alt="Elevation Calculation"
+                width={500}
+                height={100}
+              />
+              <p>Độ cao so với mực nước biển.</p>
+            </div> */}
+          </TooltipCustom>
+          <dd className="text-foreground">
+            {formatNumber(mountain.elevationM!)} m | {metersToFeet(mountain.elevationM!)} ft
+          </dd>
         </div>
       )}
       {hasValue(mountain.trailDistanceKm) && (
@@ -202,7 +237,7 @@ export default function MountainDetailDialog({
               </div>
             )}
           </div>
-          <div className="w-full min-w-0">
+          <div className="w-full min-w-0 space-y-2">
             {detailQuery.isError && (
               <div className="flex flex-col gap-3 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm">
                 <p>{t("mountainDetail.loadError")}</p>
@@ -231,6 +266,16 @@ export default function MountainDetailDialog({
                 </blockquote>
               )
             )}
+            <Alert variant="info">
+              <CircleAlertIcon />
+              <AlertTitle>Phát hiện sai sót thông tin? Hãy góp ý cho chúng tôi.</AlertTitle>
+              <AlertAction>
+                <Button variant="outline">
+                  <PencilSparkles />
+                  Góp ý
+                </Button>
+              </AlertAction>
+            </Alert>
           </div>
         </div>
       </DialogContent>

@@ -64,3 +64,7 @@ export function coordinateToDMS(coordinate: number, type: "latitude" | "longitud
 export const formatNumber = (value: number) => new Intl.NumberFormat("en-US").format(value);
 
 export const hasValue = (value: unknown) => value !== null && value !== undefined && value !== "";
+
+export function metersToFeet(meters: number): number {
+  return Math.round(meters * 3.28084);
+}
