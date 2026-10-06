@@ -1,11 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import MountainSidebar from "@/components/MountainSidebar";
-import VietnamMapNew from "@/components/VietNamMapNew";
+import MountainSidebar from "@/components/mountain-sidebar";
+import VietnamMapNew from "@/components/viet-nam-map-new";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { MapStyles } from "@/components/MapStyles";
-import LanguagesSelect from "@/components/Languages";
+import { MapStyles } from "@/components/map-styles";
+import LanguagesSelect from "@/components/languages";
+import { useSidebarStore } from "@/stores/sidebar-store";
 import { useMountains, mountainsToFeatureCollection } from "@/services/api";
 import type { MountainsData } from "@/services/api/mountains/mountains.server";
 
@@ -16,6 +17,7 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
     lng: number;
   } | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const isSidebarOpen = useSidebarStore((state) => state.isOpen);
 
   const featureCollection = useMemo(() => mountainsToFeatureCollection(mountains), [mountains]);
 
@@ -27,7 +29,7 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
 
   return (
     <div className="flex h-dvh">
-      <div className="w-80 shrink-0">
+      <div className={`shrink-0 overflow-hidden ${isSidebarOpen ? "w-80" : "w-0"}`}>
         <MountainSidebar
           mountains={mountains}
           loading={false}

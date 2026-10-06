@@ -6,13 +6,20 @@ interface TooltipCustomProps {
   children: React.ReactNode;
   side?: Side;
   align?: Align;
+  classNameContent?: string;
 }
 
-export function TooltipCustom({ render, children, side, align }: TooltipCustomProps) {
+export function TooltipCustom({
+  render,
+  children,
+  side,
+  align,
+  classNameContent,
+}: TooltipCustomProps) {
   return (
     <Tooltip>
       <TooltipTrigger render={render} />
-      <TooltipContent side={side} align={align} className={`max-w-xs p-0`}>
+      <TooltipContent side={side} align={align} className={`max-w-xs ${classNameContent}`}>
         {children}
       </TooltipContent>
     </Tooltip>

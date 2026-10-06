@@ -28,16 +28,17 @@ import {
 } from "@/lib/utils";
 import Image from "next/image";
 import { CircleAlertIcon, ImagePlus, PencilSparkles } from "lucide-react";
-import AddMountainPhotoDialog from "@/components/AddMountainPhotoDialog";
+import AddMountainPhotoDialog from "@/components/add-mountain-photo-dialog";
 import { useLocale, useTranslations } from "next-intl";
 import { StarRating } from "./customs/star-rating";
-import { TooltipCustom } from "./tooltip-custom";
 import { Alert, AlertAction, AlertTitle } from "./reui/alert";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { DialogRootChangeEventDetails } from "@base-ui/react";
 
 interface MountainDetailDialogProps {
   mountainId: string | null;
   summary: Mountain | null;
-  onOpenChange: (open: boolean) => void;
+  onOpenChange: (open: boolean, eventDetails: DialogRootChangeEventDetails) => void;
 }
 
 function DetailQuote({ mountain }: { mountain: MountainDetail }) {
@@ -73,34 +74,9 @@ function DetailQuote({ mountain }: { mountain: MountainDetail }) {
       )}
       {hasValue(mountain.elevationM) && (
         <div className="flex flex-col gap-1">
-          <TooltipCustom
-            render={
-              <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                {t("mountainDetail.fields.elevationM")}
-              </dt>
-            }
-          >
-            <div className="flex flex-col gap-1 p-3">
-              {/** biome-ignore lint/performance/noImgElement: "Kibo UI is framework agnostic" */}
-              <Image
-                alt="Preview"
-                className="mb-1 h-37.5 w-64.25 rounded-md"
-                height={300}
-                src="/elevation_calculation.png"
-                width={514}
-              />
-              <p className="text-center font-semibold">Độ cao của 1 nơi so với mực nước biển</p>
-            </div>
-            {/* <div className="">
-              <Image
-                src="/elevation_calculation.png"
-                alt="Elevation Calculation"
-                width={500}
-                height={100}
-              />
-              <p>Độ cao so với mực nước biển.</p>
-            </div> */}
-          </TooltipCustom>
+          <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            {t("mountainDetail.fields.elevationM")}
+          </dt>
           <dd className="text-foreground">
             {formatNumber(mountain.elevationM!)} m | {metersToFeet(mountain.elevationM!)} ft
           </dd>
@@ -164,7 +140,7 @@ export default function MountainDetailDialog({
   const t = useTranslations();
   const locale = useLocale();
   const detailQuery = useMountainDetail(mountainId);
-  const [addPhotoOpen, setAddPhotoOpen] = useState(false);
+  const [addPhotoOpen, setAddPhotoOpen] = useState<boolean>(false);
   const mountain = detailQuery.data;
   const photos = useMemo(
     () =>
@@ -176,9 +152,12 @@ export default function MountainDetailDialog({
   );
   const open = mountainId !== null;
 
+  // const handleOpenChange = (isOpen: boolean, eventDetails: DialogRootChangeEventDetails) => {
+  //   setEditSuggestOpen(isOpen);
+  // };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90dvh] w-full max-w-6xl min-w-4xl overflow-y-auto">
+      <DialogContent className="max-h-[90dvh] w-full overflow-y-auto md:min-w-2xl">
         <DialogHeader className="sm:flex-row sm:items-start sm:justify-between">
           <div className="flex flex-col gap-2">
             <DialogTitle>
@@ -266,16 +245,27 @@ export default function MountainDetailDialog({
                 </blockquote>
               )
             )}
-            <Alert variant="info">
-              <CircleAlertIcon />
-              <AlertTitle>Phát hiện sai sót thông tin? Hãy góp ý cho chúng tôi.</AlertTitle>
-              <AlertAction>
-                <Button variant="outline">
-                  <PencilSparkles />
-                  Góp ý
-                </Button>
-              </AlertAction>
-            </Alert>
+            <Sheet>
+              <Alert variant="info">
+                <CircleAlertIcon />
+                <AlertTitle>Phát hiện sai sót thông tin? Hãy góp ý cho chúng tôi.</AlertTitle>
+                <AlertAction>
+                  <SheetTrigger
+                    render={
+                      <Button variant="outline">
+                        <PencilSparkles />
+                        Góp ý
+                      </Button>
+                    }
+                  />
+                </AlertAction>
+              </Alert>
+              <SheetContent
+                overlaySheetProps={{
+                  forceRender: true,
+                }}
+              ></SheetContent>
+            </Sheet>
           </div>
         </div>
       </DialogContent>
