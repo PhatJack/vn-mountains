@@ -13,4 +13,18 @@ export {
 export { useMountains } from "./mountains/mountains.hooks";
 export { useMountainDetail } from "./mountains/mountains.hooks";
 export { useUploadMountainPhoto } from "./mountains/mountains.hooks";
+export {
+  createMountainSuggestionEdit,
+  deleteMountainSuggestionEdit,
+  fetchMountainSuggestionEdit,
+  fetchMountainSuggestionsEdit,
+  updateMountainSuggestionEdit,
+} from "./mountain-suggestions-edit/mountain-suggestions-edit.client";
+export {
+  useCreateMountainSuggestionEdit,
+  useDeleteMountainSuggestionEdit,
+  useMountainSuggestionEdit,
+  useMountainSuggestionsEdit,
+  useUpdateMountainSuggestionEdit,
+} from "./mountain-suggestions-edit/mountain-suggestions-edit.hooks";
 export { mountainsToFeatureCollection, sortMountainsByElevation } from "./mountains/transform";

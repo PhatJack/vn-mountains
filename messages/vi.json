@@ -49,22 +49,33 @@
     "imageAlt": "Núi",
     "unknownPeak": "Núi chưa xác định",
     "loadError": "Không thể tải đầy đủ thông tin ngọn núi.",
-    "elevation": "Độ cao",
+    "elevation": "Độ cao (m)",
     "latitude": "Vĩ độ",
     "longitude": "Kinh độ",
+    "approximately": "Khoảng",
+    "difficulty": {
+      "beginner": "Nhập môn",
+      "basic": "Dễ",
+      "advanced": "Nâng cao",
+      "challenging": "Thử thách",
+      "extremely_hard": "Cực khó"
+    },
     "fields": {
       "name": "Tên",
       "nameVi": "Tên tiếng Việt",
       "description": "Mô tả",
       "difficulty": "Mức độ khó",
-      "elevationM": "Độ cao",
+      "elevationM": "Độ cao (m)",
       "lat": "Vĩ độ",
       "lng": "Kinh độ",
       "rangeId": "Phạm vi",
       "createdAt": "Ngày tạo",
       "updatedAt": "Cập nhật cuối",
       "slug": "Slug",
-      "photos": "Ảnh"
+      "photos": "Ảnh",
+      "trailDistanceKm": "Độ dài cung đường",
+      "averageClimbingDuration": "Thời gian leo núi trung bình",
+      "recommendedClimbingPeriod": "Thời gian leo núi thích hợp"
     }
   },
   "photo": {
@@ -76,6 +87,7 @@
     "caption": "Chú thích",
     "captionPlaceholder": "Khoảnh khắc này như thế nào?",
     "dateTaken": "Ngày chụp",
+    "pickDate": "Chọn ngày",
     "fileDescription": "JPEG, PNG, GIF hoặc WebP. Tối đa 5 MB",
     "fileRequired": "Vui lòng chọn một ảnh",
     "fileTypes": "Chỉ cho phép ảnh JPEG, PNG, GIF hoặc WebP",
@@ -93,6 +105,50 @@
     "fileTooLarge": "Tệp vượt quá dung lượng tối đa {size}.",
     "filesTooLarge": "Một số tệp vượt quá dung lượng tối đa {size}.",
     "invalidFileType": "Tệp \"{fileName}\" không thuộc định dạng được chấp nhận.",
-    "maxFiles": "Bạn chỉ có thể tải lên tối đa {count} tệp."
+    "maxFiles": "Bạn chỉ có thể tải lên tối đa {count} tệp.",
+    "invalidFutureDate": "Ngày chụp không thể là ngày trong tương lai."
+  },
+  "suggestEdit": {
+    "title": "Góp ý chỉnh sửa thông tin núi",
+    "description": "Thông tin hiện tại đã được điền sẵn. Hãy chỉnh sửa phần cần cập nhật và ghi rõ lý do.",
+    "submit": "Gửi góp ý",
+    "submitting": "Đang gửi...",
+    "success": "Đã gửi góp ý thành công",
+    "error": "Không thể gửi góp ý. Vui lòng thử lại.",
+    "fields": {
+      "name": "Tên núi",
+      "nameVi": "Tên tiếng Việt",
+      "elevationM": "Độ cao (m)",
+      "latitude": "Vĩ độ",
+      "longitude": "Kinh độ",
+      "description": "Mô tả",
+      "difficulty": "Mức độ khó",
+      "averageClimbingDuration": "Thời gian leo núi trung bình",
+      "recommendedClimbingPeriod": "Thời gian leo núi thích hợp",
+      "trailDistanceKm": "Độ dài cung đường (km)",
+      "userNote": "Ghi chú góp ý"
+    },
+    "placeholders": {
+      "difficulty": "Chọn mức độ khó",
+      "userNote": "Bạn muốn chỉnh sửa thông tin nào?"
+    },
+    "difficulty": {
+      "beginner": "Nhập môn",
+      "basic": "Dễ",
+      "advanced": "Nâng cao",
+      "challenging": "Thử thách",
+      "extremely_hard": "Cực khó"
+    },
+    "validation": {
+      "nameRequired": "Vui lòng nhập tên núi",
+      "nameLength": "Tên không được quá 200 ký tự",
+      "invalidNumber": "Vui lòng nhập một số hợp lệ",
+      "invalidLatitude": "Vĩ độ phải nằm trong khoảng -90 đến 90",
+      "invalidLongitude": "Kinh độ phải nằm trong khoảng -180 đến 180",
+      "descriptionLength": "Mô tả không được quá 1000 ký tự",
+      "textLength": "Nội dung không được quá 200 ký tự",
+      "noteRequired": "Vui lòng nhập ghi chú góp ý",
+      "noteLength": "Ghi chú không được quá 2000 ký tự"
+    }
   }
 }

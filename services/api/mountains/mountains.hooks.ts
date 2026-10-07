@@ -9,12 +9,18 @@ import {
   type UploadMountainPhotoInput,
 } from "./mountains.client";
 
+/**
+ *
+ * @param
+ * @returns
+ */
 export function useMountains(initialData: Mountain[]) {
   return useQuery({
     queryKey: ["mountains"],
     queryFn: fetchMountains,
     initialData,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 24 * 60 * 60 * 1000, // 1 ngày
+    gcTime: 24 * 60 * 60 * 1000, // nên >= staleTime
   });
 }
 

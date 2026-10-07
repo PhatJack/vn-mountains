@@ -14,7 +14,7 @@ export function mountainsToFeatureCollection(mountains: Mountain[]): MountainFea
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [m.lng, m.lat],
+      coordinates: [m.longitude, m.latitude],
     },
     properties: {
       id: m.id,

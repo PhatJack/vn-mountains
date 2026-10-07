@@ -50,3 +50,26 @@ export function coordinateToDMS(coordinate: number, type: "latitude" | "longitud
 
   return `${degrees}° ${minutes}′ ${seconds.toFixed(2)}″ ${direction}`;
 }
+
+/**
+ * Formats a number with thousand separators.
+ *
+ * @param number - The number to format.
+ * @returns The formatted number as a string.
+ *
+ * @example
+ * formatNumber(2913); // "2,913"
+ * formatNumber(1000000); // "1,000,000"
+ */
+export const formatNumber = (value: number) => new Intl.NumberFormat("en-US").format(value);
+
+export const hasValue = (value: unknown) => value !== null && value !== undefined && value !== "";
+
+export function metersToFeet(meters: number): number {
+  return Math.round(meters * 3.28084);
+}
+
+export const toInputValue = (value: string | number | null | undefined) =>
+  value == null ? "" : String(value);
+export const toNullableString = (value: string) => value.trim() || null;
+export const toNullableNumber = (value: string) => (value.trim() ? Number(value) : null);

@@ -11,7 +11,7 @@ import {
   MarkerTooltip,
   type MapRef,
 } from "@/components/ui/map";
-import MountainDetailDialog from "@/components/MountainDetailDialog";
+import MountainDetailDialog from "@/components/mountain-detail-dialog";
 import type { MountainFeatureCollection } from "@/services/api";
 import { useMapStore, MAP_STYLES } from "@/stores/map-store";
 import MapTerrain from "./map-components/map-terrain";
@@ -22,6 +22,10 @@ import MountainLayer from "./map-components/mountain-layer";
 import type { Mountain } from "@/services/api";
 import { useTranslations } from "next-intl";
 import { coordinateToDMS } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { useSidebarStore } from "@/stores/sidebar-store";
+import { TooltipCustom } from "./tooltip-custom";
 
 interface VietnamMapNewProps {
   data: MountainFeatureCollection | null;
@@ -50,6 +54,8 @@ export default function VietnamMapNew({
 
   const style = useMapStore((s) => s.style);
   const setMapLoading = useMapStore((s) => s.setMapLoading);
+  const isSidebarOpen = useSidebarStore((s) => s.isOpen);
+  const toggleSidebar = useSidebarStore((s) => s.toggle);
 
   const selectedStyle = MAP_STYLES[style] as string | undefined;
   const is3D = style === "openstreetmap3d";
@@ -108,10 +114,32 @@ export default function VietnamMapNew({
       zoom={5.5}
       styles={mapStyles}
     >
-      <div className="absolute top-3 right-3 z-10 flex gap-4">
-        {toolbar}
-        <MapTerrainToggle onEnabledChange={setTerrainEnabled} />
-        <MapContoursToggle onEnabledChange={setContoursEnabled} />
+      <div className="absolute top-3 w-full">
+        <div className="flex w-full items-center justify-between px-3">
+          <div className="">
+            <TooltipCustom
+              render={
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={toggleSidebar}
+                  aria-label={isSidebarOpen ? "Hide mountain list" : "Show mountain list"}
+                  // title={isSidebarOpen ? "Hide mountain list" : "Show mountain list"}
+                >
+                  {isSidebarOpen ? <PanelLeftClose /> : <PanelLeftOpen />}
+                </Button>
+              }
+            >
+              Toggle Sidebar
+            </TooltipCustom>
+          </div>
+          <div className="flex items-end gap-4">
+            {toolbar}
+            <MapTerrainToggle onEnabledChange={setTerrainEnabled} />
+            <MapContoursToggle onEnabledChange={setContoursEnabled} />
+          </div>
+        </div>
       </div>
       <MapTerrain enabled={terrainEnabled} restorePitch={is3D ? 60 : 0} />
       <MapContours enabled={contoursEnabled} />
@@ -137,8 +165,8 @@ export default function VietnamMapNew({
                 id: selectedDetail.id,
                 name: t("mountainDetail.unknownPeak"),
                 elevationM: null,
-                lat: selectedDetail.lat,
-                lng: selectedDetail.lng,
+                latitude: selectedDetail.lat,
+                longitude: selectedDetail.lng,
               })
             : null
         }

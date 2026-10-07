@@ -45,7 +45,7 @@ vn-mountains/
 │   └── layout.tsx          # Root layout
 ├── components/
 │   ├── VietNamMap.tsx      # MapLibre GL map component
-│   ├── MountainSidebar.tsx # Search/filter sidebar
+│   ├── mountain-sidebar.tsx # Search/filter sidebar
 │   └── ui/                 # shadcn/ui components
 ├── lib/
 │   ├── overpass.ts         # Overpass API queries & GeoJSON

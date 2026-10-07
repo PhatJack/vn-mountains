@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Be_Vietnam_Pro } from "next/font/google";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
@@ -11,7 +11,11 @@ import QueryProvider from "@/components/query-provider";
 import SonnerProvider from "@/components/sonner-provider";
 import { routing } from "@/i18n/routing";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const beVietnamPro = Be_Vietnam_Pro({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  weight: ["400", "500", "600", "700"],
+});
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
@@ -53,7 +57,7 @@ export default async function LocaleLayout({
         geistSans.variable,
         geistMono.variable,
         "font-sans",
-        inter.variable,
+        beVietnamPro.variable,
       )}
     >
       <body className="flex min-h-full flex-col">

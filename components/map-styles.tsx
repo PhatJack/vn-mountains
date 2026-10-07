@@ -24,7 +24,7 @@ export function MapStyles() {
   return (
     <Select value={style} onValueChange={(value) => setStyle(value as MapStyleKey)}>
       <SelectTrigger className="w-44 bg-background">
-        <SelectValue />
+        <SelectValue render={<span>{t(style)}</span>} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
