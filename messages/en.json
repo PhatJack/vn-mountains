@@ -107,5 +107,48 @@
     "invalidFileType": "File \"{fileName}\" is not an accepted file type.",
     "maxFiles": "You can only upload a maximum of {count} files.",
     "invalidFutureDate": "The date taken cannot be in the future."
+  },
+  "suggestEdit": {
+    "title": "Suggest mountain edits",
+    "description": "Current information is pre-filled. Update the fields that need correction and explain your suggestion.",
+    "submit": "Send suggestion",
+    "submitting": "Sending...",
+    "success": "Suggestion sent successfully",
+    "error": "Could not send suggestion. Please try again.",
+    "fields": {
+      "name": "Mountain name",
+      "nameVi": "Vietnamese name",
+      "elevationM": "Elevation (m)",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "description": "Description",
+      "difficulty": "Difficulty",
+      "averageClimbingDuration": "Average climbing duration",
+      "recommendedClimbingPeriod": "Recommended climbing period",
+      "trailDistanceKm": "Trail distance (km)",
+      "userNote": "Suggestion note"
+    },
+    "placeholders": {
+      "difficulty": "Select difficulty",
+      "userNote": "What information should be corrected?"
+    },
+    "difficulty": {
+      "beginner": "Beginner",
+      "basic": "Basic",
+      "advanced": "Advanced",
+      "challenging": "Challenging",
+      "extremely_hard": "Extremely hard"
+    },
+    "validation": {
+      "nameRequired": "Please enter a mountain name",
+      "nameLength": "Name must be 200 characters or fewer",
+      "invalidNumber": "Please enter a valid number",
+      "invalidLatitude": "Latitude must be between -90 and 90",
+      "invalidLongitude": "Longitude must be between -180 and 180",
+      "descriptionLength": "Description must be 1000 characters or fewer",
+      "textLength": "Text must be 200 characters or fewer",
+      "noteRequired": "Please enter a suggestion note",
+      "noteLength": "Note must be 2000 characters or fewer"
+    }
   }
 }

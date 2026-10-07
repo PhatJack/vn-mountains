@@ -43,6 +43,58 @@ export interface CreateMountainInput {
 
 export type UpdateMountainInput = Partial<CreateMountainInput>;
 
+export type SuggestionStatus = "pending" | "approved" | "rejected" | "duplicate";
+
+export interface MountainSuggestionEdit {
+  id: string;
+  mountainId: string;
+  status: SuggestionStatus;
+  userNote: string | null;
+  adminNote: string | null;
+  slug: string | null;
+  name: string | null;
+  nameVi: string | null;
+  elevationM: number | null;
+  latitude: number | null;
+  longitude: number | null;
+  description: string | null;
+  difficulty: MountainDetail["difficulty"];
+  averageClimbingDuration: string | null;
+  recommendedClimbingPeriod: string | null;
+  trailDistanceKm: number | null;
+  rangeId: string | null;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface CreateMountainSuggestionEditInput {
+  mountainId: string;
+  slug?: string | null;
+  name?: string | null;
+  nameVi?: string | null;
+  elevationM?: number | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  description?: string | null;
+  difficulty?: NonNullable<MountainDetail["difficulty"]> | null;
+  averageClimbingDuration?: string | null;
+  recommendedClimbingPeriod?: string | null;
+  trailDistanceKm?: number | null;
+  rangeId?: string | null;
+  userNote?: string | null;
+}
+
+export interface UpdateMountainSuggestionEditInput {
+  elevationM?: number | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  description?: string | null;
+  averageClimbingDuration?: string | null;
+  recommendedClimbingPeriod?: string | null;
+  trailDistanceKm?: number | null;
+  userNote?: string | null;
+}
+
 export interface MountainFeature {
   type: "Feature";
   geometry: {

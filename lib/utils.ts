@@ -68,3 +68,8 @@ export const hasValue = (value: unknown) => value !== null && value !== undefine
 export function metersToFeet(meters: number): number {
   return Math.round(meters * 3.28084);
 }
+
+export const toInputValue = (value: string | number | null | undefined) =>
+  value == null ? "" : String(value);
+export const toNullableString = (value: string) => value.trim() || null;
+export const toNullableNumber = (value: string) => (value.trim() ? Number(value) : null);

@@ -15,7 +15,7 @@ function Field({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="field"
       className={cn(
         "group/field flex w-full flex-col gap-2",
-        "data-invalid:text-destructive",
+        "data-[invalid=true]:text-destructive",
         className,
       )}
       {...props}

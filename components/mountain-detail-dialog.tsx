@@ -32,8 +32,16 @@ import AddMountainPhotoDialog from "@/components/add-mountain-photo-dialog";
 import { useLocale, useTranslations } from "next-intl";
 import { StarRating } from "./customs/star-rating";
 import { Alert, AlertAction, AlertTitle } from "./reui/alert";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet";
 import { DialogRootChangeEventDetails } from "@base-ui/react";
+import SuggestEditForm from "./detail-dialog/suggest-edit-form";
 
 interface MountainDetailDialogProps {
   mountainId: string | null;
@@ -141,6 +149,7 @@ export default function MountainDetailDialog({
   const locale = useLocale();
   const detailQuery = useMountainDetail(mountainId);
   const [addPhotoOpen, setAddPhotoOpen] = useState<boolean>(false);
+  const [editSuggestOpen, setEditSuggestOpen] = useState(false);
   const mountain = detailQuery.data;
   const photos = useMemo(
     () =>
@@ -245,7 +254,7 @@ export default function MountainDetailDialog({
                 </blockquote>
               )
             )}
-            <Sheet>
+            <Sheet open={editSuggestOpen} onOpenChange={setEditSuggestOpen}>
               <Alert variant="info">
                 <CircleAlertIcon />
                 <AlertTitle>Phát hiện sai sót thông tin? Hãy góp ý cho chúng tôi.</AlertTitle>
@@ -261,10 +270,26 @@ export default function MountainDetailDialog({
                 </AlertAction>
               </Alert>
               <SheetContent
+                className="w-full data-[side=right]:sm:max-w-lg"
                 overlaySheetProps={{
                   forceRender: true,
                 }}
-              ></SheetContent>
+              >
+                <SheetHeader>
+                  <SheetTitle>{t("suggestEdit.title")}</SheetTitle>
+                  <SheetDescription>{t("suggestEdit.description")}</SheetDescription>
+                </SheetHeader>
+                {mountain ? (
+                  <SuggestEditForm
+                    mountain={mountain}
+                    onSuccess={() => setEditSuggestOpen(false)}
+                  />
+                ) : (
+                  <div className="px-4 text-sm text-muted-foreground">
+                    {t("mountainDetail.loading")}
+                  </div>
+                )}
+              </SheetContent>
             </Sheet>
           </div>
         </div>
