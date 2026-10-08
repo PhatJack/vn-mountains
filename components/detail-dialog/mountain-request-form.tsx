@@ -99,7 +99,6 @@ export default function MountainRequestForm({ onSuccess }: MountainRequestFormPr
   });
 
   useUnsavedChanges("mountain-request", form.formState.isDirty, () => form.reset());
-
   const onSubmit = form.handleSubmit(async (values) => {
     try {
       await mutateAsync({

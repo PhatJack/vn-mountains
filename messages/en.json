@@ -85,7 +85,7 @@
       "latitude": "Latitude must be between -90 and 90",
       "longitude": "Longitude must be between -180 and 180",
       "invalidNumber": "Please enter a valid number",
-      "descriptionLength": "Description must be 5000 characters or fewer",
+      "descriptionLength": "Description must be 1000 characters or fewer",
       "durationLength": "Climbing duration must be 100 characters or fewer",
       "periodLength": "Recommended period must be 250 characters or fewer"
     }
