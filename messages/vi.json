@@ -38,7 +38,11 @@
     "loading": "Đang tải các đỉnh núi...",
     "count": "{filtered} trên {total} đỉnh núi",
     "searchPlaceholder": "Tìm kiếm núi...",
-    "empty": "Không tìm thấy ngọn núi nào"
+    "empty": "Không tìm thấy ngọn núi nào",
+    "addMountain": "Biết một đỉnh núi “xịn” mà tụi mình chưa có? 👀",
+    "addMountainDescription": "Drop tọa độ và chia sẻ nó với cộng đồng!",
+    "addMountainCta": "Đề xuất ngay",
+    "addMountainCtaSearch": "Đề xuất 1 ngọn núi"
   },
   "mountainDetail": {
     "title": "Thông tin núi",

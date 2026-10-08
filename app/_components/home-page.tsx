@@ -27,6 +27,10 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
     setSelectedId(found?.id ?? null);
   };
 
+  const handleAddMountain = () => {
+    // Reserved integration point for the add-mountain form or route.
+  };
+
   return (
     <div className="flex h-dvh">
       <div className={`shrink-0 overflow-hidden ${isSidebarOpen ? "w-80" : "w-0"}`}>
@@ -35,6 +39,7 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
           loading={false}
           onSelect={handleSidebarSelect}
           selectedId={selectedId}
+          onAddMountain={handleAddMountain}
         />
       </div>
       <div className="relative flex-1">

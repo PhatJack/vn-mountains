@@ -38,7 +38,11 @@
     "loading": "Loading peaks...",
     "count": "{filtered} of {total} peaks",
     "searchPlaceholder": "Search mountains...",
-    "empty": "No mountains found"
+    "empty": "No mountains found",
+    "addMountain": "Know a hidden gem we’re missing? 👀",
+    "addMountainDescription": "Drop the location and share it with the community!",
+    "addMountainCta": "Suggest a mountain",
+    "addMountainCtaSearch": "Drop a peak!"
   },
   "mountainDetail": {
     "title": "Mountain details",
