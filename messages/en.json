@@ -9,6 +9,12 @@
     "close": "Close",
     "notAvailable": "N/A"
   },
+  "unsavedChanges": {
+    "title": "Discard unsaved changes?",
+    "description": "You have unsaved changes. Are you sure you want to close this form?",
+    "continueEditing": "Continue editing",
+    "discard": "Discard changes"
+  },
   "language": {
     "label": "Language",
     "select": "Select language",
@@ -43,6 +49,46 @@
     "addMountainDescription": "Drop the location and share it with the community!",
     "addMountainCta": "Suggest a mountain",
     "addMountainCtaSearch": "Drop a peak!"
+  },
+  "mountainRequest": {
+    "title": "Suggest a new mountain",
+    "description": "Share the details and help the community discover more peaks.",
+    "submit": "Send suggestion",
+    "submitting": "Sending...",
+    "success": "Mountain suggestion sent successfully",
+    "error": "Could not send the suggestion. Please try again.",
+    "fields": {
+      "name": "Mountain name",
+      "nameVi": "Vietnamese name",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "elevationM": "Elevation (m)",
+      "description": "Description",
+      "difficulty": "Difficulty",
+      "averageClimbingDuration": "Average climbing duration",
+      "recommendedClimbingPeriod": "Recommended climbing period",
+      "trailDistanceKm": "Trail distance (km)"
+    },
+    "placeholders": {
+      "difficulty": "Select difficulty"
+    },
+    "difficulty": {
+      "beginner": "Beginner",
+      "basic": "Basic",
+      "advanced": "Advanced",
+      "challenging": "Challenging",
+      "extremely_hard": "Extremely hard"
+    },
+    "validation": {
+      "nameRequired": "Please enter a mountain name",
+      "nameLength": "Mountain name must be 250 characters or fewer",
+      "latitude": "Latitude must be between -90 and 90",
+      "longitude": "Longitude must be between -180 and 180",
+      "invalidNumber": "Please enter a valid number",
+      "descriptionLength": "Description must be 5000 characters or fewer",
+      "durationLength": "Climbing duration must be 100 characters or fewer",
+      "periodLength": "Recommended period must be 250 characters or fewer"
+    }
   },
   "mountainDetail": {
     "title": "Mountain details",

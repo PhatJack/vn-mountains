@@ -24,7 +24,7 @@ import { useTranslations } from "next-intl";
 import { coordinateToDMS } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
-import { useSidebarStore } from "@/stores/sidebar-store";
+import { useGlobalStore } from "@/stores/global-store";
 import { TooltipCustom } from "./tooltip-custom";
 
 interface VietnamMapNewProps {
@@ -54,8 +54,8 @@ export default function VietnamMapNew({
 
   const style = useMapStore((s) => s.style);
   const setMapLoading = useMapStore((s) => s.setMapLoading);
-  const isSidebarOpen = useSidebarStore((s) => s.isOpen);
-  const toggleSidebar = useSidebarStore((s) => s.toggle);
+  const isSidebarOpen = useGlobalStore((s) => s.isOpen);
+  const toggleSidebar = useGlobalStore((s) => s.toggle);
 
   const selectedStyle = MAP_STYLES[style] as string | undefined;
   const is3D = style === "openstreetmap3d";

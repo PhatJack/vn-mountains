@@ -24,6 +24,7 @@ import { useTranslations } from "next-intl";
 import { ScrollArea } from "../ui/scroll-area";
 import { difficultyValues } from "@/constant/difficulty";
 import { toInputValue, toNullableNumber, toNullableString } from "@/lib/utils";
+import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 
 const DESCRIPTION_MAX_LENGTH = 1000;
 
@@ -99,6 +100,7 @@ export default function SuggestEditForm({ mountain, onSuccess }: SuggestEditForm
   });
 
   useEffect(() => form.reset(values), [form, mountain]);
+  useUnsavedChanges(`suggest-edit-${mountain.id}`, form.formState.isDirty, () => form.reset());
 
   const onSubmit = form.handleSubmit(async (formValues) => {
     try {
@@ -126,14 +128,21 @@ export default function SuggestEditForm({ mountain, onSuccess }: SuggestEditForm
     }
   });
 
-  const renderInput = (name: keyof SuggestEditFormValues, label: string, type = "text") => (
+  const renderInput = (
+    name: keyof SuggestEditFormValues,
+    label: string,
+    type = "text",
+    requiredAtRisk = false,
+  ) => (
     <Controller
       name={name}
       control={form.control}
       render={({ field, fieldState }) => {
         return (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={`suggest-edit-${name}`}>{label}</FieldLabel>
+            <FieldLabel htmlFor={`suggest-edit-${name}`} requiredAtRisk={requiredAtRisk}>
+              {label}
+            </FieldLabel>
             <Input
               {...field}
               id={`suggest-edit-${name}`}
@@ -153,7 +162,7 @@ export default function SuggestEditForm({ mountain, onSuccess }: SuggestEditForm
       <form id="suggest-edit-form" onSubmit={onSubmit} className="flex flex-1 flex-col">
         <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-4">
           <FieldGroup className="gap-4">
-            {renderInput("name", t("fields.name"))}
+            {renderInput("name", t("fields.name"), "text", true)}
             {renderInput("nameVi", t("fields.nameVi"))}
             <div className="grid gap-4 sm:grid-cols-2">
               {renderInput("elevationM", t("fields.elevationM"), "number")}

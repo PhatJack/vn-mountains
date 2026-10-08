@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn, coordinateToDMS } from "@/lib/utils";
 import type { Mountain as MountainType } from "@/services/api";
+import { useGlobalStore } from "@/stores/global-store";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import MountainSkeleton from "./empty-and-skeletons/user/mountain-skeleton";
@@ -22,7 +23,6 @@ interface MountainSidebarProps {
   loading: boolean;
   onSelect: (lat: number, lng: number) => void;
   selectedId: string | null;
-  onAddMountain: () => void;
 }
 
 export default function MountainSidebar({
@@ -30,10 +30,10 @@ export default function MountainSidebar({
   loading,
   onSelect,
   selectedId,
-  onAddMountain,
 }: MountainSidebarProps) {
   "use no memo";
   const t = useTranslations("sidebar");
+  const setIsDialogOpen = useGlobalStore((state) => state.setIsDialogOpen);
   const [search, setSearch] = useState("");
   const viewportRef = useRef<HTMLDivElement>(null);
 
@@ -85,7 +85,7 @@ export default function MountainSidebar({
             className="pl-8"
           />
         </div>
-        <Button type="button" className="mt-2 w-full" onClick={onAddMountain}>
+        <Button type="button" className="mt-2 w-full" onClick={() => setIsDialogOpen(true)}>
           <Mountain className="size-4" />
           {t("addMountainCtaSearch")}
         </Button>
@@ -96,7 +96,7 @@ export default function MountainSidebar({
           <MountainSkeleton />
         ) : filtered.length === 0 ? (
           <div className="px-4">
-            <MountainEmpty onAddMountain={onAddMountain} />
+            <MountainEmpty onAddMountain={() => setIsDialogOpen(true)} />
           </div>
         ) : (
           <ScrollArea className="h-full" viewportRef={viewportRef}>
