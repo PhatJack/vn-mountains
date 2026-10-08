@@ -20,6 +20,10 @@ function DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {
   return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />;
 }
 
+function DialogViewPort({ ...props }: DialogPrimitive.Viewport.Props) {
+  return <DialogPrimitive.Viewport data-slot="dialog-viewport" {...props} />;
+}
+
 function DialogClose({ ...props }: DialogPrimitive.Close.Props) {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
@@ -139,4 +143,5 @@ export {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
+  DialogViewPort,
 };

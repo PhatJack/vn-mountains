@@ -24,6 +24,7 @@ import InputImage from "@/components/ui/input-image";
 import { useUploadMountainPhoto } from "@/services/api";
 import { useLocale, useTranslations } from "next-intl";
 import { DateTimePicker } from "./ui/date-picker";
+import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
@@ -76,6 +77,11 @@ export default function AddMountainPhotoDialog({
     resolver: zodResolver(addPhotoSchema(t)),
     defaultValues: { file: undefined, caption: "", takenAt: new Date() },
   });
+  const requestClose = useUnsavedChanges(
+    `add-mountain-photo-${mountainId}`,
+    form.formState.isDirty,
+    () => form.reset(),
+  );
 
   useEffect(() => {
     if (!open) {
@@ -101,8 +107,17 @@ export default function AddMountainPhotoDialog({
       toast.error(t("photo.error"));
     }
   });
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (nextOpen) {
+      onOpenChange(true);
+      return;
+    }
+
+    requestClose(() => onOpenChange(false));
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
         className="max-w-lg"
         overlayProps={{
@@ -122,7 +137,9 @@ export default function AddMountainPhotoDialog({
                 control={form.control}
                 render={({ fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="submit-image-form-file">{t("photo.file")}</FieldLabel>
+                    <FieldLabel htmlFor="submit-image-form-file" requiredAtRisk={true}>
+                      {t("photo.file")}
+                    </FieldLabel>
                     <InputImage />
                     {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
                   </Field>
@@ -176,7 +193,7 @@ export default function AddMountainPhotoDialog({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => onOpenChange(false)}
+                onClick={() => requestClose(() => onOpenChange(false))}
                 disabled={isUploading}
               >
                 {t("common.cancel")}

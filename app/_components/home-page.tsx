@@ -6,9 +6,10 @@ import VietnamMapNew from "@/components/viet-nam-map-new";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { MapStyles } from "@/components/map-styles";
 import LanguagesSelect from "@/components/languages";
-import { useSidebarStore } from "@/stores/sidebar-store";
+import { useGlobalStore } from "@/stores/global-store";
 import { useMountains, mountainsToFeatureCollection } from "@/services/api";
 import type { MountainsData } from "@/services/api/mountains/mountains.server";
+import MountainRequestDialog from "@/components/detail-dialog/mountain-request-dialog";
 
 const HomePage = ({ initialData }: { initialData: MountainsData }) => {
   const { data: mountains } = useMountains(initialData.mountains);
@@ -17,7 +18,7 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
     lng: number;
   } | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const isSidebarOpen = useSidebarStore((state) => state.isOpen);
+  const isSidebarOpen = useGlobalStore((state) => state.isOpen);
 
   const featureCollection = useMemo(() => mountainsToFeatureCollection(mountains), [mountains]);
 
@@ -51,6 +52,7 @@ const HomePage = ({ initialData }: { initialData: MountainsData }) => {
           }
         />
       </div>
+      <MountainRequestDialog />
     </div>
   );
 };

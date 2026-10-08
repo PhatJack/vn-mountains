@@ -42,6 +42,7 @@ import {
 } from "./ui/sheet";
 import { DialogRootChangeEventDetails } from "@base-ui/react";
 import SuggestEditForm from "./detail-dialog/suggest-edit-form";
+import { useUnsavedChangesStore } from "@/stores/unsaved-changes-store";
 
 interface MountainDetailDialogProps {
   mountainId: string | null;
@@ -150,6 +151,7 @@ export default function MountainDetailDialog({
   const detailQuery = useMountainDetail(mountainId);
   const [addPhotoOpen, setAddPhotoOpen] = useState<boolean>(false);
   const [editSuggestOpen, setEditSuggestOpen] = useState(false);
+  const requestClose = useUnsavedChangesStore((state) => state.requestClose);
   const mountain = detailQuery.data;
   const photos = useMemo(
     () =>
@@ -254,7 +256,21 @@ export default function MountainDetailDialog({
                 </blockquote>
               )
             )}
-            <Sheet open={editSuggestOpen} onOpenChange={setEditSuggestOpen}>
+            <Sheet
+              open={editSuggestOpen}
+              onOpenChange={(nextOpen) => {
+                if (nextOpen) {
+                  setEditSuggestOpen(true);
+                  return;
+                }
+
+                if (mountain) {
+                  requestClose(`suggest-edit-${mountain.id}`, () => setEditSuggestOpen(false));
+                } else {
+                  setEditSuggestOpen(false);
+                }
+              }}
+            >
               <Alert variant="info">
                 <CircleAlertIcon />
                 <AlertTitle>Phát hiện sai sót thông tin? Hãy góp ý cho chúng tôi.</AlertTitle>

@@ -13,6 +13,8 @@ export {
 export { useMountains } from "./mountains/mountains.hooks";
 export { useMountainDetail } from "./mountains/mountains.hooks";
 export { useUploadMountainPhoto } from "./mountains/mountains.hooks";
+export { createMountainRequest } from "./mountain-requests/mountain-requests.client";
+export { useCreateMountainRequest } from "./mountain-requests/mountain-requests.hooks";
 export {
   createMountainSuggestionEdit,
   deleteMountainSuggestionEdit,

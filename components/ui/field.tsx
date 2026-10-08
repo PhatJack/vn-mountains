@@ -23,8 +23,24 @@ function Field({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>) {
-  return <Label data-slot="field-label" className={className} {...props} />;
+function FieldLabel({
+  className,
+  children,
+  requiredAtRisk,
+  ...props
+}: React.ComponentProps<typeof Label> & {
+  requiredAtRisk?: boolean;
+}) {
+  return (
+    <Label data-slot="field-label" className={className} {...props}>
+      {children}
+      {requiredAtRisk && (
+        <span aria-hidden="true" className="text-destructive">
+          *
+        </span>
+      )}
+    </Label>
+  );
 }
 
 function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {

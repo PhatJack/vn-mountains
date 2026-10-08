@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import QueryProvider from "@/components/query-provider";
 import SonnerProvider from "@/components/sonner-provider";
 import { routing } from "@/i18n/routing";
+import UnsavedChangesAlert from "@/components/customs/unsaved-changes-alert";
 
 const beVietnamPro = Be_Vietnam_Pro({
   subsets: ["latin"],
@@ -71,6 +72,7 @@ export default async function LocaleLayout({
             <QueryProvider>
               {children}
               <SonnerProvider />
+              <UnsavedChangesAlert />
             </QueryProvider>
           </ThemeProvider>
         </NextIntlClientProvider>

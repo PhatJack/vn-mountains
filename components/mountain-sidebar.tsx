@@ -7,32 +7,22 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn, coordinateToDMS } from "@/lib/utils";
 import type { Mountain as MountainType } from "@/services/api";
+import { useGlobalStore } from "@/stores/global-store";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import MountainSkeleton from "./empty-and-skeletons/user/mountain-skeleton";
+import MountainEmpty from "./empty-and-skeletons/user/mountain-empty";
 
 interface MountainSidebarProps {
   mountains: MountainType[];
   loading: boolean;
   onSelect: (lat: number, lng: number) => void;
   selectedId: string | null;
-}
-
-function MountainSkeleton() {
-  return (
-    <div className="flex flex-col gap-3 px-4">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="flex flex-col gap-2">
-          <Skeleton className="h-4 w-3/4" />
-          <Skeleton className="h-3 w-1/2" />
-          {i < 4 && <Separator />}
-        </div>
-      ))}
-    </div>
-  );
 }
 
 export default function MountainSidebar({
@@ -43,6 +33,7 @@ export default function MountainSidebar({
 }: MountainSidebarProps) {
   "use no memo";
   const t = useTranslations("sidebar");
+  const setIsDialogOpen = useGlobalStore((state) => state.setIsDialogOpen);
   const [search, setSearch] = useState("");
   const viewportRef = useRef<HTMLDivElement>(null);
 
@@ -94,15 +85,18 @@ export default function MountainSidebar({
             className="pl-8"
           />
         </div>
+        <Button type="button" className="mt-2 w-full" onClick={() => setIsDialogOpen(true)}>
+          <Mountain className="size-4" />
+          {t("addMountainCtaSearch")}
+        </Button>
       </div>
 
       <CardContent className="flex-1 overflow-hidden px-0">
         {loading ? (
           <MountainSkeleton />
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center gap-2 px-4 py-8 text-center text-sm text-muted-foreground">
-            <Mountain className="size-8 opacity-50" />
-            <p>{t("empty")}</p>
+          <div className="px-4">
+            <MountainEmpty onAddMountain={() => setIsDialogOpen(true)} />
           </div>
         ) : (
           <ScrollArea className="h-full" viewportRef={viewportRef}>

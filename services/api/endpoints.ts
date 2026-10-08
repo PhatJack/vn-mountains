@@ -10,6 +10,7 @@ export const ENDPOINTS = {
     `/mountains/${mountainId}/photos/${photoId}`,
   mountainSuggestionsEdit: "/mountain-suggestions-edit",
   mountainSuggestionEdit: (id: string) => `/mountain-suggestions-edit/${id}`,
+  mountainRequests: "/mountain-requests",
 } as const;
 
 export function mountainPhotoUrl(storageKey: string): string {

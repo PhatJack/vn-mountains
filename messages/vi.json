@@ -9,6 +9,12 @@
     "close": "Đóng",
     "notAvailable": "N/A"
   },
+  "unsavedChanges": {
+    "title": "Bỏ các thay đổi chưa lưu?",
+    "description": "Bạn có thay đổi chưa được lưu. Bạn có chắc muốn đóng biểu mẫu này không?",
+    "continueEditing": "Tiếp tục chỉnh sửa",
+    "discard": "Bỏ thay đổi"
+  },
   "language": {
     "label": "Ngôn ngữ",
     "select": "Chọn ngôn ngữ",
@@ -38,7 +44,51 @@
     "loading": "Đang tải các đỉnh núi...",
     "count": "{filtered} trên {total} đỉnh núi",
     "searchPlaceholder": "Tìm kiếm núi...",
-    "empty": "Không tìm thấy ngọn núi nào"
+    "empty": "Không tìm thấy ngọn núi nào",
+    "addMountain": "Biết một đỉnh núi “xịn” mà tụi mình chưa có? 👀",
+    "addMountainDescription": "Drop tọa độ và chia sẻ nó với cộng đồng!",
+    "addMountainCta": "Đề xuất ngay",
+    "addMountainCtaSearch": "Đề xuất 1 ngọn núi"
+  },
+  "mountainRequest": {
+    "title": "Đề xuất thêm một ngọn núi",
+    "description": "Chia sẻ thông tin để giúp cộng đồng khám phá thêm những đỉnh núi mới.",
+    "submit": "Gửi đề xuất",
+    "submitting": "Đang gửi...",
+    "success": "Đã gửi đề xuất thêm núi thành công",
+    "error": "Không thể gửi đề xuất. Vui lòng thử lại.",
+    "fields": {
+      "name": "Tên núi",
+      "nameVi": "Tên tiếng Việt",
+      "latitude": "Vĩ độ",
+      "longitude": "Kinh độ",
+      "elevationM": "Độ cao (m)",
+      "description": "Mô tả",
+      "difficulty": "Mức độ khó",
+      "averageClimbingDuration": "Thời gian leo núi trung bình",
+      "recommendedClimbingPeriod": "Thời gian leo núi thích hợp",
+      "trailDistanceKm": "Độ dài cung đường (km)"
+    },
+    "placeholders": {
+      "difficulty": "Chọn mức độ khó"
+    },
+    "difficulty": {
+      "beginner": "Nhập môn",
+      "basic": "Dễ",
+      "advanced": "Nâng cao",
+      "challenging": "Thử thách",
+      "extremely_hard": "Cực khó"
+    },
+    "validation": {
+      "nameRequired": "Vui lòng nhập tên núi",
+      "nameLength": "Tên núi không được quá 250 ký tự",
+      "latitude": "Vĩ độ phải nằm trong khoảng -90 đến 90",
+      "longitude": "Kinh độ phải nằm trong khoảng -180 đến 180",
+      "invalidNumber": "Vui lòng nhập một số hợp lệ",
+      "descriptionLength": "Mô tả không được quá 1000 ký tự",
+      "durationLength": "Thời gian leo núi không được quá 100 ký tự",
+      "periodLength": "Thời gian thích hợp không được quá 250 ký tự"
+    }
   },
   "mountainDetail": {
     "title": "Thông tin núi",

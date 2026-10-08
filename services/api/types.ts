@@ -84,6 +84,41 @@ export interface CreateMountainSuggestionEditInput {
   userNote?: string | null;
 }
 
+export type MountainRequestStatus = "pending" | "approved" | "rejected" | "duplicate";
+
+export interface MountainRequest {
+  id: string;
+  name: string;
+  nameVi: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  elevationM: number | null;
+  provinceId: string | null;
+  description: string | null;
+  difficulty: MountainDetail["difficulty"];
+  averageClimbingDuration: string | null;
+  recommendedClimbingPeriod: string | null;
+  trailDistanceKm: number | null;
+  status: MountainRequestStatus;
+  rejectReason: string | null;
+  mountainId: string | null;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface CreateMountainRequestInput {
+  name: string;
+  nameVi?: string;
+  latitude: number;
+  longitude: number;
+  elevationM?: number;
+  description?: string;
+  difficulty?: NonNullable<MountainDetail["difficulty"]>;
+  averageClimbingDuration?: string;
+  recommendedClimbingPeriod?: string;
+  trailDistanceKm?: number;
+}
+
 export interface UpdateMountainSuggestionEditInput {
   elevationM?: number | null;
   latitude?: number | null;
