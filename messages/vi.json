@@ -37,7 +37,23 @@
     "enableTerrain": "Bật địa hình",
     "locationTooltip": "📍 Bạn chưa lạc đường... đâu nhé.",
     "locationTitle": "📍 Bạn đang ở đây, nhà thám hiểm!",
-    "locationDescription": "Vị trí hiện tại của bạn"
+    "locationDescription": "Vị trí hiện tại của bạn",
+    "coordinatePicker": "Hiển thị 1 tọa độ bất kỳ khi click",
+    "latitude": "Vĩ độ",
+    "longitude": "Kinh độ",
+    "addMountain": "Thêm ngọn núi",
+    "controls": {
+      "zoomIn": "Phóng to",
+      "zoomOut": "Thu nhỏ",
+      "findMyLocation": "Tìm vị trí của tôi",
+      "toggleFullscreen": "Bật/tắt toàn màn hình",
+      "coordinatePicker": "Hiển thị 1 tọa độ bất kỳ khi click",
+      "resetBearing": "Đặt hướng về phía Bắc",
+      "closePopup": "Đóng popup",
+      "toggleSidebar": "Bật/tắt danh sách núi",
+      "hideMountainList": "Ẩn danh sách núi",
+      "showMountainList": "Hiện danh sách núi"
+    }
   },
   "sidebar": {
     "logoAlt": "Núi Việt Nam",

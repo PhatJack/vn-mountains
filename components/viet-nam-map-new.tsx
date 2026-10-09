@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import Image from "next/image";
 import {
   Map,
   MapClusterLayer,
@@ -23,7 +24,7 @@ import type { Mountain } from "@/services/api";
 import { useTranslations } from "next-intl";
 import { coordinateToDMS } from "@/lib/utils";
 import { Button } from "./ui/button";
-import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { PanelLeftClose, PanelLeftOpen, Plus, X } from "lucide-react";
 import { useGlobalStore } from "@/stores/global-store";
 import { TooltipCustom } from "./tooltip-custom";
 
@@ -56,6 +57,34 @@ export default function VietnamMapNew({
   const setMapLoading = useMapStore((s) => s.setMapLoading);
   const isSidebarOpen = useGlobalStore((s) => s.isOpen);
   const toggleSidebar = useGlobalStore((s) => s.toggle);
+  const setMountainRequestCoordinates = useGlobalStore((s) => s.setMountainRequestCoordinates);
+  const setDialogOpen = useGlobalStore((s) => s.setIsDialogOpen);
+  const requestCoordinates = useGlobalStore((s) => s.mountainRequestCoordinates);
+  const previousRequestCoordinates = useRef(requestCoordinates);
+
+  useEffect(() => {
+    if (previousRequestCoordinates.current && !requestCoordinates) {
+      setLocation(null);
+    }
+    previousRequestCoordinates.current = requestCoordinates;
+  }, [requestCoordinates]);
+
+  const handleCoordinateSelect = ({
+    latitude,
+    longitude,
+  }: {
+    latitude: number;
+    longitude: number;
+  }) => {
+    setLocation({ lat: latitude, lng: longitude });
+  };
+
+  const handleOpenMountainRequest = () => {
+    if (!location) return;
+    setMountainRequestCoordinates({ latitude: location.lat, longitude: location.lng });
+    setLocation(null);
+    setDialogOpen(true);
+  };
 
   const selectedStyle = MAP_STYLES[style] as string | undefined;
   const is3D = style === "openstreetmap3d";
@@ -124,14 +153,18 @@ export default function VietnamMapNew({
                   variant="outline"
                   size="icon"
                   onClick={toggleSidebar}
-                  aria-label={isSidebarOpen ? "Hide mountain list" : "Show mountain list"}
+                  aria-label={
+                    isSidebarOpen
+                      ? t("map.controls.hideMountainList")
+                      : t("map.controls.showMountainList")
+                  }
                   // title={isSidebarOpen ? "Hide mountain list" : "Show mountain list"}
                 >
                   {isSidebarOpen ? <PanelLeftClose /> : <PanelLeftOpen />}
                 </Button>
               }
             >
-              Toggle Sidebar
+              {t("map.controls.toggleSidebar")}
             </TooltipCustom>
           </div>
           <div className="flex items-end gap-4">
@@ -153,6 +186,9 @@ export default function VietnamMapNew({
         showCompass
         showFullscreen
         showLocate
+        showCoordinatePicker
+        coordinatePickerLabel={t("map.coordinatePicker")}
+        onCoordinateSelect={handleCoordinateSelect}
         onLocate={(coord) => {
           setLocation({ lat: coord.latitude, lng: coord.longitude });
         }}
@@ -177,13 +213,13 @@ export default function VietnamMapNew({
       {location && (
         <MapMarker latitude={location.lat} longitude={location.lng}>
           <MarkerContent>
-            <div className="relative flex size-6 items-center justify-center">
-              {/* Ripple */}
-              <div className="absolute size-6 animate-ping rounded-full bg-primary/40" />
-
-              {/* Marker */}
-              <div className="relative size-4 rounded-full border-2 border-white bg-primary shadow-lg" />
-            </div>
+            <Image
+              src="/marker.png"
+              alt=""
+              width={32}
+              height={32}
+              className="size-8 object-contain"
+            />
           </MarkerContent>
 
           <MarkerTooltip>{t("map.locationTooltip")}</MarkerTooltip>
@@ -199,6 +235,27 @@ export default function VietnamMapNew({
             </div>
           </MarkerPopup>
         </MapMarker>
+      )}
+      {location && (
+        <div className="absolute bottom-4 left-1/2 z-20 flex max-w-[calc(100%-2rem)] -translate-x-1/2 items-center gap-3 rounded-lg border border-border bg-background/95 px-3 py-2 shadow-lg backdrop-blur-sm">
+          <div className="text-xs text-foreground">
+            <div>
+              {t("map.latitude")}: {location.lat.toFixed(6)}
+            </div>
+            <div>
+              {t("map.longitude")}: {location.lng.toFixed(6)}
+            </div>
+          </div>
+          <Button
+            type="button"
+            size="icon"
+            variant="outline"
+            onClick={handleOpenMountainRequest}
+            aria-label={t("map.addMountain")}
+          >
+            <Plus className="size-4" />
+          </Button>
+        </div>
       )}
     </Map>
   );

@@ -37,7 +37,23 @@
     "enableTerrain": "Enable terrain",
     "locationTooltip": "📍 You're not lost... yet.",
     "locationTitle": "📍 You are here, explorer!",
-    "locationDescription": "Your current location"
+    "locationDescription": "Your current location",
+    "coordinatePicker": "Show any coordinate when clicking the map",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "addMountain": "Add mountain",
+    "controls": {
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "findMyLocation": "Find my location",
+      "toggleFullscreen": "Toggle fullscreen",
+      "coordinatePicker": "Show any coordinate when clicking the map",
+      "resetBearing": "Reset bearing to north",
+      "closePopup": "Close popup",
+      "toggleSidebar": "Toggle mountain list",
+      "hideMountainList": "Hide mountain list",
+      "showMountainList": "Show mountain list"
+    }
   },
   "sidebar": {
     "logoAlt": "Vietnam Mountains",
