@@ -7,6 +7,9 @@ interface GlobalStore {
   isDialogOpen: boolean;
   toggleDialogOpen: () => void;
   setIsDialogOpen: (isDialogOpen: boolean) => void;
+  mountainRequestCoordinates: { latitude: number; longitude: number } | null;
+  setMountainRequestCoordinates: (coordinates: { latitude: number; longitude: number }) => void;
+  clearMountainRequestCoordinates: () => void;
 }
 
 export const useGlobalStore = create<GlobalStore>((set) => ({
@@ -16,4 +19,8 @@ export const useGlobalStore = create<GlobalStore>((set) => ({
   isDialogOpen: false,
   toggleDialogOpen: () => set((state) => ({ isDialogOpen: !state.isDialogOpen })),
   setIsDialogOpen: (isDialogOpen) => set({ isDialogOpen }),
+  mountainRequestCoordinates: null,
+  setMountainRequestCoordinates: (mountainRequestCoordinates) =>
+    set({ mountainRequestCoordinates }),
+  clearMountainRequestCoordinates: () => set({ mountainRequestCoordinates: null }),
 }));

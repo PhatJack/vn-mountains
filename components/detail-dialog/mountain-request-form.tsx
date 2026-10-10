@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle, Send } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
+import { useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -76,9 +77,13 @@ const mountainRequestSchema = (t: (key: string) => string) =>
 
 interface MountainRequestFormProps {
   onSuccess: () => void;
+  initialCoordinates?: { latitude: number; longitude: number } | null;
 }
 
-export default function MountainRequestForm({ onSuccess }: MountainRequestFormProps) {
+export default function MountainRequestForm({
+  onSuccess,
+  initialCoordinates,
+}: MountainRequestFormProps) {
   const t = useTranslations("mountainRequest");
   const tDifficulty = useTranslations("mountainRequest.difficulty");
   const { mutateAsync, isPending } = useCreateMountainRequest();
@@ -97,6 +102,12 @@ export default function MountainRequestForm({ onSuccess }: MountainRequestFormPr
       trailDistanceKm: "",
     },
   });
+
+  useEffect(() => {
+    if (!initialCoordinates) return;
+    form.setValue("latitude", initialCoordinates.latitude.toFixed(6), { shouldDirty: false });
+    form.setValue("longitude", initialCoordinates.longitude.toFixed(6), { shouldDirty: false });
+  }, [form, initialCoordinates]);
 
   useUnsavedChanges("mountain-request", form.formState.isDirty, () => form.reset());
   const onSubmit = form.handleSubmit(async (values) => {

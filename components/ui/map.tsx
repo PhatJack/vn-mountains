@@ -18,9 +18,11 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
-import { X, Minus, Plus, Locate, Maximize, Loader2 } from "lucide-react";
+import { X, Minus, Plus, Locate, Maximize, Loader2, MousePointer2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { TooltipCustom } from "@/components/tooltip-custom";
+import { useTranslations } from "next-intl";
 
 if (typeof window !== "undefined" && !MapLibreGL.getWorkerUrl()) {
   MapLibreGL.setWorkerUrl(
@@ -660,11 +662,13 @@ function DefaultMarkerIcon() {
 }
 
 function PopupCloseButton({ onClick }: { onClick: () => void }) {
+  const t = useTranslations("map.controls");
+
   return (
     <button
       type="button"
       onClick={onClick}
-      aria-label="Close popup"
+      aria-label={t("closePopup")}
       className="absolute top-1 right-1 z-10 inline-flex size-5 cursor-pointer items-center justify-center rounded-sm text-foreground transition-colors hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
     >
       <X className="size-3.5" />
@@ -848,10 +852,16 @@ type MapControlsProps = {
   showLocate?: boolean;
   /** Show fullscreen toggle button (default: false) */
   showFullscreen?: boolean;
+  /** Show the control for selecting a coordinate by clicking the map (default: false) */
+  showCoordinatePicker?: boolean;
   /** Additional CSS classes for the controls container */
   className?: string;
   /** Callback with user coordinates when located */
   onLocate?: (coords: { longitude: number; latitude: number }) => void;
+  /** Callback with coordinates selected by clicking the map */
+  onCoordinateSelect?: (coords: { longitude: number; latitude: number }) => void;
+  /** Accessible label for the coordinate picker control */
+  coordinatePickerLabel?: string;
 };
 
 const positionClasses = {
@@ -874,28 +884,38 @@ function ControlButton({
   label,
   children,
   disabled = false,
+  active = false,
 }: {
   onClick: () => void;
   label: string;
   children: React.ReactNode;
   disabled?: boolean;
+  active?: boolean;
 }) {
   return (
-    <button
-      onClick={onClick}
-      aria-label={label}
-      type="button"
-      className={cn(
-        "flex size-8 items-center justify-center transition-colors",
-        "first:rounded-t-md last:rounded-b-md",
-        "hover:bg-accent dark:hover:bg-accent/40",
-        "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset",
-        "disabled:pointer-events-none disabled:opacity-50",
-      )}
-      disabled={disabled}
+    <TooltipCustom
+      render={
+        <button
+          onClick={onClick}
+          aria-label={label}
+          aria-pressed={active}
+          type="button"
+          className={cn(
+            "flex size-8 items-center justify-center transition-colors",
+            "first:rounded-t-md last:rounded-b-md",
+            "hover:bg-accent dark:hover:bg-accent/40",
+            active && "bg-accent text-accent-foreground",
+            "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset",
+            "disabled:pointer-events-none disabled:opacity-50",
+          )}
+          disabled={disabled}
+        >
+          {children}
+        </button>
+      }
     >
-      {children}
-    </button>
+      {label}
+    </TooltipCustom>
   );
 }
 
@@ -905,11 +925,48 @@ function MapControls({
   showCompass = false,
   showLocate = false,
   showFullscreen = false,
+  showCoordinatePicker = false,
   className,
   onLocate,
+  onCoordinateSelect,
+  coordinatePickerLabel,
 }: MapControlsProps) {
   const { map } = useMap();
+  const t = useTranslations("map.controls");
   const [waitingForLocation, setWaitingForLocation] = useState(false);
+  const [coordinatePickerActive, setCoordinatePickerActive] = useState(false);
+
+  useEffect(() => {
+    if (!map || !showCoordinatePicker || !coordinatePickerActive) return;
+
+    const handleMapClick = (event: MouseEvent) => {
+      if ((event.target as Element).closest("button")) return;
+      const rect = map.getContainer().getBoundingClientRect();
+      const point = map.unproject([event.clientX - rect.left, event.clientY - rect.top]);
+      onCoordinateSelect?.({
+        longitude: point.lng,
+        latitude: point.lat,
+      });
+      setCoordinatePickerActive(false);
+    };
+
+    const canvas = map.getCanvas();
+    const canvasContainer = map.getCanvasContainer();
+    const previousCanvasCursor = canvas.style.cursor;
+    const previousContainerCursor = canvasContainer.style.cursor;
+
+    map.getContainer().addEventListener("click", handleMapClick);
+    // MapLibre applies `grab` to the canvas container while hovering/dragging.
+    // Set both elements so the coordinate picker cursor stays visible.
+    canvas.style.cursor = "crosshair";
+    canvasContainer.style.cursor = "crosshair";
+
+    return () => {
+      map.getContainer().removeEventListener("click", handleMapClick);
+      canvas.style.cursor = previousCanvasCursor;
+      canvasContainer.style.cursor = previousContainerCursor;
+    };
+  }, [map, showCoordinatePicker, coordinatePickerActive, onCoordinateSelect]);
 
   const handleZoomIn = useCallback(() => {
     map?.zoomTo(map.getZoom() + 1, { duration: 300 });
@@ -964,12 +1021,29 @@ function MapControls({
     <div
       className={cn("absolute z-10 flex flex-col gap-1.5", positionClasses[position], className)}
     >
+      {showCoordinatePicker && (
+        <ControlGroup>
+          <TooltipCustom
+            render={
+              <ControlButton
+                onClick={() => setCoordinatePickerActive((active) => !active)}
+                label={coordinatePickerLabel ?? t("coordinatePicker")}
+                active={coordinatePickerActive}
+              >
+                <MousePointer2 className="size-4" />
+              </ControlButton>
+            }
+          >
+            {coordinatePickerLabel ?? t("coordinatePicker")}
+          </TooltipCustom>
+        </ControlGroup>
+      )}
       {showZoom && (
         <ControlGroup>
-          <ControlButton onClick={handleZoomIn} label="Zoom in">
+          <ControlButton onClick={handleZoomIn} label={t("zoomIn")}>
             <Plus className="size-4" />
           </ControlButton>
-          <ControlButton onClick={handleZoomOut} label="Zoom out">
+          <ControlButton onClick={handleZoomOut} label={t("zoomOut")}>
             <Minus className="size-4" />
           </ControlButton>
         </ControlGroup>
@@ -983,7 +1057,7 @@ function MapControls({
         <ControlGroup>
           <ControlButton
             onClick={handleLocate}
-            label="Find my location"
+            label={t("findMyLocation")}
             disabled={waitingForLocation}
           >
             {waitingForLocation ? (
@@ -996,7 +1070,7 @@ function MapControls({
       )}
       {showFullscreen && (
         <ControlGroup>
-          <ControlButton onClick={handleFullscreen} label="Toggle fullscreen">
+          <ControlButton onClick={handleFullscreen} label={t("toggleFullscreen")}>
             <Maximize className="size-4" />
           </ControlButton>
         </ControlGroup>
@@ -1007,6 +1081,7 @@ function MapControls({
 
 function CompassButton({ onClick }: { onClick: () => void }) {
   const { map } = useMap();
+  const t = useTranslations("map.controls");
   const compassRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
@@ -1031,7 +1106,7 @@ function CompassButton({ onClick }: { onClick: () => void }) {
   }, [map]);
 
   return (
-    <ControlButton onClick={onClick} label="Reset bearing to north">
+    <ControlButton onClick={onClick} label={t("resetBearing")}>
       <svg
         ref={compassRef}
         viewBox="0 0 24 24"

@@ -16,6 +16,8 @@ export default function MountainRequestDialog() {
   const t = useTranslations("mountainRequest");
   const open = useGlobalStore((state) => state.isDialogOpen);
   const setOpen = useGlobalStore((state) => state.setIsDialogOpen);
+  const initialCoordinates = useGlobalStore((state) => state.mountainRequestCoordinates);
+  const clearCoordinates = useGlobalStore((state) => state.clearMountainRequestCoordinates);
 
   const requestClose = useUnsavedChangesStore((state) => state.requestClose);
 
@@ -25,7 +27,10 @@ export default function MountainRequestDialog() {
       return;
     }
 
-    requestClose("mountain-request", () => setOpen(false));
+    requestClose("mountain-request", () => {
+      setOpen(false);
+      clearCoordinates();
+    });
   };
 
   return (
@@ -37,8 +42,10 @@ export default function MountainRequestDialog() {
             <DialogDescription>{t("description")}</DialogDescription>
           </DialogHeader>
           <MountainRequestForm
+            initialCoordinates={initialCoordinates}
             onSuccess={() => {
               setOpen(false);
+              clearCoordinates();
             }}
           />
         </DialogContent>
