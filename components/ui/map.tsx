@@ -1021,6 +1021,23 @@ function MapControls({
     <div
       className={cn("absolute z-10 flex flex-col gap-1.5", positionClasses[position], className)}
     >
+      {showCoordinatePicker && (
+        <ControlGroup>
+          <TooltipCustom
+            render={
+              <ControlButton
+                onClick={() => setCoordinatePickerActive((active) => !active)}
+                label={coordinatePickerLabel ?? t("coordinatePicker")}
+                active={coordinatePickerActive}
+              >
+                <MousePointer2 className="size-4" />
+              </ControlButton>
+            }
+          >
+            {coordinatePickerLabel ?? t("coordinatePicker")}
+          </TooltipCustom>
+        </ControlGroup>
+      )}
       {showZoom && (
         <ControlGroup>
           <ControlButton onClick={handleZoomIn} label={t("zoomIn")}>
@@ -1056,23 +1073,6 @@ function MapControls({
           <ControlButton onClick={handleFullscreen} label={t("toggleFullscreen")}>
             <Maximize className="size-4" />
           </ControlButton>
-        </ControlGroup>
-      )}
-      {showCoordinatePicker && (
-        <ControlGroup>
-          <TooltipCustom
-            render={
-              <ControlButton
-                onClick={() => setCoordinatePickerActive((active) => !active)}
-                label={coordinatePickerLabel ?? t("coordinatePicker")}
-                active={coordinatePickerActive}
-              >
-                <MousePointer2 className="size-4" />
-              </ControlButton>
-            }
-          >
-            {coordinatePickerLabel ?? t("coordinatePicker")}
-          </TooltipCustom>
         </ControlGroup>
       )}
     </div>

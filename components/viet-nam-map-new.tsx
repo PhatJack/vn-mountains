@@ -158,7 +158,6 @@ export default function VietnamMapNew({
                       ? t("map.controls.hideMountainList")
                       : t("map.controls.showMountainList")
                   }
-                  // title={isSidebarOpen ? "Hide mountain list" : "Show mountain list"}
                 >
                   {isSidebarOpen ? <PanelLeftClose /> : <PanelLeftOpen />}
                 </Button>
@@ -170,7 +169,7 @@ export default function VietnamMapNew({
           <div className="flex items-end gap-4">
             {toolbar}
             <MapTerrainToggle onEnabledChange={setTerrainEnabled} />
-            <MapContoursToggle onEnabledChange={setContoursEnabled} />
+            {/* <MapContoursToggle onEnabledChange={setContoursEnabled} /> */}
           </div>
         </div>
       </div>
