@@ -1,5 +1,6 @@
 export * from "./types";
 export { API_BASE_URL, ENDPOINTS, R2_PUBLIC_URL, mountainPhotoUrl } from "./endpoints";
+export { fetchCurrentUser, login, logout, register } from "./auth/auth.client";
 export {
   createMountain,
   deleteMountain,

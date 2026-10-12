@@ -2,6 +2,11 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost
 export const R2_PUBLIC_URL = (process.env.NEXT_PUBLIC_R2_PUBLIC_URL ?? "").replace(/\/$/, "");
 
 export const ENDPOINTS = {
+  authRefresh: "/auth/refresh",
+  authLogin: "/auth/login",
+  authRegister: "/auth/register",
+  authLogout: "/auth/logout",
+  authMe: "/auth/me",
   mountains: "/mountains",
   mountainById: (id: string) => `/mountains/${id}`,
   mountainByOsmId: "/mountains",
