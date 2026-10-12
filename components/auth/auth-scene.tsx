@@ -37,7 +37,7 @@ export function AuthScene({ children }: AuthSceneProps) {
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[46%] bg-linear-to-t from-foreground/70 via-primary/30 to-transparent opacity-90"
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[46%] bg-linear-to-t from-primary/50 via-primary/30 to-transparent opacity-90"
       />
 
       {clouds.map((cloud, index) => (
