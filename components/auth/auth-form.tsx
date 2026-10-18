@@ -1,12 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import { Eye, EyeOff, LoaderCircle, LockKeyhole, Mail, Mountain, UserRound } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -16,7 +17,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { login, register } from "@/services/api/auth/auth.client";
+import { login, loginWithGoogle, register } from "@/services/api/auth/auth.client";
+
+declare global {
+  interface Window {
+    google?: {
+      accounts: {
+        id: {
+          initialize: (options: {
+            client_id: string;
+            callback: (response: { credential: string }) => void;
+          }) => void;
+          renderButton: (element: HTMLElement, options: Record<string, string>) => void;
+        };
+      };
+    };
+  }
+}
 
 type AuthMode = "login" | "register";
 
@@ -26,6 +43,14 @@ type AuthValues = {
   password: string;
   confirmPassword: string;
 };
+
+function getApiErrorMessage(error: unknown): string | undefined {
+  if (!axios.isAxiosError(error)) return undefined;
+
+  const message = error.response?.data?.message;
+  if (Array.isArray(message)) return message.filter((item) => typeof item === "string").join(" ");
+  return typeof message === "string" ? message : undefined;
+}
 
 function getSchema(mode: AuthMode, t: ReturnType<typeof useTranslations<"auth">>) {
   const base = z.object({
@@ -51,6 +76,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const googleButtonRef = useRef<HTMLDivElement>(null);
   const schema = getSchema(mode, t);
   const form = useForm<AuthValues>({
     resolver: zodResolver(schema),
@@ -58,6 +84,52 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
   });
 
   const isSubmitting = form.formState.isSubmitting;
+
+  useEffect(() => {
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (!clientId || !googleButtonRef.current) return;
+
+    const renderGoogleButton = () => {
+      if (!window.google || !googleButtonRef.current) return;
+      window.google.accounts.id.initialize({
+        client_id: clientId,
+        callback: async ({ credential }) => {
+          try {
+            await loginWithGoogle({ credential });
+            toast.success(t("success.login"));
+            router.push(`/${locale}`);
+          } catch (error) {
+            toast.error(getApiErrorMessage(error) ?? t("errors.request"));
+          }
+        },
+      });
+      googleButtonRef.current.replaceChildren();
+      window.google.accounts.id.renderButton(googleButtonRef.current, {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        text: mode === "login" ? "signin_with" : "signup_with",
+        shape: "rectangular",
+        width: "400",
+      });
+    };
+
+    if (window.google) {
+      renderGoogleButton();
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = renderGoogleButton;
+    document.head.appendChild(script);
+
+    return () => {
+      script.onload = null;
+    };
+  }, [locale, mode, router, t]);
   const submit = form.handleSubmit(async (values) => {
     try {
       if (mode === "login") {
@@ -72,8 +144,8 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 
       toast.success(t(mode === "login" ? "success.login" : "success.register"));
       router.push(`/${locale}`);
-    } catch {
-      toast.error(t("errors.request"));
+    } catch (error) {
+      toast.error(getApiErrorMessage(error) ?? t("errors.request"));
     }
   });
 
@@ -243,25 +315,23 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 
             <Button
               type="submit"
-              className="mt-6 h-11 w-full font-semibold"
+              className="mt-4 h-11 w-full font-semibold"
               disabled={isSubmitting}
             >
               {isSubmitting && <LoaderCircle className="animate-spin" aria-hidden="true" />}
               {t(mode === "login" ? "login.submit" : "register.submit")}
             </Button>
 
-            <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
+            <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
               <Separator className="flex-1" />
               <span>{t("or")}</span>
               <Separator className="flex-1" />
             </div>
 
-            <Button type="button" variant="outline" className="h-11 w-full">
-              {t("google")}
-            </Button>
+            <div ref={googleButtonRef} className="flex min-h-11 justify-center overflow-hidden" />
           </form>
 
-          <p className="mt-7 text-center text-sm text-muted-foreground">
+          <p className="mt-3 text-center text-sm text-muted-foreground">
             {t(mode === "login" ? "switch.noAccount" : "switch.hasAccount")}{" "}
             <Link
               className="font-semibold text-primary hover:text-primary/80"

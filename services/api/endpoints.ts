@@ -4,6 +4,7 @@ export const R2_PUBLIC_URL = (process.env.NEXT_PUBLIC_R2_PUBLIC_URL ?? "").repla
 export const ENDPOINTS = {
   authRefresh: "/auth/refresh",
   authLogin: "/auth/login",
+  authGoogle: "/auth/google",
   authRegister: "/auth/register",
   authLogout: "/auth/logout",
   authMe: "/auth/me",

@@ -10,6 +10,10 @@ export type RegisterInput = LoginInput & {
   displayName?: string;
 };
 
+export type GoogleLoginInput = {
+  credential: string;
+};
+
 export type AuthenticatedUser = {
   id: string;
   email: string | null;
@@ -24,6 +28,10 @@ export async function login(input: LoginInput): Promise<void> {
 
 export async function register(input: RegisterInput): Promise<void> {
   await api.post(ENDPOINTS.authRegister, input);
+}
+
+export async function loginWithGoogle(input: GoogleLoginInput): Promise<void> {
+  await api.post(ENDPOINTS.authGoogle, input);
 }
 
 export async function logout(): Promise<void> {
