@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { Eye, EyeOff, LoaderCircle, LockKeyhole, Mail, Mountain, UserRound } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
@@ -17,6 +16,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { getApiErrorMessage } from "@/lib/utils";
 import { login, loginWithGoogle, register } from "@/services/api/auth/auth.client";
 
 declare global {
@@ -43,14 +43,6 @@ type AuthValues = {
   password: string;
   confirmPassword: string;
 };
-
-function getApiErrorMessage(error: unknown): string | undefined {
-  if (!axios.isAxiosError(error)) return undefined;
-
-  const message = error.response?.data?.message;
-  if (Array.isArray(message)) return message.filter((item) => typeof item === "string").join(" ");
-  return typeof message === "string" ? message : undefined;
-}
 
 function getSchema(mode: AuthMode, t: ReturnType<typeof useTranslations<"auth">>) {
   const base = z.object({
@@ -99,7 +91,9 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
             toast.success(t("success.login"));
             router.push(`/${locale}`);
           } catch (error) {
-            toast.error(getApiErrorMessage(error) ?? t("errors.request"));
+            const message = getApiErrorMessage(error) ?? t("errors.request");
+            form.setError("root.server", { message });
+            toast.error(message);
           }
         },
       });
@@ -131,6 +125,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
     };
   }, [locale, mode, router, t]);
   const submit = form.handleSubmit(async (values) => {
+    form.clearErrors("root.server");
     try {
       if (mode === "login") {
         await login({ email: values.email, password: values.password });
@@ -145,7 +140,9 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
       toast.success(t(mode === "login" ? "success.login" : "success.register"));
       router.push(`/${locale}`);
     } catch (error) {
-      toast.error(getApiErrorMessage(error) ?? t("errors.request"));
+      const message = getApiErrorMessage(error) ?? t("errors.request");
+      form.setError("root.server", { message });
+      toast.error(message);
     }
   });
 
@@ -321,6 +318,12 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
               {isSubmitting && <LoaderCircle className="animate-spin" aria-hidden="true" />}
               {t(mode === "login" ? "login.submit" : "register.submit")}
             </Button>
+
+            {form.formState.errors.root?.server?.message && (
+              <p role="alert" className="mt-3 text-center text-sm text-destructive">
+                {form.formState.errors.root.server.message}
+              </p>
+            )}
 
             <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
               <Separator className="flex-1" />

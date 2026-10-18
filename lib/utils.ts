@@ -1,9 +1,20 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format, isValid } from "date-fns";
+import axios from "axios";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function getApiErrorMessage(error: unknown): string | undefined {
+  if (!axios.isAxiosError(error)) {
+    return error instanceof Error ? error.message : undefined;
+  }
+
+  const message = error.response?.data?.message;
+  if (Array.isArray(message)) return message.filter((item) => typeof item === "string").join(" ");
+  return typeof message === "string" ? message : error.message || undefined;
 }
 
 export function formatLabel(key: string) {
