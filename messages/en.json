@@ -216,5 +216,53 @@
       "noteRequired": "Please enter a suggestion note",
       "noteLength": "Note must be 2000 characters or fewer"
     }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "description": "Sign in to continue your journey through Vietnam's mountains.",
+      "submit": "Sign in"
+    },
+    "register": {
+      "title": "Begin your journey",
+      "description": "Create an account and keep track of unforgettable cloud-hunting trails.",
+      "submit": "Create account"
+    },
+    "fields": {
+      "displayName": "Display name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password"
+    },
+    "placeholders": {
+      "displayName": "Your name",
+      "email": "you@example.com",
+      "password": "At least 8 characters",
+      "confirmPassword": "Re-enter your password"
+    },
+    "forgotPassword": "Forgot password?",
+    "google": "Continue with Google",
+    "or": "or",
+    "switch": {
+      "noAccount": "Don't have an account?",
+      "hasAccount": "Already have an account?",
+      "register": "Create one",
+      "login": "Sign in"
+    },
+    "success": {
+      "login": "Signed in successfully",
+      "register": "Account created successfully"
+    },
+    "errors": {
+      "request": "We couldn't complete your request. Please try again."
+    },
+    "validation": {
+      "emailRequired": "Please enter your email",
+      "emailInvalid": "Please enter a valid email",
+      "passwordMin": "Password must be at least 8 characters",
+      "displayNameMax": "Display name must be 100 characters or fewer",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordMismatch": "Passwords do not match"
+    }
   }
 }
